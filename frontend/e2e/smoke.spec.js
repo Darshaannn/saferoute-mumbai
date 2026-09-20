@@ -4,7 +4,7 @@ test.describe('SafeRoute Mumbai - Smoke & Page Navigation', () => {
   test('landing page loads and renders key CTA and elements', async ({ page }) => {
     await page.goto('/');
     await expect(page).toHaveTitle(/SafeRoute Mumbai/i);
-    await expect(page.locator('text=Navigate Mumbai with').first()).toBeVisible();
+    await expect(page.locator('text=Know more').first()).toBeVisible();
     await expect(page.locator('a[href="/journey"]').first()).toBeVisible();
     await expect(page.locator('a[href="/map"]').first()).toBeVisible();
   });
@@ -17,7 +17,7 @@ test.describe('SafeRoute Mumbai - Smoke & Page Navigation', () => {
 
   test('safety map loads with resource toggles', async ({ page }) => {
     await page.goto('/');
-    await page.locator('a:has-text("Explore Safety Map")').first().click();
+    await page.locator('a:has-text("Explore the map")').first().click();
     await expect(page).toHaveURL(/.*map/);
   });
 

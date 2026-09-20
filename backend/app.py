@@ -803,85 +803,343 @@ def analyze_journey():
     return jsonify(response)
 
 @app.route('/api/assistant', methods=['POST'])
-@rate_limit(max_requests=60, window_secs=60)
+@rate_limit(max_requests=30, window_secs=60)
 def safety_assistant():
+    """
+    SafeRoute Mumbai Safety Guide - Rule-based assistant.
+    SCOPE: Mumbai women's safety, emergency contacts, BNSS legal rights,
+    official crime statistics, route/transit guidance, incident reporting.
+    OUT OF SCOPE: medical advice, psychological counselling, legal representation,
+    predictions about specific individuals or future incidents.
+    """
     req_data = request.json or {}
     message = req_data.get('message', '').strip()
-    
+
     if not message:
-        return jsonify({"reply": "Hello! I am your SafeRoute Mumbai Safety Guide. You can ask about recorded crime patterns across Mumbai, route corridor safety, women's legal rights (Zero FIR under BNSS, night arrest rules), or emergency response numbers."})
-        
-    m_lower = message.lower()
+        return jsonify({
+            "reply": (
+                "Namaste. I am the **SafeRoute Mumbai Safety Guide**.\n\n"
+                "I can help you with:\n"
+                "- **Emergency contacts** (112, 103, 139)\n"
+                "- **Your legal rights** (Zero FIR, night arrest protection)\n"
+                "- **Mumbai crime statistics** (official 2022-2023 data)\n"
+                "- **Safe travel tips** for Mumbai's roads, trains, and metro\n"
+                "- **What to do** if you feel unsafe right now\n\n"
+                "*Ask me anything in these areas.*"
+            )
+        })
+
+    m = message.lower().strip()
     crime_stats = load_json('crime_stats.json') or {}
-    
-    city_risk = crime_stats.get('city_wide_risk_indicator', 50.0)
     total_2023 = crime_stats.get('total_cases_2023', '5,913')
     total_2022 = crime_stats.get('total_cases_2022', '6,156')
     trend = crime_stats.get('trend_percentage', -3.95)
-    
+
     reply = ""
-    
-    # 1. Legal Rights / Zero FIR Queries (Priority matching)
-    if any(w in m_lower for w in ["right", "rights", "law", "fir", "zero fir", "arrest", "night arrest", "aid", "legal aid", "statement", "section", "bnss", "crpc", "legal"]):
+
+    # INTENT 0: Active danger / being followed / unsafe right now (HIGHEST PRIORITY)
+    if any(w in m for w in [
+        "followed", "following me", "someone following", "feel unsafe",
+        "scared right now", "danger right now", "help me now", "unsafe right now",
+        "in danger", "stalking", "stalker", "being watched", "suspicious person",
+        "threaten", "threatening me", "i'm scared", "i am scared"
+    ]):
         reply = (
-            f"**Key Statutory Rights for Women in India (BNSS, 2023):**\n\n"
-            f"1. **Zero FIR & e-FIR (Sec. 173(1) BNSS / formerly Sec. 154 CrPC):** Any police station is legally obligated to register an FIR for cognizable offences against women regardless of territorial jurisdiction and transfer it to the jurisdictional station. Electronic registration (e-FIR) is also codified.\n"
-            f"2. **Safeguard Against Night Arrest (Sec. 43(5) BNSS / formerly Sec. 46(4) CrPC):** As a statutory rule, no woman shall be arrested after sunset and before sunrise except in extraordinary circumstances with prior written permission of a Judicial Magistrate, executed by a female officer.\n"
-            f"3. **Examination at Residence (Sec. 179(1) Proviso BNSS / formerly Sec. 160 CrPC):** No woman can be compelled to attend a police station for witness examination; examination must take place at her place of residence. Statements of sexual assault survivors must be recorded by a woman officer (Sec. 176/183 BNSS).\n"
-            f"4. **Free Legal Aid (Sec. 12 Legal Services Authorities Act, 1987 & Sec. 340 BNSS):** Every woman is entitled to free legal aid and counsel irrespective of income through the District Legal Services Authority (DLSA Mumbai).\n\n"
-            f"*General legal information only — not legal advice. Source: BNSS, 2023 & Legal Services Authorities Act, 1987 (India Code). Last verified: 2026.*"
+            "**If you are in immediate danger, call 112 now.**\n\n"
+            "While you wait or move:\n\n"
+            "**1. Move toward a public, lit space immediately.**\n"
+            "Shops, petrol pumps, railway stations, bank ATMs, and hospitals are good choices. "
+            "Do not go somewhere isolated.\n\n"
+            "**2. Change your direction unpredictably.**\n"
+            "If someone is following on foot, turn around and walk the opposite direction.\n\n"
+            "**3. Speak loudly if needed.**\n"
+            "Saying: *'I can see you following me. I am calling the police.'* often deters "
+            "the person and alerts bystanders.\n\n"
+            "**4. Share your live location** with a trusted contact via WhatsApp right now.\n\n"
+            "**Emergency numbers:**\n"
+            "- **112** - National Emergency (works with zero balance, any network)\n"
+            "- **103** - Mumbai Police Women Safety Cell\n"
+            "- **100** - Mumbai Police Control Room\n\n"
+            "---\n"
+            "*This guide provides practical steps. Always call emergency services in a crisis.*"
         )
-    # 2. Emergency Helplines & Police Contacts
-    elif any(w in m_lower for w in ["helpline", "helplines", "emergency", "sos", "contact", "contacts", "phone", "railway number", "police number", "112", "103", "139", "100", "railway emergency", "railmadad", "call"]):
+
+    # INTENT 1: Legal Rights
+    elif any(w in m for w in [
+        "right", "rights", "law", "fir", "zero fir", "efir", "e-fir",
+        "arrest", "night arrest", "legal aid", "statement", "section",
+        "bnss", "crpc", "legal", "pocso", "police refuse", "complaint",
+        "file complaint", "register fir", "fir refused", "dlsa", "magistrate"
+    ]):
         reply = (
-            f"**Verified Emergency Contacts in Mumbai:**\n\n"
-            f"• **112:** National Unified Emergency Service (Police, Fire, Medical Ambulance)\n"
-            f"• **103:** Mumbai Police Dedicated Women Safety Cell (Immediate response squad)\n"
-            f"• **139:** Indian Railways (RailMadad) 24/7 Security & Medical Assistance\n"
-            f"• **100:** Mumbai Police Central Control Room\n\n"
-            f"Over **118 active police stations** and municipal medical facilities are mapped across Greater Mumbai on our Map."
+            "**Statutory Rights for Women - BNSS 2023 (India):**\n\n"
+            "**1. Zero FIR (Sec. 173(1) BNSS)**\n"
+            "Any police station in India must register an FIR for cognizable offences against "
+            "women regardless of jurisdiction, then forward it to the correct station. "
+            "If a station refuses:\n"
+            "- Write to the Superintendent of Police / DCP\n"
+            "- File directly before a Judicial Magistrate (Sec. 175 BNSS)\n"
+            "- Call **103** (Mumbai Police Women Safety Cell)\n\n"
+            "**2. Night Arrest Protection (Sec. 43(5) BNSS)**\n"
+            "No woman may be arrested between sunset and sunrise except with prior written "
+            "permission from a Judicial Magistrate, carried out by a female officer.\n\n"
+            "**3. Examination at Residence (Sec. 179(1) BNSS)**\n"
+            "No woman can be compelled to attend a police station for witness examination. "
+            "Survivor statements in sexual offence cases must be recorded by a woman officer.\n\n"
+            "**4. Free Legal Aid**\n"
+            "Every woman is entitled to free legal aid through the District Legal Services "
+            "Authority (DLSA). Mumbai DLSA: +91-22-2207-7227. Income is not a barrier.\n\n"
+            "**5. POCSO Act 2012**\n"
+            "Offences against minors must be reported - reporting is mandatory for anyone "
+            "with knowledge of an offence.\n\n"
+            "---\n"
+            "*General legal information only - not legal advice. Source: BNSS 2023, Legal "
+            "Services Authorities Act 1987. For personal matters, contact DLSA Mumbai.*"
         )
-    # 3. Travel Route Queries
-    elif any(w in m_lower for w in ["from", "to", "travel", "journey", "going", "route", "reach", "dadar", "andheri", "bkc", "bandra", "colaba", "kurla", "borivali", "thane", "train", "metro"]):
+
+    # INTENT 2: Emergency Helplines
+    elif any(w in m for w in [
+        "helpline", "emergency", "sos", "contact", "phone number", "police number",
+        "what number", "which number", "dial", "call", "112", "103", "139",
+        "100", "railmadad", "railway helpline", "hospital number", "ambulance",
+        "fire", "childline", "1098"
+    ]):
         reply = (
-            f"**Mumbai Route Safety Guidelines:**\n\n"
-            f"• **Corridor Recommendation:** For night travel across Mumbai, always favor primary arterial roads (Western Express Highway, Eastern Express Highway, or the Coastal Arterials) which have active highway police patrols and continuous lighting.\n"
-            f"• **Suburban Railway:** Dedicated ladies coaches are positioned at the engine, center, and rear of 12/15-car local trains. After 9:00 PM, armed RPF/GRP personnel are assigned onboard. RailMadad Railway Helpline: **139**.\n"
-            f"• **Safe Journey Tool:** You can plan this exact route on our **Safe Journey** page to compare lowest-risk corridors, inspect safety resources, and set an Emergency Check-in timer.\n"
-            f"• **Emergency Helplines:** Dial **103** (Mumbai Women Police Cell) or **112** (All-in-One Emergency)."
+            "**Verified Emergency Contacts - Mumbai:**\n\n"
+            "| Number | Service |\n"
+            "|--------|---------|\n"
+            "| **112** | National Emergency - Police, Fire, Ambulance (unified) |\n"
+            "| **103** | Mumbai Police Women Safety Cell (dedicated rapid response) |\n"
+            "| **100** | Mumbai Police Control Room |\n"
+            "| **139** | Indian Railways RailMadad - Security & Medical (24/7) |\n"
+            "| **101** | Fire Brigade |\n"
+            "| **108** | State Emergency Medical Services |\n"
+            "| **1098** | Childline India (children in distress) |\n\n"
+            "**Important:** 112 works with zero SIM balance on any network.\n\n"
+            "**103** is specifically trained for rapid response to women in distress - "
+            "prefer this over the general 100 line for gender-based safety incidents.\n\n"
+            "SafeRoute has **118 police stations** and **58 municipal medical facilities** "
+            "mapped - view the nearest to your location on the **Map** page."
         )
-    # 4. Crime Statistics & Data Breakdown
-    elif any(w in m_lower for w in ["stats", "statistics", "trend", "data", "crime", "rate", "2023", "2022", "dataset", "cases"]):
+
+    # INTENT 3: Train / Metro / Public Transport Safety
+    elif any(w in m for w in [
+        "train", "local train", "railway", "station", "metro", "metro 3",
+        "aqua line", "ladies coach", "ladies compartment", "public transport",
+        "bus", "auto", "rickshaw", "cab", "ola", "uber", "rpf", "grp"
+    ]):
         reply = (
-            f"**Official Mumbai Crime Against Women Statistics (2022 vs 2023):**\n\n"
-            f"• **Total Registered Cases (2023):** 5,913 (down from 6,156 in 2022 — a **{abs(trend)}% net decrease**).\n"
-            f"• **Institutional Detection Rate:** **94.2%** of cases detected in 2023 (5,570 detected out of 5,913), compared to 81.1% in 2022 (4,995 detected).\n"
-            f"• **Major Heads Registered:** Outraging Modesty (2,163 cases, 95% detected), Kidnapping (1,167 cases, 94% detected), Rape & POCSO (973 cases, 96% detected), Domestic Harassment Sec. 498-A (746 cases, 94% detected).\n"
-            f"• **Statistical Provenance:** Source: Mumbai Police Annual Statistical Registry (Calendar Years 2022 vs 2023)."
+            "**Mumbai Public Transport - Safety Information:**\n\n"
+            "**Suburban Railways (Local Trains):**\n"
+            "- Dedicated **Ladies Coaches** are at the engine end, centre, and rear of all 12/15-car trains\n"
+            "- After **9:00 PM**, RPF and GRP personnel are assigned onboard and at major stations\n"
+            "- The **first class ladies coach** is always available for women\n"
+            "- Emergency: **RailMadad 139** - 24/7, security and medical emergencies on trains\n\n"
+            "**Metro Rail (Mumbai Metro 3 - Aqua Line):**\n"
+            "- Dedicated **ladies coach** in every train (first coach from Cuffe Parade end)\n"
+            "- CCTV surveillance across all 27 stations and inside coaches\n"
+            "- Security personnel present at all stations\n\n"
+            "**Cabs & Auto-Rickshaws:**\n"
+            "- Share your live trip details (plate, driver name) with a contact before departing\n"
+            "- Prefer app-based cabs over unmarked vehicles at night\n"
+            "- SafeRoute **Safe Journey** page shows police station proximity along any road route\n\n"
+            "**General Night Travel:**\n"
+            "- Stick to Western or Eastern Express Highway corridors for longer journeys\n"
+            "- Avoid isolated stretches - use the **Map** to find nearest police stations en route"
         )
-    # 5. Risk Calculation & Methodology
-    elif any(w in m_lower for w in ["score", "calculate", "risk", "methodology", "formula", "algorithm"]):
+
+    # INTENT 4: Route / Area / Neighbourhood Safety
+    elif any(w in m for w in [
+        "safe", "safety", "route", "travel", "journey", "night", "late night",
+        "andheri", "bandra", "dadar", "kurla", "borivali", "thane", "colaba",
+        "bkc", "lower parel", "malad", "goregaon", "vikhroli", "dharavi",
+        "from", "going to", "walk", "walking", "dangerous", "danger", "area", "ward"
+    ]):
         reply = (
-            f"**How SafeRoute Evaluates Corridor Coverage:**\n\n"
-            f"1. **Emergency Proximity:** As you plan a journey, the route is sampled every 500 meters against municipal zone boundaries, nearby active police stations, and municipal medical facilities.\n"
-            f"2. **Safety Infrastructure Coverage:** Measures access to official emergency and medical infrastructure.\n"
-            f"3. **Zero Synthetic Inferences:** All baseline infrastructure derives strictly from statutory registries and official spatial boundaries.\n"
-            f"4. **Transit Optimization:** Evaluates Western/Central Local trains, Metro lines, and highway corridors to find well-supported routes."
+            "**Route & Area Safety - SafeRoute Mumbai:**\n\n"
+            "SafeRoute does not assign personal safety ratings to neighbourhoods - crime "
+            "statistics vary by incident type and cannot predict individual experience. "
+            "Instead, we provide **infrastructure proximity data** for informed decisions.\n\n"
+            "**For your specific route, use the Safe Journey page:**\n"
+            "Enter your origin and destination to see:\n"
+            "- Nearest police stations along the corridor\n"
+            "- Municipal hospitals within 1-2 km of your route\n"
+            "- Safety Infrastructure Coverage score (0-100) based on emergency resource proximity\n\n"
+            "**General Guidelines:**\n"
+            "- **Arterial roads** (Western Express Highway, Eastern Express Highway, "
+            "Marine Drive, Coastal Road) have continuous police patrol and highway lighting\n"
+            "- **After 10 PM**, prefer primary roads over smaller connecting lanes\n"
+            "- **Share your live location** with a trusted contact before and during travel\n"
+            "- Emergency contacts: **112** (all emergencies), **103** (women's helpline)\n\n"
+            "**Check the Safety Map** to explore police and hospital locations across all 24 wards."
         )
+
+    # INTENT 5: Crime Statistics
+    elif any(w in m for w in [
+        "stats", "statistics", "trend", "data", "crime", "rate", "2023", "2022",
+        "dataset", "cases", "how many", "incidents", "recorded", "reported",
+        "assault", "rape", "kidnap", "domestic", "outraging", "modesty"
+    ]):
+        reply = (
+            "**Official Mumbai Crime Against Women - 2022 vs 2023:**\n\n"
+            "*Source: Mumbai Police Annual Statistical Registry*\n\n"
+            f"| Year | Registered | Detected | Detection Rate |\n"
+            f"|------|------------|----------|----------------|\n"
+            f"| **2022** | {total_2022} | 4,995 | 81.1% |\n"
+            f"| **2023** | {total_2023} | 5,570 | **94.2%** |\n\n"
+            f"**Year-on-year: {abs(trend)}% decrease in registered cases.**\n\n"
+            "**2023 Category Breakdown:**\n"
+            "- Outraging Modesty (Sec. 354 IPC): **2,163** cases - 95% detected\n"
+            "- Kidnapping & Abduction: **1,167** cases - 94% detected\n"
+            "- Rape & POCSO offences: **973** cases - 96% detected\n"
+            "- Domestic Harassment (Sec. 498-A): **746** cases - 94% detected\n\n"
+            "**Important context:**\n"
+            "- Statistics reflect *registered* cases only - under-reporting is documented for gender-based offences\n"
+            "- Detection rate improvement (81% to 94%) indicates stronger institutional response\n"
+            "- Ward-level crime data is not in the public registry; our ward scores use infrastructure proximity\n\n"
+            "*Data sourced from public records. It does not predict individual risk.*"
+        )
+
+    # INTENT 6: SafeRoute methodology
+    elif any(w in m for w in [
+        "score", "how does", "methodology", "formula", "algorithm", "calculate",
+        "how is", "how it works", "how saferout", "what is saferoute",
+        "infrastructure", "proximity", "coverage", "ward score"
+    ]):
+        reply = (
+            "**How SafeRoute Mumbai Works:**\n\n"
+            "**1. No fabricated safety scores**\n"
+            "SafeRoute does not claim to predict whether a neighbourhood is 'safe'. "
+            "We measure verifiable emergency infrastructure proximity.\n\n"
+            "**2. Safety Infrastructure Coverage Score (0-100)**\n"
+            "- **Police proximity (40 pts):** Distance to nearest police station per 500m route sample\n"
+            "- **Medical proximity (25 pts):** Distance to nearest municipal hospital or maternity home\n"
+            "- **Route type (20 pts):** Arterial vs secondary road (highway patrols, lighting)\n"
+            "- **Resource density (15 pts):** Number of resources within 2 km radius\n\n"
+            "**3. Data sources (all public):**\n"
+            "- 118 police stations - Mumbai Police open data\n"
+            "- 31 municipal hospitals + 27 maternity homes - BMC records\n"
+            "- Ward boundaries - Mumbai Metropolitan Region GIS\n"
+            "- Crime figures - Mumbai Police Annual Statistical Registry\n\n"
+            "**4. What the app does not do:**\n"
+            "- Does not use AI to predict incidents\n"
+            "- Does not store or transmit your GPS location beyond your device\n"
+            "- Does not guarantee personal safety"
+        )
+
+    # INTENT 7: After an incident / reporting
+    elif any(w in m for w in [
+        "what to do", "what should i do", "after incident", "how to report",
+        "want to report", "harassment", "harassed", "molested", "molestation",
+        "assaulted", "survivor", "victim", "file case", "ncw", "mahila", "shelter"
+    ]):
+        reply = (
+            "**Reporting an Incident or Seeking Help - Mumbai:**\n\n"
+            "**Immediate steps:**\n"
+            "1. **Get to a safe location first.** If in immediate danger, call **112** now.\n"
+            "2. **Preserve evidence** where possible - do not wash, do not delete messages or photos.\n"
+            "3. **Any police station must accept a Zero FIR** (BNSS Sec. 173(1)) - they cannot legally refuse.\n\n"
+            "**Filing a complaint:**\n"
+            "- Request a woman officer to record your statement - this is your right (Sec. 176/183 BNSS)\n"
+            "- Obtain a free copy of your FIR\n"
+            "- Contact DLSA Mumbai (+91-22-2207-7227) for free legal aid\n\n"
+            "**Support resources in Mumbai:**\n"
+            "- **Snehi:** +91-22-2772-6771 (emotional support helpline)\n"
+            "- **iCall (TISS):** 9152987821 (counselling referrals, Mon-Sat 8AM-10PM)\n"
+            "- **NCW Helpline:** 7827-170-170 (National Commission for Women)\n"
+            "- **Maharashtra State Women's Commission:** +91-22-2202-0682\n\n"
+            "---\n"
+            "*SafeRoute can help locate the nearest police station on the Map page. "
+            "BMC hospitals provide free care. iCall and Snehi provide emotional support.*"
+        )
+
+    # INTENT 8: Practical safety tips
+    elif any(w in m for w in [
+        "tip", "tips", "advice", "how to stay safe", "precaution", "precautions",
+        "night out", "alone at night", "travelling alone", "self-defence",
+        "self defence", "what should i carry", "safety app"
+    ]):
+        reply = (
+            "**Practical Safety Tips - Mumbai:**\n\n"
+            "**Before you travel:**\n"
+            "- Use SafeRoute's **Safe Journey** page to check police station and hospital proximity\n"
+            "- Share your planned route and expected arrival time with a trusted contact\n"
+            "- Enable live location sharing on WhatsApp or Google Maps\n\n"
+            "**En route:**\n"
+            "- Stay on well-lit, busy roads - especially after 10 PM\n"
+            "- On local trains, use the **ladies coach** (engine end, centre, rear)\n"
+            "- Ride in the front row of autos at night (visible to other road users)\n"
+            "- Prefer app-based cabs - share trip details with a contact\n\n"
+            "**If something goes wrong:**\n"
+            "- **112** works with zero balance on any network\n"
+            "- **103** is Mumbai's dedicated women's safety cell\n"
+            "- Make noise, move toward light and people, enter any open shop or building\n\n"
+            "**Useful apps:**\n"
+            "- **112 India App** (Government of India) - emergency SOS with auto location share\n"
+            "- **WhatsApp Live Location** - simple and widely used\n\n"
+            "---\n"
+            "*Self-defence courses are offered by Mumbai Police at local stations.*"
+        )
+
+    # INTENT 9: Sensitive / Out-of-scope - graceful decline
+    elif any(w in m for w in [
+        "suicid", "self-harm", "self harm", "kill myself", "end my life",
+        "want to die", "depression", "mental health", "therapy", "therapist",
+        "anxiety", "trauma", "ptsd", "diagnosis", "medical advice", "treatment"
+    ]):
+        reply = (
+            "I want to acknowledge that this sounds very difficult, and I am genuinely sorry.\n\n"
+            "I am a safety information guide for Mumbai routes and legal rights - I am not "
+            "equipped to provide the support you need right now, and I do not want to give "
+            "you inadequate help on something this important.\n\n"
+            "**Please reach out to someone who can actually help:**\n\n"
+            "- **iCall (TISS Mumbai):** 9152987821 - free, confidential counselling (Mon-Sat, 8AM-10PM)\n"
+            "- **Snehi:** +91-22-2772-6771 - emotional support helpline\n"
+            "- **Vandrevala Foundation:** 1860-2662-345 - 24/7 mental health helpline\n\n"
+            "If you are in immediate physical danger, call **112**.\n\n"
+            "*You deserve real support from a trained person - not a chatbot.*"
+        )
+
+    # INTENT 10: Greetings / what can you do
+    elif any(w in m for w in [
+        "hello", "hi", "hey", "namaste", "thanks", "thank you",
+        "who are you", "what can you do", "help"
+    ]):
+        reply = (
+            "Namaste. I am the **SafeRoute Mumbai Safety Guide**.\n\n"
+            "I am a rule-based guide - everything I provide is drawn from verified public data.\n\n"
+            "**Ask me about:**\n"
+            "- **Immediate danger:** What to do if you feel unsafe right now\n"
+            "- **Emergency numbers:** 112, 103, 139 and when to use each\n"
+            "- **Legal rights:** Zero FIR, night arrest protection, free legal aid\n"
+            "- **Crime data:** Official 2022-2023 Mumbai statistics\n"
+            "- **Safe travel:** Train safety, route guidance, night travel tips\n"
+            "- **Reporting:** How to file a complaint after an incident\n\n"
+            "*Use the quick suggestion buttons below to get started.*"
+        )
+
+    # INTENT 11: Fallback
     else:
         reply = (
-            f"I am your **Mumbai Safety Guide**. Here is what you can ask me:\n\n"
-            f"• **Route Safety:** *'How safe is traveling from Bandra to Dadar late at night?'*\n"
-            f"• **Legal Rights:** *'What are my rights regarding Zero FIR and night arrest?'*\n"
-            f"• **Crime Data:** *'What are the official 2022-2023 Mumbai crime trends and solve rates?'*\n"
-            f"• **Helplines & Havens:** *'What numbers should I dial in an emergency?'*\n"
-            f"• **Transit Tips:** *'What safety facilities exist on Mumbai local trains and Metro 3?'*"
+            "I wasn't able to match your question to my safety database.\n\n"
+            "**I can help with these topics:**\n\n"
+            "- *'I feel like I'm being followed - what do I do?'*\n"
+            "- *'What is my right to file a Zero FIR?'*\n"
+            "- *'What are the official 2023 Mumbai crime statistics?'*\n"
+            "- *'Is it safe to travel from Bandra to Dadar late at night?'*\n"
+            "- *'What emergency numbers should I know?'*\n"
+            "- *'How do I report harassment to the police?'*\n"
+            "- *'What safety tips are there for Mumbai local trains?'*\n\n"
+            "**Out of scope:** I cannot provide medical advice, psychological counselling, "
+            "legal representation, or opinions on specific individuals or court cases.\n\n"
+            "*If this is an emergency, call **112** now.*"
         )
-        
+
     return jsonify({
         "reply": reply,
-        "city_wide_risk_indicator": city_risk
+        "city_wide_risk_indicator": crime_stats.get('city_wide_risk_indicator', 50.0)
     })
+
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))

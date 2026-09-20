@@ -10,91 +10,258 @@ export default function Navigation() {
   const [showTransitGuide, setShowTransitGuide] = useState(false);
 
   const links = [
-    { name: 'Home', path: '/', icon: Shield },
-    { name: 'Safety Map', path: '/map', icon: Map },
-    { name: 'Safe Journey', path: '/journey', icon: NavIcon },
+    { name: 'Map', path: '/map', icon: Map },
+    { name: 'Journey', path: '/journey', icon: NavIcon },
     { name: 'Dashboard', path: '/dashboard', icon: Activity },
     { name: 'Safety Guide', path: '/assistant', icon: Bot },
   ];
 
   return (
     <>
-      {/* Desktop Floating Navigation */}
-      <header className="hidden md:flex fixed top-0 w-full z-50 px-6 py-3 justify-between items-center pointer-events-none">
-        {/* Brand */}
-        <Link 
-          to="/" 
-          className="pointer-events-auto flex items-center gap-2.5 px-3.5 py-1.5 rounded-xl bg-white/95 backdrop-blur-md border border-slate-200/80 shadow-sm hover:shadow transition group"
+      {/* ─────────────────────────────────────────
+          DESKTOP NAVIGATION
+          ───────────────────────────────────────── */}
+      <header
+        className="hidden md:block fixed top-0 left-0 right-0 z-50"
+        style={{
+          height: '74px',
+          background: 'rgba(244, 240, 232, 0.96)',
+          backdropFilter: 'blur(16px)',
+          WebkitBackdropFilter: 'blur(16px)',
+          borderBottom: '1px solid var(--color-border)',
+        }}
+      >
+        <div
+          className="mx-auto h-full px-6 lg:px-12 flex items-center justify-between"
+          style={{ maxWidth: '1440px' }}
         >
-          <div className="w-7 h-7 rounded-lg bg-blue-600 text-white flex items-center justify-center shadow-xs">
+
+          {/* Brand */}
+          <Link
+            to="/"
+            className="flex items-center gap-2.5 transition-opacity hover:opacity-75 group"
+            style={{ textDecoration: 'none' }}
+          >
+            <div
+              className="flex items-center justify-center rounded-lg"
+              style={{
+                width: '30px',
+                height: '30px',
+                background: 'var(--color-primary)',
+                color: '#fff',
+                flexShrink: 0,
+              }}
+            >
+              <Shield className="w-4 h-4" />
+            </div>
+            <div className="flex items-baseline gap-1.5">
+              <span
+                className="font-display tracking-wide"
+                style={{ fontSize: '20px', color: 'var(--color-primary)', lineHeight: 1 }}
+              >
+                SafeRoute
+              </span>
+              <span
+                className="font-body"
+                style={{ fontSize: '12px', color: 'var(--color-muted)', fontStyle: 'italic' }}
+              >
+                Mumbai
+              </span>
+            </div>
+          </Link>
+
+          {/* Centre navigation links */}
+          <nav className="flex items-center gap-1">
+            {links.map((link) => {
+              const isActive = location.pathname === link.path;
+              return (
+                <Link
+                  key={link.name}
+                  to={link.path}
+                  className="relative transition-colors"
+                  style={{
+                    padding: '6px 14px',
+                    fontFamily: 'var(--font-body)',
+                    fontSize: '17px',
+                    color: isActive ? 'var(--color-primary)' : 'var(--color-muted)',
+                    fontWeight: isActive ? '600' : '400',
+                    textDecoration: 'none',
+                    borderBottom: isActive ? '2px solid var(--color-primary)' : '2px solid transparent',
+                    transition: 'all 0.18s ease',
+                  }}
+                  onMouseEnter={e => {
+                    if (!isActive) e.currentTarget.style.color = 'var(--color-primary)';
+                  }}
+                  onMouseLeave={e => {
+                    if (!isActive) e.currentTarget.style.color = 'var(--color-muted)';
+                  }}
+                >
+                  {link.name}
+                </Link>
+              );
+            })}
+          </nav>
+
+          {/* Right: Quick tools */}
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setShowTransitGuide(true)}
+              className="font-body transition-colors cursor-pointer"
+              style={{
+                padding: '7px 12px',
+                fontSize: '15px',
+                color: 'var(--color-muted)',
+                background: 'transparent',
+                border: 'none',
+                borderRadius: '10px',
+                cursor: 'pointer',
+              }}
+              onMouseEnter={e => {
+                e.currentTarget.style.color = 'var(--color-primary)';
+                e.currentTarget.style.background = 'rgba(18,59,58,0.06)';
+              }}
+              onMouseLeave={e => {
+                e.currentTarget.style.color = 'var(--color-muted)';
+                e.currentTarget.style.background = 'transparent';
+              }}
+              title="Transit Safety & Zero FIR Rights"
+            >
+              Rights
+            </button>
+
+            <button
+              onClick={() => setShowFakeCall(true)}
+              className="flex items-center gap-1.5 font-body transition-colors cursor-pointer"
+              style={{
+                padding: '7px 12px',
+                fontSize: '15px',
+                color: 'var(--color-accent)',
+                background: 'transparent',
+                border: 'none',
+                borderRadius: '10px',
+              }}
+              onMouseEnter={e => {
+                e.currentTarget.style.background = 'rgba(30,103,97,0.08)';
+              }}
+              onMouseLeave={e => {
+                e.currentTarget.style.background = 'transparent';
+              }}
+              title="Trigger Fake Call (Discreet Escape)"
+            >
+              <PhoneForwarded className="w-3.5 h-3.5" />
+              <span>Fake Call</span>
+            </button>
+
+            <a
+              href="tel:112"
+              className="flex items-center gap-1.5 font-body font-semibold text-white transition-colors"
+              style={{
+                padding: '8px 14px',
+                fontSize: '15px',
+                background: 'var(--color-danger)',
+                borderRadius: 'var(--radius-btn)',
+                textDecoration: 'none',
+                boxShadow: '0 2px 8px rgba(216,76,69,0.25)',
+              }}
+              onMouseEnter={e => e.currentTarget.style.background = '#C0403A'}
+              onMouseLeave={e => e.currentTarget.style.background = 'var(--color-danger)'}
+              title="National Emergency Helpline"
+            >
+              <PhoneCall className="w-3.5 h-3.5" />
+              <span>SOS 112</span>
+            </a>
+          </div>
+        </div>
+      </header>
+
+      {/* ─────────────────────────────────────────
+          MOBILE TOP HEADER
+          ───────────────────────────────────────── */}
+      <header
+        className="md:hidden fixed top-0 left-0 right-0 z-40 flex items-center justify-between px-4"
+        style={{
+          height: '56px',
+          background: 'rgba(244, 240, 232, 0.96)',
+          backdropFilter: 'blur(16px)',
+          WebkitBackdropFilter: 'blur(16px)',
+          borderBottom: '1px solid var(--color-border)',
+        }}
+      >
+        <Link to="/" className="flex items-center gap-2" style={{ textDecoration: 'none' }}>
+          <div
+            className="flex items-center justify-center rounded-md"
+            style={{ width: '26px', height: '26px', background: 'var(--color-primary)', color: '#fff' }}
+          >
             <Shield className="w-3.5 h-3.5" />
           </div>
-          <div className="flex items-center gap-2">
-            <span className="font-bold text-xs tracking-tight text-slate-900">
-              SafeRoute <span className="text-blue-600 font-semibold">Mumbai</span>
+          <span className="font-display" style={{ fontSize: '18px', color: 'var(--color-primary)', lineHeight: 1 }}>
+            SafeRoute{' '}
+            <span className="font-body" style={{ fontSize: '11px', color: 'var(--color-muted)', fontStyle: 'italic' }}>
+              Mumbai
             </span>
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-          </div>
+          </span>
         </Link>
 
-        {/* Center Nav Links */}
-        <nav className="pointer-events-auto flex items-center gap-1 p-1 rounded-xl bg-white/95 backdrop-blur-md border border-slate-200/80 shadow-sm">
-          {links.map((link) => {
-            const Icon = link.icon;
-            const isActive = location.pathname === link.path;
-            return (
-              <Link
-                key={link.name}
-                to={link.path}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition ${
-                  isActive 
-                    ? 'bg-slate-900 text-white shadow-xs' 
-                    : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/80'
-                }`}
-              >
-                <Icon className="w-3.5 h-3.5" />
-                {link.name}
-              </Link>
-            );
-          })}
-        </nav>
-
-        {/* Action Controls */}
-        <div className="pointer-events-auto flex items-center gap-1.5">
-          {/* Fake Call discreet button */}
+        <div className="flex items-center gap-2">
           <button
             onClick={() => setShowFakeCall(true)}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/95 hover:bg-slate-50 text-slate-700 border border-slate-200/80 text-xs font-medium shadow-xs transition cursor-pointer"
-            title="Trigger Fake Call (Discreet Escape)"
+            className="flex items-center justify-center rounded-lg cursor-pointer"
+            style={{
+              width: '32px', height: '32px',
+              background: 'rgba(30,103,97,0.1)',
+              border: 'none',
+              color: 'var(--color-accent)',
+            }}
+            title="Fake Call"
           >
-            <PhoneForwarded className="w-3.5 h-3.5 text-emerald-600" />
-            Fake Call
+            <PhoneForwarded className="w-3.5 h-3.5" />
           </button>
-
-          {/* Legal / Transit Guide button */}
-          <button
-            onClick={() => setShowTransitGuide(true)}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/95 hover:bg-slate-50 text-slate-700 border border-slate-200/80 text-xs font-medium shadow-xs transition cursor-pointer"
-            title="Transit Safety & Zero FIR Rights"
-          >
-            <Scale className="w-3.5 h-3.5 text-indigo-600" />
-            Rights & Transit
-          </button>
-
-          {/* Emergency Quick Action */}
           <a
             href="tel:112"
-            className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-semibold shadow-xs hover:shadow transition active:scale-95"
+            className="flex items-center gap-1 font-body font-semibold text-white"
+            style={{
+              padding: '6px 10px',
+              fontSize: '13px',
+              background: 'var(--color-danger)',
+              borderRadius: '10px',
+              textDecoration: 'none',
+            }}
           >
-            <PhoneCall className="w-3.5 h-3.5" />
-            SOS 112
+            <PhoneCall className="w-3 h-3" />
+            <span>112</span>
           </a>
         </div>
       </header>
 
-      {/* Mobile Bottom Navigation */}
-      <nav className="md:hidden fixed bottom-0 w-full z-50 bg-white/95 backdrop-blur-xl border-t border-slate-200 px-3 py-2">
+      {/* ─────────────────────────────────────────
+          MOBILE BOTTOM NAVIGATION
+          ───────────────────────────────────────── */}
+      <nav
+        className="md:hidden fixed bottom-0 left-0 right-0 z-50"
+        style={{
+          background: 'rgba(244, 240, 232, 0.97)',
+          backdropFilter: 'blur(16px)',
+          WebkitBackdropFilter: 'blur(16px)',
+          borderTop: '1px solid var(--color-border)',
+          padding: '6px 8px',
+        }}
+      >
         <div className="flex justify-around items-center">
+          <Link
+            to="/"
+            className="flex flex-col items-center justify-center py-1 px-2 rounded-lg transition"
+            style={{
+              textDecoration: 'none',
+              color: location.pathname === '/' ? 'var(--color-primary)' : 'var(--color-muted)',
+              fontFamily: 'var(--font-body)',
+            }}
+          >
+            <Shield className="w-4 h-4" />
+            <span style={{ fontSize: '10px', marginTop: '2px', fontWeight: location.pathname === '/' ? '600' : '400' }}>
+              Home
+            </span>
+          </Link>
+
           {links.map((link) => {
             const Icon = link.icon;
             const isActive = location.pathname === link.path;
@@ -102,29 +269,20 @@ export default function Navigation() {
               <Link
                 key={link.name}
                 to={link.path}
-                className={`flex flex-col items-center justify-center py-1 px-2 rounded-xl transition ${
-                  isActive ? 'text-blue-600 font-bold bg-blue-50' : 'text-slate-500'
-                }`}
+                className="flex flex-col items-center justify-center py-1 px-2 rounded-lg transition"
+                style={{
+                  textDecoration: 'none',
+                  color: isActive ? 'var(--color-primary)' : 'var(--color-muted)',
+                  fontFamily: 'var(--font-body)',
+                }}
               >
                 <Icon className="w-4 h-4" />
-                <span className="text-[10px] mt-0.5">{link.name}</span>
+                <span style={{ fontSize: '10px', marginTop: '2px', fontWeight: isActive ? '600' : '400' }}>
+                  {link.name}
+                </span>
               </Link>
             );
           })}
-          <button
-            onClick={() => setShowFakeCall(true)}
-            className="flex flex-col items-center justify-center py-1 px-2 rounded-xl text-emerald-600 font-bold"
-          >
-            <PhoneForwarded className="w-4 h-4" />
-            <span className="text-[10px] mt-0.5">Fake Call</span>
-          </button>
-          <a
-            href="tel:112"
-            className="flex flex-col items-center justify-center py-1 px-2 rounded-xl text-rose-600 font-bold bg-rose-50"
-          >
-            <PhoneCall className="w-4 h-4 animate-pulse" />
-            <span className="text-[10px] mt-0.5">SOS</span>
-          </a>
         </div>
       </nav>
 

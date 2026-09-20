@@ -9,7 +9,7 @@ import AIAssistant from './pages/AIAssistant';
 function App() {
   return (
     <Router>
-      <div className="min-h-screen bg-slate-50 text-slate-900">
+      <div className="min-h-screen font-body" style={{ backgroundColor: 'var(--color-bg)', color: 'var(--color-ink)' }}>
         <Navigation />
         <main className="pb-20 md:pb-0">
           <Routes>
