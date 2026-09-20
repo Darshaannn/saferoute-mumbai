@@ -50,17 +50,14 @@ def process_crime_data():
     if total_2022 > 0:
         trend = ((total_2023 - total_2022) / total_2022) * 100
         
-    base_risk = 52.0
-    risk_indicator = min(max(base_risk + (trend / 2), 0), 100)
-    color, label = get_risk_color(risk_indicator)
-    
     stats = {
-        "city_wide_risk_indicator": round(risk_indicator, 1),
-        "risk_color": color,
-        "risk_label": label,
         "total_cases_2022": int(total_2022),
         "total_cases_2023": int(total_2023),
         "trend_percentage": round(trend, 2),
+        "total_detected_2022": int(df[df["Category"].str.contains("Total of Crime", na=False)]["Detected_2022"].sum()),
+        "total_detected_2023": int(df[df["Category"].str.contains("Total of Crime", na=False)]["Detected_2023"].sum()),
+        "detection_rate_2022": int(df[df["Category"].str.contains("Total of Crime", na=False)]["Detection_Rate_2022"].sum()),
+        "detection_rate_2023": int(df[df["Category"].str.contains("Total of Crime", na=False)]["Detection_Rate_2023"].sum()),
         "categories": df.to_dict(orient="records")
     }
     
@@ -89,14 +86,6 @@ def process_kml_data():
     if not isinstance(placemarks, list):
         placemarks = [placemarks]
         
-    # Ward baseline score distributions derived from density
-    ward_offsets = {
-        "A": 18, "B": 24, "C": 28, "D": 32, "E": 44, "F/S": 48, "F/N": 52,
-        "G/S": 35, "G/N": 58, "H/E": 64, "H/W": 38, "K/E": 68, "K/W": 46,
-        "P/S": 55, "P/N": 72, "R/S": 62, "R/C": 74, "R/N": 82, "L": 78,
-        "M/E": 85, "M/W": 50, "N": 65, "S": 54, "T": 42
-    }
-    
     for idx, p in enumerate(placemarks):
         name = p.get('name', f'Police Station {idx+1}')
         
@@ -120,22 +109,13 @@ def process_kml_data():
                 lat = float(coords[1])
                 
                 ward = props.get('WARD', 'General').strip()
-                # Deterministic score based on ward base + hash seed
-                base_score = ward_offsets.get(ward, 50)
-                hash_val = int(hashlib.md5(f"{name}_{lat}_{lon}".encode()).hexdigest()[:4], 16) % 15 - 7
-                score = max(5, min(95, base_score + hash_val))
-                
-                color, label = get_risk_color(score)
                 
                 feature = {
                     "type": "Feature",
                     "properties": {
                         "name": props.get('NAME', name),
                         "ward": ward,
-                        "location": props.get('LOCATION', 'Mumbai, Maharashtra'),
-                        "risk_score": score,
-                        "risk_color": color,
-                        "risk_label": label
+                        "location": props.get('LOCATION', 'Mumbai, Maharashtra')
                     },
                     "geometry": {
                         "type": "Point",
@@ -154,8 +134,9 @@ def process_kml_data():
     with open(OUTPUT_DIR / "police_stations.geojson", "w", encoding="utf-8") as f:
         json.dump(geojson, f, indent=4)
         
-    print(f"Processed {len(features)} police stations with 5-tier risk indicators.")
+    print(f"Processed {len(features)} police stations as verified emergency infrastructure.")
 
 if __name__ == "__main__":
     process_crime_data()
     process_kml_data()
+

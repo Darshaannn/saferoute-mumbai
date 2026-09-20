@@ -9,6 +9,7 @@ import { computeTransitOptions } from '../data/mumbaiTransitLines';
 import FakeCallModal from '../components/FakeCallModal';
 import TransitAndRightsModal from '../components/TransitAndRightsModal';
 import API_BASE_URL from '../config/api';
+import { apiRequest } from '../services/apiClient';
 
 // Leaflet custom marker icons
 const originIcon = new L.Icon({
@@ -59,6 +60,22 @@ const metroStationIcon = L.divIcon({
   iconAnchor: [7, 7]
 });
 
+const policeStationIcon = new L.Icon({
+  iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-blue.png',
+  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
+  iconSize: [20, 32],
+  iconAnchor: [10, 32],
+  popupAnchor: [1, -28]
+});
+
+const hospitalIcon = new L.Icon({
+  iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-violet.png',
+  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
+  iconSize: [20, 32],
+  iconAnchor: [10, 32],
+  popupAnchor: [1, -28]
+});
+
 const hospitalHavenIcon = L.divIcon({
   className: 'hospital-haven-badge',
   html: `
@@ -106,21 +123,21 @@ const pharmacyHavenIcon = L.divIcon({
 });
 
 const POPULAR_MUMBAI_PLACES = [
-  { name: "Bandra Kurla Complex (BKC)", zone: "Central Business Hub" },
-  { name: "Colaba / Gateway of India", zone: "South Mumbai" },
-  { name: "CSMT Railway Terminus", zone: "South Mumbai" },
-  { name: "Marine Drive Promenade", zone: "South Mumbai" },
-  { name: "Bandra West / Bandstand", zone: "Western Suburbs" },
-  { name: "Dadar Railway Station", zone: "Central Mumbai" },
-  { name: "Andheri Railway Station", zone: "Western Suburbs" },
-  { name: "Mumbai Int'l Airport (T2)", zone: "Airport Zone" },
-  { name: "Powai (Hiranandani)", zone: "Eastern Suburbs" },
-  { name: "Borivali West", zone: "North Mumbai" },
-  { name: "Juhu Beach", zone: "Western Suburbs" },
-  { name: "Ghatkopar East", zone: "Eastern Suburbs" },
-  { name: "Thane Station", zone: "MMR Zone" },
-  { name: "Vashi", zone: "Navi Mumbai" },
-  { name: "Lower Parel / High Street Phoenix", zone: "South Central" },
+  { name: "Bandra Kurla Complex (BKC)", zone: "Central Business Hub", lat: 19.0657, lng: 72.8687 },
+  { name: "Colaba / Gateway of India", zone: "South Mumbai", lat: 18.9220, lng: 72.8347 },
+  { name: "CSMT Railway Terminus", zone: "South Mumbai", lat: 18.9401, lng: 72.8354 },
+  { name: "Marine Drive Promenade", zone: "South Mumbai", lat: 18.9432, lng: 72.8230 },
+  { name: "Bandra West / Bandstand", zone: "Western Suburbs", lat: 19.0596, lng: 72.8295 },
+  { name: "Dadar Railway Station", zone: "Central Mumbai", lat: 19.0182, lng: 72.8434 },
+  { name: "Andheri Railway Station", zone: "Western Suburbs", lat: 19.1197, lng: 72.8464 },
+  { name: "Mumbai Int'l Airport (T2)", zone: "Airport Zone", lat: 19.0896, lng: 72.8656 },
+  { name: "Powai (Hiranandani)", zone: "Eastern Suburbs", lat: 19.1176, lng: 72.9060 },
+  { name: "Borivali West", zone: "North Mumbai", lat: 19.2307, lng: 72.8567 },
+  { name: "Juhu Beach", zone: "Western Suburbs", lat: 19.0988, lng: 72.8264 },
+  { name: "Ghatkopar East", zone: "Eastern Suburbs", lat: 19.0860, lng: 72.9090 },
+  { name: "Thane Station", zone: "MMR Zone", lat: 19.1860, lng: 72.9759 },
+  { name: "Vashi", zone: "Navi Mumbai", lat: 19.0771, lng: 72.9986 },
+  { name: "Lower Parel / High Street Phoenix", zone: "South Central", lat: 18.9953, lng: 72.8302 },
 ];
 
 function FitBounds({ positions }) {
@@ -160,7 +177,19 @@ export default function SafeJourney() {
   const [journeyState, setJourneyState] = useState('planner'); // planner, active, emergency
   const [origin, setOrigin] = useState('Andheri Railway Station, Mumbai');
   const [destination, setDestination] = useState('Colaba / Gateway of India, Mumbai');
-  const [mapStyle, setMapStyle] = useState('google-streets');
+  const [originLocation, setOriginLocation] = useState({
+    name: 'Andheri Railway Station, Mumbai',
+    lat: 19.1197,
+    lng: 72.8464,
+    source: 'Default'
+  });
+  const [destinationLocation, setDestinationLocation] = useState({
+    name: 'Colaba / Gateway of India, Mumbai',
+    lat: 18.9220,
+    lng: 72.8347,
+    source: 'Default'
+  });
+  const [mapStyle, setMapStyle] = useState('osm');
   const [analysis, setAnalysis] = useState(null);
   const [analyzing, setAnalyzing] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
@@ -186,33 +215,91 @@ export default function SafeJourney() {
 
   // SOS & Emergency states
   const [sirenActive, setSirenActive] = useState(false);
-  const [liveCoords, setLiveCoords] = useState({ lat: 19.0760, lng: 72.8777 });
+  const [liveCoords, setLiveCoords] = useState(null); // Never default to fake coordinates
+  const [locationStatus, setLocationStatus] = useState('idle'); // idle | requesting | available | denied | unavailable
   const [trustedContacts, setTrustedContacts] = useState(() => {
     try {
       const saved = localStorage.getItem('saferoute_contacts');
-      return saved ? JSON.parse(saved) : [
-        { name: "Mom", phone: "9820012345" },
-        { name: "Emergency Friend", phone: "9820098765" }
-      ];
+      return saved ? JSON.parse(saved) : [];
     } catch {
-      return [{ name: "Family", phone: "9820012345" }];
+      return [];
     }
   });
   const [newContactName, setNewContactName] = useState('');
   const [newContactPhone, setNewContactPhone] = useState('');
+  const [contactError, setContactError] = useState('');
   const [showContactsModal, setShowContactsModal] = useState(false);
 
   const audioCtxRef = useRef(null);
   const oscRef = useRef(null);
+  const watchIdRef = useRef(null);
 
   useEffect(() => {
     handleAnalyze();
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition((pos) => {
-        setLiveCoords({ lat: pos.coords.latitude, lng: pos.coords.longitude });
-      }, () => {});
+      setLocationStatus('requesting');
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          setLiveCoords({ lat: pos.coords.latitude, lng: pos.coords.longitude });
+          setLocationStatus('available');
+        },
+        (err) => {
+          console.warn("Initial GPS check failed:", err.message);
+          setLiveCoords(null);
+          setLocationStatus(err.code === 1 ? 'denied' : 'unavailable');
+        },
+        { enableHighAccuracy: true, timeout: 6000, maximumAge: 10000 }
+      );
+    } else {
+      setLocationStatus('unavailable');
     }
   }, []);
+
+  // Continuous Real-Time GPS Tracking during Active Journey Mode
+  useEffect(() => {
+    if (journeyState === 'active') {
+      if (navigator.geolocation) {
+        setLocationStatus('requesting');
+        // Clear any existing watcher before starting a new one
+        if (watchIdRef.current !== null) {
+          navigator.geolocation.clearWatch(watchIdRef.current);
+          watchIdRef.current = null;
+        }
+
+        const id = navigator.geolocation.watchPosition(
+          (pos) => {
+            const coords = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+            setLiveCoords(coords);
+            setLocationStatus('available');
+          },
+          (err) => {
+            console.warn("Continuous GPS tracking error:", err.message);
+            setLocationStatus(err.code === 1 ? 'denied' : 'unavailable');
+          },
+          {
+            enableHighAccuracy: true,
+            timeout: 10000,
+            maximumAge: 3000
+          }
+        );
+        watchIdRef.current = id;
+      }
+    } else {
+      // Clear watcher when not in active journey state
+      if (watchIdRef.current !== null) {
+        navigator.geolocation.clearWatch(watchIdRef.current);
+        watchIdRef.current = null;
+      }
+    }
+
+    // Cleanup on unmount or mode change
+    return () => {
+      if (watchIdRef.current !== null) {
+        navigator.geolocation.clearWatch(watchIdRef.current);
+        watchIdRef.current = null;
+      }
+    };
+  }, [journeyState]);
 
   // Save contacts to localStorage
   useEffect(() => {
@@ -248,29 +335,49 @@ export default function SafeJourney() {
         try {
           oscRef.current.stop();
           oscRef.current.disconnect();
-        } catch {}
-        oscRef.current = null;
+        } catch (e) {
+          console.warn(e);
+        }
+      }
+      if (audioCtxRef.current) {
+        try {
+          audioCtxRef.current.close();
+        } catch (e) {
+          console.warn(e);
+        }
       }
       setSirenActive(false);
     } else {
       try {
         const AudioContext = window.AudioContext || window.webkitAudioContext;
-        if (!audioCtxRef.current) audioCtxRef.current = new AudioContext();
-        const ctx = audioCtxRef.current;
-        if (ctx.state === 'suspended') ctx.resume();
+        const ctx = new AudioContext();
+        audioCtxRef.current = ctx;
+
         const osc = ctx.createOscillator();
         const gain = ctx.createGain();
 
         osc.type = 'sawtooth';
         osc.frequency.setValueAtTime(800, ctx.currentTime);
-        let time = ctx.currentTime;
-        for (let i = 0; i < 30; i++) {
-          osc.frequency.linearRampToValueAtTime(1400, time + 0.3);
-          osc.frequency.linearRampToValueAtTime(700, time + 0.6);
-          time += 0.6;
-        }
+        osc.frequency.linearRampToValueAtTime(1400, ctx.currentTime + 0.3);
+        osc.frequency.linearRampToValueAtTime(800, ctx.currentTime + 0.6);
 
-        gain.gain.setValueAtTime(0.7, ctx.currentTime);
+        // Siren frequency modulation loop
+        let isHigh = false;
+        const interval = setInterval(() => {
+          if (!audioCtxRef.current) {
+            clearInterval(interval);
+            return;
+          }
+          const t = ctx.currentTime;
+          if (isHigh) {
+            osc.frequency.linearRampToValueAtTime(800, t + 0.25);
+          } else {
+            osc.frequency.linearRampToValueAtTime(1400, t + 0.25);
+          }
+          isHigh = !isHigh;
+        }, 300);
+
+        gain.gain.setValueAtTime(0.8, ctx.currentTime);
         osc.connect(gain);
         gain.connect(ctx.destination);
         osc.start();
@@ -284,22 +391,47 @@ export default function SafeJourney() {
 
   const addContact = (e) => {
     e.preventDefault();
-    if (!newContactName || !newContactPhone) return;
-    setTrustedContacts([...trustedContacts, { name: newContactName, phone: newContactPhone }]);
+    setContactError('');
+    const trimmedName = newContactName.trim();
+    const trimmedPhone = newContactPhone.trim().replace(/[\s-]/g, '');
+
+    if (!trimmedName) {
+      setContactError('Please enter a contact name.');
+      return;
+    }
+
+    const phoneRegex = /^\+?[0-9]{7,15}$/;
+    if (!phoneRegex.test(trimmedPhone)) {
+      setContactError('Please enter a valid phone number (digits only, optional +, 7–15 digits).');
+      return;
+    }
+
+    setTrustedContacts([...trustedContacts, { name: trimmedName, phone: trimmedPhone }]);
     setNewContactName('');
     setNewContactPhone('');
+    setContactError('');
   };
 
   const removeContact = (idx) => {
     setTrustedContacts(trustedContacts.filter((_, i) => i !== idx));
   };
 
-  const handleBroadcastSOS = () => {
-    const lat = liveCoords.lat.toFixed(5);
-    const lng = liveCoords.lng.toFixed(5);
+  const handleBroadcastSOS = (targetPhone = null) => {
+    if (!liveCoords || isNaN(liveCoords.lat) || isNaN(liveCoords.lng)) {
+      alert("Current GPS location is unavailable. You can still access direct 112 and 103 emergency call options.");
+      return;
+    }
+    const lat = Number(liveCoords.lat).toFixed(5);
+    const lng = Number(liveCoords.lng).toFixed(5);
     const mapsLink = `https://maps.google.com/?q=${lat},${lng}`;
-    const text = encodeURIComponent(`🚨 EMERGENCY SOS ALERT from SafeRoute Mumbai!\n\nI need immediate assistance. My live GPS location:\n${mapsLink}\n\nNearby destination: ${destination}`);
-    window.open(`https://api.whatsapp.com/send?text=${text}`, '_blank');
+    const text = encodeURIComponent(`🚨 EMERGENCY ALERT - SafeRoute Mumbai\n\nI need immediate assistance. My current location snapshot:\n${mapsLink}\n\nNearby destination: ${destination}`);
+    
+    if (targetPhone) {
+      const cleanPhone = String(targetPhone).replace(/[^0-9]/g, '');
+      window.open(`https://wa.me/${cleanPhone}?text=${text}`, '_blank');
+    } else {
+      window.open(`https://api.whatsapp.com/send?text=${text}`, '_blank');
+    }
   };
 
   const handleNavigateNearestStation = () => {
@@ -312,18 +444,35 @@ export default function SafeJourney() {
     }
   };
 
-  const searchPlaces = async (query, setFn) => {
+  // Debounced place search helper
+  const searchPlaces = (query, setFn, debounceRef, abortRef) => {
+    if (debounceRef.current) {
+      clearTimeout(debounceRef.current);
+    }
+    if (abortRef.current) {
+      abortRef.current.abort();
+    }
+
     if (!query || query.trim().length === 0) {
       setFn([]);
       return;
     }
-    try {
-      const res = await fetch(`${API_BASE_URL}/api/geocode?q=${encodeURIComponent(query)}`);
-      const data = await res.json();
-      setFn(data.results || []);
-    } catch (e) {
-      console.error(e);
-    }
+
+    debounceRef.current = setTimeout(async () => {
+      const abortController = new AbortController();
+      abortRef.current = abortController;
+
+      try {
+        const data = await apiRequest(`/api/geocode?q=${encodeURIComponent(query.trim())}`, {
+          signal: abortController.signal
+        });
+        setFn(data.results || []);
+      } catch (e) {
+        if (!e.isAborted) {
+          console.error("Geocoding search error", e);
+        }
+      }
+    }, 350);
   };
 
   const handleUseMyLocation = () => {
@@ -336,28 +485,44 @@ export default function SafeJourney() {
         const lat = pos.coords.latitude;
         const lng = pos.coords.longitude;
         setLiveCoords({ lat, lng });
+        let displayName = `${lat.toFixed(4)}, ${lng.toFixed(4)}`;
         try {
-          const res = await fetch(`${API_BASE_URL}/api/reverse-geocode?lat=${lat}&lng=${lng}`);
-          const data = await res.json();
-          setOrigin(data.name || `${lat.toFixed(4)}, ${lng.toFixed(4)}`);
+          const data = await apiRequest(`/api/reverse-geocode?lat=${lat}&lng=${lng}`);
+          if (data.name) displayName = data.name;
         } catch {
-          setOrigin(`${lat.toFixed(4)}, ${lng.toFixed(4)}`);
+          // fallback to coordinates string
         }
+        setOrigin(displayName);
+        setOriginLocation({
+          name: displayName,
+          lat: lat,
+          lng: lng,
+          source: 'GPS'
+        });
       },
       () => {
-        setOrigin("Bandra West, Mumbai");
+        setErrorMsg("Unable to retrieve GPS location. Please type a Mumbai location.");
       }
     );
   };
 
   const handleMapPick = async (latlng) => {
+    const lat = latlng.lat;
+    const lng = latlng.lng;
+    let displayName = `${lat.toFixed(4)}, ${lng.toFixed(4)}`;
     try {
-      const res = await fetch(`${API_BASE_URL}/api/reverse-geocode?lat=${latlng.lat}&lng=${latlng.lng}`);
-      const data = await res.json();
-      setDestination(data.name || `${latlng.lat.toFixed(4)}, ${latlng.lng.toFixed(4)}`);
+      const data = await apiRequest(`/api/reverse-geocode?lat=${lat}&lng=${lng}`);
+      if (data.name) displayName = data.name;
     } catch {
-      setDestination(`${latlng.lat.toFixed(4)}, ${latlng.lng.toFixed(4)}`);
+      // fallback to coords string
     }
+    setDestination(displayName);
+    setDestinationLocation({
+      name: displayName,
+      lat: lat,
+      lng: lng,
+      source: 'Map Click'
+    });
   };
 
   const handleAnalyze = async (e) => {
@@ -369,19 +534,41 @@ export default function SafeJourney() {
     setAnalyzing(true);
     setErrorMsg('');
     try {
-      const res = await fetch(`${API_BASE_URL}/api/journey/analyze`, {
+      const payload = {
+        origin: origin.trim(),
+        destination: destination.trim(),
+        start: originLocation ? { lat: originLocation.lat, lng: originLocation.lng } : null,
+        end: destinationLocation ? { lat: destinationLocation.lat, lng: destinationLocation.lng } : null
+      };
+
+      const data = await apiRequest('/api/journey/analyze', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ origin, destination })
+        body: JSON.stringify(payload)
       });
-      const data = await res.json();
-      if (!res.ok) {
-        throw new Error(data.error || "Failed to analyze road route.");
-      }
       setAnalysis(data);
 
       const sCoords = [data.route.origin.lat, data.route.origin.lng];
       const eCoords = [data.route.destination.lat, data.route.destination.lng];
+      
+      // Update structured location states if geocoded by backend
+      if (!originLocation) {
+        setOriginLocation({
+          name: data.route.origin.name || origin,
+          lat: data.route.origin.lat,
+          lng: data.route.origin.lng,
+          source: 'Resolved'
+        });
+      }
+      if (!destinationLocation) {
+        setDestinationLocation({
+          name: data.route.destination.name || destination,
+          lat: data.route.destination.lat,
+          lng: data.route.destination.lng,
+          source: 'Resolved'
+        });
+      }
+
       const multiModal = computeTransitOptions(sCoords, eCoords, data);
       setTransitOptions(multiModal);
 
@@ -393,7 +580,7 @@ export default function SafeJourney() {
       setTimerRemainingSecs((estimatedMins + 10) * 60);
 
     } catch (err) {
-      setErrorMsg(err.message || "Route calculation error");
+      setErrorMsg(err.message || "Unable to calculate route. Please try again.");
     } finally {
       setAnalyzing(false);
     }
@@ -429,17 +616,13 @@ export default function SafeJourney() {
   };
 
   const tileLayers = {
-    'google-streets': {
-      url: 'https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',
-      attribution: '&copy; Google Maps & OpenRouteService'
-    },
-    'google-hybrid': {
-      url: 'https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}',
-      attribution: '&copy; Google Satellite & OpenRouteService'
-    },
     'osm': {
       url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-      attribution: '&copy; OpenStreetMap & OpenRouteService'
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">OpenStreetMap</a> contributors'
+    },
+    'osm-hot': {
+      url: 'https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png',
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">OpenStreetMap</a> contributors, Tiles courtesy of Humanitarian OpenStreetMap Team'
     }
   };
 
@@ -539,7 +722,9 @@ export default function SafeJourney() {
                         value={origin}
                         onChange={(e) => {
                           setOrigin(e.target.value);
-                          searchPlaces(e.target.value, setFromSuggestions);
+                          // Invalidate previous coordinate selection if text is manually typed
+                          setOriginLocation(null);
+                          searchPlaces(e.target.value, setFromSuggestions, fromDebounceRef, fromAbortRef);
                         }}
                         placeholder="e.g. Andheri Station, Bandra, BKC..."
                         className="w-full pl-9 pr-3 py-2 text-xs bg-slate-50 hover:bg-slate-100/60 focus:bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
@@ -554,6 +739,12 @@ export default function SafeJourney() {
                             key={idx}
                             onClick={() => {
                               setOrigin(place.name);
+                              setOriginLocation({
+                                name: place.name,
+                                lat: place.lat,
+                                lng: place.lng,
+                                source: place.source || 'Search'
+                              });
                               setFromSuggestions([]);
                             }}
                             className="p-2.5 text-xs hover:bg-blue-50 cursor-pointer flex justify-between items-center transition"
@@ -578,6 +769,12 @@ export default function SafeJourney() {
                               type="button"
                               onClick={() => {
                                 setOrigin(p.name);
+                                setOriginLocation({
+                                  name: p.name,
+                                  lat: p.lat,
+                                  lng: p.lng,
+                                  source: 'Quick Hub'
+                                });
                                 setShowFromHubs(false);
                               }}
                               className="text-left p-1.5 rounded-lg hover:bg-white border border-transparent hover:border-slate-200 transition"
@@ -610,7 +807,9 @@ export default function SafeJourney() {
                         value={destination}
                         onChange={(e) => {
                           setDestination(e.target.value);
-                          searchPlaces(e.target.value, setToSuggestions);
+                          // Invalidate previous coordinate selection if text is manually typed
+                          setDestinationLocation(null);
+                          searchPlaces(e.target.value, setToSuggestions, toDebounceRef, toAbortRef);
                         }}
                         placeholder="e.g. Gateway of India, Dadar, Powai..."
                         className="w-full pl-9 pr-3 py-2 text-xs bg-slate-50 hover:bg-slate-100/60 focus:bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
@@ -625,6 +824,12 @@ export default function SafeJourney() {
                             key={idx}
                             onClick={() => {
                               setDestination(place.name);
+                              setDestinationLocation({
+                                name: place.name,
+                                lat: place.lat,
+                                lng: place.lng,
+                                source: place.source || 'Search'
+                              });
                               setToSuggestions([]);
                             }}
                             className="p-2.5 text-xs hover:bg-blue-50 cursor-pointer flex justify-between items-center transition"
@@ -649,6 +854,12 @@ export default function SafeJourney() {
                               type="button"
                               onClick={() => {
                                 setDestination(p.name);
+                                setDestinationLocation({
+                                  name: p.name,
+                                  lat: p.lat,
+                                  lng: p.lng,
+                                  source: 'Quick Hub'
+                                });
                                 setShowToHubs(false);
                               }}
                               className="text-left p-1.5 rounded-lg hover:bg-white border border-transparent hover:border-slate-200 transition"
@@ -696,13 +907,13 @@ export default function SafeJourney() {
                         Available Transit Options:
                       </span>
                       <span className="text-[10px] font-medium text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200/60">
-                        Zone Verified
+                        Resource Verified
                       </span>
                     </div>
 
                     <div className="grid grid-cols-2 gap-2">
                       
-                      {/* 1. SAFEST ZONE CORRIDOR (Always available) */}
+                      {/* 1. BEST SUPPORTED CORRIDOR (Always available) */}
                       {transitOptions.safest_cab && (
                         <button
                           type="button"
@@ -719,8 +930,8 @@ export default function SafeJourney() {
                             </span>
                             <span className="text-xs font-semibold opacity-90">{transitOptions.safest_cab.distanceKm} km</span>
                           </div>
-                          <div className="font-bold text-xs mt-1">🛡️ Safest Corridor</div>
-                          <div className="text-[11px] opacity-90">Risk Score: {transitOptions.safest_cab.avgZoneScore}/100</div>
+                          <div className="font-bold text-xs mt-1">🛡️ Best Supported Corridor</div>
+                          <div className="text-[11px] opacity-90">Resource Coverage: {transitOptions.safest_cab.resourceCoverage?.score || 85}/100</div>
                           <div className={`text-sm font-bold mt-1 ${selectedTransitMode === 'safest_cab' ? 'text-white' : 'text-emerald-700'}`}>
                             {transitOptions.safest_cab.durationMin} mins
                           </div>
@@ -747,7 +958,7 @@ export default function SafeJourney() {
                             <span className="text-xs font-semibold opacity-90">{transitOptions.direct_cab.distanceKm} km</span>
                           </div>
                           <div className="font-bold text-xs mt-1">🚗 Direct Road</div>
-                          <div className="text-[11px] opacity-90">Risk Score: {transitOptions.direct_cab.avgZoneScore}/100</div>
+                          <div className="text-[11px] opacity-90">Resource Coverage: {transitOptions.direct_cab.resourceCoverage?.score || 72}/100</div>
                           <div className={`text-sm font-bold mt-1 ${selectedTransitMode === 'direct_cab' ? 'text-white' : 'text-amber-700'}`}>
                             {transitOptions.direct_cab.durationMin} mins
                           </div>
@@ -840,16 +1051,16 @@ export default function SafeJourney() {
                           </span>
                         </div>
 
-                        {/* Zone Risk Score Badge Bar */}
-                        {currentOption.avgZoneScore && (
+                        {/* Resource Coverage Score Badge Bar */}
+                        {currentOption.resourceCoverage && (
                           <div className="p-2.5 bg-slate-50 rounded-xl border border-slate-100 flex items-center justify-between text-xs">
                             <div>
-                              <span className="text-slate-500 text-[10px] block">Zone Risk Indicator:</span>
-                              <strong className="text-slate-900 text-xs">{currentOption.avgZoneScore} / 100</strong>
+                              <span className="text-slate-500 text-[10px] block">Safety Resource Coverage:</span>
+                              <strong className="text-slate-900 text-xs">{currentOption.resourceCoverage.score} / 100</strong>
                             </div>
                             <div className="text-right">
-                              <span className="text-slate-500 text-[10px] block">Confidence:</span>
-                              <strong className="text-emerald-700 text-xs">{currentOption.safetyScore}% Safe</strong>
+                              <span className="text-slate-500 text-[10px] block">Emergency Infrastructure:</span>
+                              <strong className="text-emerald-700 text-xs">{currentOption.resourceCoverage.tier}</strong>
                             </div>
                           </div>
                         )}
@@ -869,7 +1080,7 @@ export default function SafeJourney() {
                           <div><strong>Corridor Protection:</strong> {currentOption.safetyDetails}</div>
                           {analysis && (
                             <div className="text-slate-500 text-[10px]">
-                              Nearby Police Stations: <strong>{analysis.safety_context.nearby_police_stations_count}</strong> • 24/7 Havens: <strong>{analysis.safety_context.nearby_hospitals_count || 4}</strong>
+                              Nearby Police Stations: <strong>{analysis.safety_context.nearby_police_stations_count}</strong> • Medical Facilities: <strong>{analysis.safety_context.nearby_hospitals_count || 4}</strong>
                             </div>
                           )}
                         </div>
@@ -895,20 +1106,20 @@ export default function SafeJourney() {
                 {/* Map style selector bar */}
                 <div className="absolute top-4 left-4 z-[1000] bg-white/95 backdrop-blur-md p-1.5 rounded-xl shadow-md border border-slate-200 flex items-center gap-1">
                   <button
-                    onClick={() => setMapStyle('google-streets')}
+                    onClick={() => setMapStyle('osm')}
                     className={`px-2.5 py-1 text-[11px] font-medium rounded-lg transition ${
-                      mapStyle === 'google-streets' ? 'bg-blue-600 text-white shadow-sm' : 'text-slate-600 hover:bg-slate-100'
+                      mapStyle === 'osm' ? 'bg-blue-600 text-white shadow-sm' : 'text-slate-600 hover:bg-slate-100'
                     }`}
                   >
-                    Google Map
+                    OSM Standard
                   </button>
                   <button
-                    onClick={() => setMapStyle('google-hybrid')}
+                    onClick={() => setMapStyle('osm-hot')}
                     className={`px-2.5 py-1 text-[11px] font-medium rounded-lg transition ${
-                      mapStyle === 'google-hybrid' ? 'bg-blue-600 text-white shadow-sm' : 'text-slate-600 hover:bg-slate-100'
+                      mapStyle === 'osm-hot' ? 'bg-blue-600 text-white shadow-sm' : 'text-slate-600 hover:bg-slate-100'
                     }`}
                   >
-                    Satellite
+                    Terrain/HOT
                   </button>
                 </div>
 
@@ -918,7 +1129,7 @@ export default function SafeJourney() {
                     style={{ backgroundColor: currentOption?.color || '#059669' }}
                     className="w-2.5 h-2.5 rounded-full animate-pulse"
                   ></span>
-                  <span>Viewing {currentOption?.name || 'Safest Corridor'}</span>
+                  <span>Viewing {currentOption?.name || 'Best Supported Corridor'}</span>
                 </div>
 
                 <MapContainer
@@ -1030,7 +1241,7 @@ export default function SafeJourney() {
                     </Marker>
                   )}
 
-                  {/* 24/7 Safe Havens on Map */}
+                  {/* Mapped Medical Facilities on Map */}
                   {MUMBAI_SAFE_HAVENS.slice(0, 15).map((h) => {
                     const icon = h.type === 'hospital' ? hospitalHavenIcon : pharmacyHavenIcon;
                     return (
@@ -1075,10 +1286,10 @@ export default function SafeJourney() {
                 <div className="flex justify-between items-center mb-2">
                   <span className="text-xs font-semibold text-slate-300 flex items-center gap-1.5 uppercase tracking-wider">
                     <Timer className="w-3.5 h-3.5 text-emerald-400" />
-                    Safety Check-in Timer
+                    Emergency Check-in Timer
                   </span>
                   <span className="text-[10px] text-slate-300 font-medium bg-white/10 px-2 py-0.5 rounded-full">
-                    Auto-SOS Safeguard
+                    Check-in Timer
                   </span>
                 </div>
 
@@ -1088,7 +1299,7 @@ export default function SafeJourney() {
                       {formatTimer(timerRemainingSecs)}
                     </div>
                     <span className="text-[10px] text-slate-400 block mt-0.5">
-                      Sends SOS alert if you do not check in
+                      Opens emergency actions if you do not check in.
                     </span>
                   </div>
 
@@ -1134,13 +1345,26 @@ export default function SafeJourney() {
                   Fake Call
                 </button>
                 <button
-                  onClick={handleBroadcastSOS}
-                  className="p-2.5 bg-blue-50 hover:bg-blue-100 border border-blue-200 text-blue-800 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition cursor-pointer"
+                  onClick={() => handleBroadcastSOS()}
+                  className={`p-2.5 border rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition cursor-pointer ${
+                    liveCoords 
+                      ? 'bg-blue-50 hover:bg-blue-100 border-blue-200 text-blue-800' 
+                      : 'bg-slate-50 border-slate-200 text-slate-400 opacity-80'
+                  }`}
+                  title={liveCoords ? "Share current GPS location snapshot" : "GPS location is currently unavailable"}
                 >
-                  <Share2 className="w-3.5 h-3.5 text-blue-600" />
-                  Share Live GPS
+                  <Share2 className={`w-3.5 h-3.5 ${liveCoords ? 'text-blue-600' : 'text-slate-400'}`} />
+                  {liveCoords ? 'Share Current Location' : 'GPS Unavailable'}
                 </button>
               </div>
+
+              {/* GPS Connection Notice if unavailable */}
+              {!liveCoords && (
+                <div className="mb-4 p-2.5 bg-amber-50 border border-amber-200 rounded-xl text-[11px] text-amber-900 text-left flex items-start gap-1.5">
+                  <Info className="w-3.5 h-3.5 text-amber-600 shrink-0 mt-0.5" />
+                  <span>GPS location unavailable. You can still access emergency call options and the safety timer.</span>
+                </div>
+              )}
 
               {/* End Trip Button */}
               <button 
@@ -1181,7 +1405,7 @@ export default function SafeJourney() {
               <div>
                 <h1 className="text-xl font-bold tracking-tight text-white">Emergency Protocol Active</h1>
                 <p className="text-slate-400 text-xs mt-1">
-                  Connect immediately with Mumbai emergency dispatch or broadcast coordinates.
+                  Connect immediately with Mumbai emergency dispatch or share your current location snapshot.
                 </p>
               </div>
 
@@ -1203,12 +1427,33 @@ export default function SafeJourney() {
                   Call 103 (Women&apos;s Helpline)
                 </a>
 
+                {/* Quick-Select Trusted Contacts WhatsApp Direct Buttons */}
+                {trustedContacts.length > 0 && (
+                  <div className="space-y-1.5 pt-1 text-left">
+                    <span className="text-[11px] font-semibold text-slate-300 block">Send Location Snapshot to Contact:</span>
+                    {trustedContacts.map((c, i) => (
+                      <button
+                        key={i}
+                        onClick={() => handleBroadcastSOS(c.phone)}
+                        className="w-full py-2.5 px-3 bg-emerald-900/60 hover:bg-emerald-800 border border-emerald-600/40 text-white rounded-xl font-medium text-xs flex items-center justify-between transition cursor-pointer"
+                      >
+                        <span className="flex items-center gap-1.5 truncate">
+                          <MessageSquare className="w-3.5 h-3.5 text-emerald-300 shrink-0" />
+                          <span className="font-semibold">{c.name}</span>
+                          <span className="text-[10px] text-emerald-200 opacity-80 truncate">({c.phone})</span>
+                        </span>
+                        <span className="text-[10px] bg-emerald-600 px-2 py-0.5 rounded-md shrink-0">Open WhatsApp</span>
+                      </button>
+                    ))}
+                  </div>
+                )}
+
                 <button 
-                  onClick={handleBroadcastSOS}
+                  onClick={() => handleBroadcastSOS()}
                   className="w-full py-3 bg-emerald-700 hover:bg-emerald-600 text-white rounded-xl font-semibold text-xs flex items-center justify-center gap-2 transition cursor-pointer"
                 >
-                  <MessageSquare className="w-4 h-4" />
-                  Broadcast Live GPS via WhatsApp
+                  <Share2 className="w-4 h-4" />
+                  Share Current Location via WhatsApp
                 </button>
 
                 <button 
@@ -1237,7 +1482,7 @@ export default function SafeJourney() {
                   if (sirenActive) toggleSiren();
                   setJourneyState('active');
                 }}
-                className="w-full py-2.5 text-slate-400 hover:text-white text-xs font-medium transition pt-2"
+                className="w-full py-2.5 text-slate-400 hover:text-white text-xs font-medium transition pt-2 cursor-pointer"
               >
                 Return to Safe Trip Tracking
               </button>
@@ -1257,7 +1502,10 @@ export default function SafeJourney() {
                 Trusted Emergency Contacts
               </h3>
               <button 
-                onClick={() => setShowContactsModal(false)}
+                onClick={() => {
+                  setShowContactsModal(false);
+                  setContactError('');
+                }}
                 className="text-slate-400 hover:text-slate-600 p-1"
               >
                 ✕
@@ -1265,45 +1513,62 @@ export default function SafeJourney() {
             </div>
 
             <p className="text-xs text-slate-500">
-              When SOS or &quot;Share Live GPS&quot; is triggered, alerts and live Google Maps coordinate links are sent to these contacts.
+              Trusted contacts are saved on this device for quick access during emergencies.
             </p>
 
             {/* List of Contacts */}
             <div className="space-y-2 max-h-48 overflow-y-auto pr-1">
-              {trustedContacts.map((c, i) => (
-                <div key={i} className="flex justify-between items-center p-3 bg-slate-50 rounded-xl border border-slate-100 text-xs">
-                  <div>
-                    <span className="font-bold text-slate-800 block">{c.name}</span>
-                    <span className="text-slate-500 text-[11px]">{c.phone}</span>
-                  </div>
-                  <button
-                    onClick={() => removeContact(i)}
-                    className="text-rose-500 hover:text-rose-700 p-1.5"
-                    title="Remove contact"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </button>
+              {trustedContacts.length === 0 ? (
+                <div className="p-4 bg-slate-50 rounded-xl border border-dashed border-slate-200 text-center text-xs text-slate-400">
+                  No trusted contacts added yet. Add a contact below for quick access during emergency situations.
                 </div>
-              ))}
+              ) : (
+                trustedContacts.map((c, i) => (
+                  <div key={i} className="flex justify-between items-center p-3 bg-slate-50 rounded-xl border border-slate-100 text-xs">
+                    <div>
+                      <span className="font-bold text-slate-800 block">{c.name}</span>
+                      <span className="text-slate-500 text-[11px]">{c.phone}</span>
+                    </div>
+                    <button
+                      onClick={() => removeContact(i)}
+                      className="text-rose-500 hover:text-rose-700 p-1.5"
+                      title="Remove contact"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
+                ))
+              )}
             </div>
 
             {/* Add Contact Form */}
             <form onSubmit={addContact} className="pt-2 border-t border-slate-100 space-y-2.5">
               <span className="text-xs font-bold text-slate-700 block">Add New Contact:</span>
+              {contactError && (
+                <div className="text-[11px] text-rose-600 bg-rose-50 border border-rose-200 px-2.5 py-1.5 rounded-lg">
+                  {contactError}
+                </div>
+              )}
               <div className="grid grid-cols-2 gap-2">
                 <input
                   type="text"
                   placeholder="Name (e.g. Sister)"
                   value={newContactName}
-                  onChange={(e) => setNewContactName(e.target.value)}
+                  onChange={(e) => {
+                    setNewContactName(e.target.value);
+                    if (contactError) setContactError('');
+                  }}
                   className="p-2.5 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
                   required
                 />
                 <input
                   type="tel"
-                  placeholder="Phone (10 digits)"
+                  placeholder="Phone (+91 / digits)"
                   value={newContactPhone}
-                  onChange={(e) => setNewContactPhone(e.target.value)}
+                  onChange={(e) => {
+                    setNewContactPhone(e.target.value);
+                    if (contactError) setContactError('');
+                  }}
                   className="p-2.5 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
                   required
                 />

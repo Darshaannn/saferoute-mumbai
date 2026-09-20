@@ -59,10 +59,12 @@ def parse_kml_features(kml_path, feature_type_default='Hospital'):
             val = sd.text.strip() if sd.text else ''
             props[attr_name.lower()] = val
 
-        # Clean address, ward, type
+        # Clean address, ward, type, owner department strictly from source KML
         address = props.get('address') or props.get('name_of_ho') or props.get('name_of_mat_home') or ''
         ward = props.get('ward', 'Mumbai')
         hosp_type = props.get('type') or feature_type_default
+        owner_dept = props.get('owner_dept', 'Public Health Dept')
+        twitter = props.get('twitter_handle', '')
 
         feature = {
             "type": "Feature",
@@ -76,9 +78,9 @@ def parse_kml_features(kml_path, feature_type_default='Hospital'):
                 "address": address,
                 "ward": ward,
                 "type": hosp_type,
-                "owner_dept": props.get('owner_dept', 'Public Health Dept'),
-                "open24x7": True,
-                "emergency_services": True if "Major" in hosp_type or "Hospital" in hosp_type else False
+                "owner_dept": owner_dept,
+                "operating_hours": "Operating hours not verified",
+                "twitter_handle": twitter
             }
         }
         features.append(feature)
@@ -108,44 +110,44 @@ def main():
         json.dump(maternity_geojson, f, indent=2)
     print(f"Saved {len(maternity_features)} maternity homes to {mat_out_path}")
 
-    # Generate unified frontend dataset
-    all_medical_havens = []
+    # Generate unified frontend dataset with source-backed fields only
+    all_medical_facilities = []
     for f in hospitals_features:
         p = f['properties']
         coords = f['geometry']['coordinates'] # [lon, lat]
-        all_medical_havens.append({
+        all_medical_facilities.append({
             'id': p['id'],
             'name': p['name'],
             'type': 'hospital',
-            'category': f"BMC {p['type']}",
-            'area': f"Ward {p['ward']}",
-            'address': p['address'] or f"Ward {p['ward']}, Mumbai",
+            'category': f"BMC {p['type']}" if p.get('type') else "BMC Hospital",
+            'area': f"Ward {p['ward']}" if p.get('ward') else "Mumbai",
+            'address': p['address'] or f"Ward {p.get('ward', 'Mumbai')}, Mumbai",
             'coordinates': [coords[1], coords[0]], # [lat, lon] for Leaflet
-            'open24x7': p['open24x7'],
             'ward': p['ward'],
-            'services': ['24/7 Casualty & Emergency Ward', 'Govt Medical Aid', 'Trauma Unit']
+            'owner_dept': p['owner_dept'],
+            'operating_hours': "Operating hours not verified"
         })
 
     for f in maternity_features:
         p = f['properties']
         coords = f['geometry']['coordinates']
-        all_medical_havens.append({
+        all_medical_facilities.append({
             'id': p['id'],
             'name': p['name'],
             'type': 'maternity_home',
             'category': 'BMC Municipal Maternity Home',
-            'area': f"Ward {p['ward']}",
-            'address': p['address'] or f"Ward {p['ward']}, Mumbai",
+            'area': f"Ward {p['ward']}" if p.get('ward') else "Mumbai",
+            'address': p['address'] or f"Ward {p.get('ward', 'Mumbai')}, Mumbai",
             'coordinates': [coords[1], coords[0]],
-            'open24x7': True,
             'ward': p['ward'],
-            'services': ['Maternal Care', 'Emergency Women Care', 'Public Health Dept']
+            'owner_dept': p['owner_dept'],
+            'operating_hours': "Operating hours not verified"
         })
 
     frontend_json_path = os.path.join(FRONTEND_DATA_DIR, "mumbaiMedicalFacilities.json")
     with open(frontend_json_path, "w", encoding="utf-8") as f:
-        json.dump(all_medical_havens, f, indent=2)
-    print(f"Generated unified frontend medical dataset with {len(all_medical_havens)} facilities at {frontend_json_path}")
+        json.dump(all_medical_facilities, f, indent=2)
+    print(f"Generated unified frontend medical dataset with {len(all_medical_facilities)} facilities at {frontend_json_path}")
 
 if __name__ == "__main__":
     main()

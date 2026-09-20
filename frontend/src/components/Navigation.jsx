@@ -14,7 +14,7 @@ export default function Navigation() {
     { name: 'Safety Map', path: '/map', icon: Map },
     { name: 'Safe Journey', path: '/journey', icon: NavIcon },
     { name: 'Dashboard', path: '/dashboard', icon: Activity },
-    { name: 'AI Assistant', path: '/assistant', icon: Bot },
+    { name: 'Safety Guide', path: '/assistant', icon: Bot },
   ];
 
   return (

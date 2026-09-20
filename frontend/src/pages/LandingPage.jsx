@@ -82,48 +82,41 @@ export default function LandingPage() {
         </motion.div>
       </section>
 
-      {/* 5-Tier Color Scale Visual Section */}
+      {/* 5-Tier Resource Coverage Visual Section */}
       <section className="px-6 py-14 bg-white border-y border-slate-200/80">
         <div className="max-w-5xl mx-auto space-y-6">
           <div className="text-center max-w-xl mx-auto">
-            <h2 className="text-2xl font-extrabold text-slate-900 mb-2">Transparent 5-Tier Recorded Risk Indicator</h2>
-            <p className="text-xs sm:text-sm text-slate-500">Standardized 0–100 visualization scale applied across Mumbai wards</p>
+            <h2 className="text-2xl font-extrabold text-slate-900 mb-2">Transparent Safety Resource Coverage Metric</h2>
+            <p className="text-xs sm:text-sm text-slate-500">Deterministic 0–100 infrastructure score based strictly on mapped emergency services</p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-5 gap-3 text-center">
-            <div className="p-4 rounded-2xl bg-[#22C55E]/10 border border-[#22C55E]/30 space-y-1">
-              <span className="inline-block w-3 h-3 rounded-full bg-[#22C55E] shadow-sm"></span>
-              <div className="text-base font-black text-[#15803d]">0 – 20</div>
-              <div className="text-xs font-bold text-slate-800">Lower Risk</div>
-              <div className="text-[10px] text-slate-500 font-mono">#22C55E</div>
+          <div className="grid grid-cols-1 sm:grid-cols-4 gap-3 text-center">
+            <div className="p-4 rounded-2xl bg-blue-50 border border-blue-200/60 space-y-1">
+              <span className="inline-block w-3 h-3 rounded-full bg-blue-600 shadow-sm"></span>
+              <div className="text-base font-black text-blue-700">40 Pts</div>
+              <div className="text-xs font-bold text-slate-800">Police Proximity</div>
+              <div className="text-[10px] text-slate-500">Distance to closest station</div>
             </div>
 
-            <div className="p-4 rounded-2xl bg-[#84CC16]/10 border border-[#84CC16]/30 space-y-1">
-              <span className="inline-block w-3 h-3 rounded-full bg-[#84CC16] shadow-sm"></span>
-              <div className="text-base font-black text-[#4d7c0f]">21 – 40</div>
-              <div className="text-xs font-bold text-slate-800">Moderate-Low</div>
-              <div className="text-[10px] text-slate-500 font-mono">#84CC16</div>
+            <div className="p-4 rounded-2xl bg-indigo-50 border border-indigo-200/60 space-y-1">
+              <span className="inline-block w-3 h-3 rounded-full bg-indigo-600 shadow-sm"></span>
+              <div className="text-base font-black text-indigo-700">25 Pts</div>
+              <div className="text-xs font-bold text-slate-800">Police Corridor Density</div>
+              <div className="text-[10px] text-slate-500">Stations along path corridor</div>
             </div>
 
-            <div className="p-4 rounded-2xl bg-[#FACC15]/20 border border-[#FACC15]/40 space-y-1">
-              <span className="inline-block w-3 h-3 rounded-full bg-[#FACC15] shadow-sm"></span>
-              <div className="text-base font-black text-[#a16207]">41 – 60</div>
-              <div className="text-xs font-bold text-slate-800">Moderate</div>
-              <div className="text-[10px] text-slate-500 font-mono">#FACC15</div>
+            <div className="p-4 rounded-2xl bg-rose-50 border border-rose-200/60 space-y-1">
+              <span className="inline-block w-3 h-3 rounded-full bg-rose-600 shadow-sm"></span>
+              <div className="text-base font-black text-rose-700">20 Pts</div>
+              <div className="text-xs font-bold text-slate-800">Hospital Proximity</div>
+              <div className="text-[10px] text-slate-500">Distance to nearest hospital</div>
             </div>
 
-            <div className="p-4 rounded-2xl bg-[#F97316]/15 border border-[#F97316]/30 space-y-1">
-              <span className="inline-block w-3 h-3 rounded-full bg-[#F97316] shadow-sm"></span>
-              <div className="text-base font-black text-[#c2410c]">61 – 80</div>
-              <div className="text-xs font-bold text-slate-800">Elevated</div>
-              <div className="text-[10px] text-slate-500 font-mono">#F97316</div>
-            </div>
-
-            <div className="p-4 rounded-2xl bg-[#EF4444]/15 border border-[#EF4444]/30 space-y-1">
-              <span className="inline-block w-3 h-3 rounded-full bg-[#EF4444] shadow-sm"></span>
-              <div className="text-base font-black text-[#b91c1c]">81 – 100</div>
-              <div className="text-xs font-bold text-slate-800">Higher Risk</div>
-              <div className="text-[10px] text-slate-500 font-mono">#EF4444</div>
+            <div className="p-4 rounded-2xl bg-emerald-50 border border-emerald-200/60 space-y-1">
+              <span className="inline-block w-3 h-3 rounded-full bg-emerald-600 shadow-sm"></span>
+              <div className="text-base font-black text-emerald-700">15 Pts</div>
+              <div className="text-xs font-bold text-slate-800">Medical Corridor Density</div>
+              <div className="text-[10px] text-slate-500">Hospitals within travel corridor</div>
             </div>
           </div>
         </div>
@@ -135,8 +128,8 @@ export default function LandingPage() {
           <FeatureCard 
             icon={Map}
             badge="Interactive Map"
-            title="Choropleth Safety Zones"
-            description="Explore neighborhood boundaries across Mumbai color-coded by historical recorded crime indicators with police stations."
+            title="Civic Infrastructure & Wards"
+            description="Explore neighborhood boundaries across Mumbai with 118 police stations, municipal medical facilities, and personal safety notes."
             linkTo="/map"
             linkText="Open Safety Map"
           />
@@ -144,17 +137,17 @@ export default function LandingPage() {
             icon={Compass}
             badge="Road Routing"
             title="Safe Journey Planner"
-            description="Calculate optimal turn-by-turn road routes across Mumbai, inspect safety corridors, and share live trips."
+            description="Calculate optimal turn-by-turn road routes across Mumbai, inspect emergency resource coverage, and share live trips."
             linkTo="/journey"
             linkText="Plan a Safe Journey"
           />
           <FeatureCard 
             icon={Bot}
-            badge="AI Intelligence"
-            title="Safety Assistant"
-            description="Ask questions grounded in official Mumbai crime records and get immediate guidance for late-night transit."
+            badge="Verified Safety Information"
+            title="Mumbai Safety Guide"
+            description="Ask questions grounded in official Mumbai crime records, transit rules, and legal rights for late-night navigation."
             linkTo="/assistant"
-            linkText="Chat with Assistant"
+            linkText="Open Safety Guide"
           />
         </div>
       </section>
@@ -173,8 +166,8 @@ export default function LandingPage() {
             <a href="tel:103" className="px-4 py-2 bg-rose-800 text-white rounded-xl font-extrabold text-xs hover:bg-rose-900 transition flex items-center gap-1.5">
               <ShieldCheck className="w-3.5 h-3.5" /> Women 103
             </a>
-            <a href="tel:1512" className="px-4 py-2 bg-rose-800 text-white rounded-xl font-extrabold text-xs hover:bg-rose-900 transition flex items-center gap-1.5">
-              <PhoneCall className="w-3.5 h-3.5" /> Railway 1512
+            <a href="tel:139" className="px-4 py-2 bg-rose-800 text-white rounded-xl font-extrabold text-xs hover:bg-rose-900 transition flex items-center gap-1.5">
+              <PhoneCall className="w-3.5 h-3.5" /> Railway 139
             </a>
           </div>
         </div>

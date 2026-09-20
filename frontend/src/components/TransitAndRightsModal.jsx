@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Train, Scale, Shield, Phone, AlertCircle, FileText, CheckCircle2, Hospital, Compass, HeartHandshake } from 'lucide-react';
+import { Train, Scale, Shield, Phone, AlertCircle, FileText, CheckCircle2, Hospital, Compass, HeartHandshake, Info } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export default function TransitAndRightsModal({ isOpen, onClose }) {
@@ -25,7 +25,7 @@ export default function TransitAndRightsModal({ isOpen, onClose }) {
           </div>
           <button
             onClick={onClose}
-            className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center text-sm transition"
+            className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center text-sm transition cursor-pointer"
           >
             ✕
           </button>
@@ -35,7 +35,7 @@ export default function TransitAndRightsModal({ isOpen, onClose }) {
         <div className="flex border-b border-slate-200 bg-slate-50 px-4 pt-3 gap-2">
           <button
             onClick={() => setActiveTab('transit')}
-            className={`flex items-center gap-2 px-4 py-2.5 rounded-t-xl font-bold text-xs transition border-b-2 ${
+            className={`flex items-center gap-2 px-4 py-2.5 rounded-t-xl font-bold text-xs transition border-b-2 cursor-pointer ${
               activeTab === 'transit'
                 ? 'bg-white text-blue-600 border-blue-600 shadow-sm'
                 : 'text-slate-600 border-transparent hover:text-slate-900'
@@ -46,7 +46,7 @@ export default function TransitAndRightsModal({ isOpen, onClose }) {
           </button>
           <button
             onClick={() => setActiveTab('rights')}
-            className={`flex items-center gap-2 px-4 py-2.5 rounded-t-xl font-bold text-xs transition border-b-2 ${
+            className={`flex items-center gap-2 px-4 py-2.5 rounded-t-xl font-bold text-xs transition border-b-2 cursor-pointer ${
               activeTab === 'rights'
                 ? 'bg-white text-indigo-600 border-indigo-600 shadow-sm'
                 : 'text-slate-600 border-transparent hover:text-slate-900'
@@ -57,7 +57,7 @@ export default function TransitAndRightsModal({ isOpen, onClose }) {
           </button>
           <button
             onClick={() => setActiveTab('sakhi')}
-            className={`flex items-center gap-2 px-4 py-2.5 rounded-t-xl font-bold text-xs transition border-b-2 ${
+            className={`flex items-center gap-2 px-4 py-2.5 rounded-t-xl font-bold text-xs transition border-b-2 cursor-pointer ${
               activeTab === 'sakhi'
                 ? 'bg-white text-rose-600 border-rose-600 shadow-sm'
                 : 'text-slate-600 border-transparent hover:text-slate-900'
@@ -75,24 +75,24 @@ export default function TransitAndRightsModal({ isOpen, onClose }) {
           {activeTab === 'transit' && (
             <div className="space-y-5">
               
-              {/* Emergency railway numbers banner */}
+              {/* Emergency railway & women helpline numbers banner */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <div className="p-3.5 rounded-2xl bg-amber-50 border border-amber-200 flex items-center justify-between">
+                <div className="p-3.5 rounded-2xl bg-rose-50 border border-rose-200 flex items-center justify-between">
                   <div>
-                    <span className="text-[10px] font-bold text-amber-800 uppercase block">Railway Police Helpline</span>
-                    <span className="text-base font-black text-amber-950">Dial 1512</span>
+                    <span className="text-[10px] font-bold text-rose-800 uppercase block">Mumbai Police Women Helpline</span>
+                    <span className="text-base font-black text-rose-950">Dial 103</span>
                   </div>
-                  <a href="tel:1512" className="px-3 py-1.5 bg-amber-600 hover:bg-amber-700 text-white font-bold rounded-xl text-xs flex items-center gap-1">
-                    <Phone className="w-3 h-3" /> Call
+                  <a href="tel:103" className="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white font-bold rounded-xl text-xs flex items-center gap-1 cursor-pointer">
+                    <Phone className="w-3 h-3" /> Call 103
                   </a>
                 </div>
                 <div className="p-3.5 rounded-2xl bg-blue-50 border border-blue-200 flex items-center justify-between">
                   <div>
-                    <span className="text-[10px] font-bold text-blue-800 uppercase block">RPF Security Helpline</span>
+                    <span className="text-[10px] font-bold text-blue-800 uppercase block">RailMadad Security & Assistance</span>
                     <span className="text-base font-black text-blue-950">Dial 139</span>
                   </div>
-                  <a href="tel:139" className="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl text-xs flex items-center gap-1">
-                    <Phone className="w-3 h-3" /> Call
+                  <a href="tel:139" className="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl text-xs flex items-center gap-1 cursor-pointer">
+                    <Phone className="w-3 h-3" /> Call 139
                   </a>
                 </div>
               </div>
@@ -106,15 +106,15 @@ export default function TransitAndRightsModal({ isOpen, onClose }) {
                 <ul className="space-y-2 text-slate-600">
                   <li className="flex items-start gap-2">
                     <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
-                    <span><strong>Ladies Coach Positioning:</strong> Marked with distinctive green & yellow diagonal stripes. Located at the <em>Engine end</em>, <em>Middle</em>, and <em>Rear end</em> of 12-car and 15-car rakes.</span>
+                    <span><strong>Ladies Coach Positioning:</strong> Marked with distinctive green & yellow diagonal stripes. Located at the <em>Engine end</em>, <em>Middle</em>, and <em>Rear end</em> of 12-car and 15-car suburban rakes.</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
-                    <span><strong>Night RPF Escort (9:00 PM – 6:00 AM):</strong> Uniformed female/male RPF and GRP personnel are officially deployed inside ladies compartments during night suburban services.</span>
+                    <span><strong>Night Security Escorts (9:00 PM – 6:00 AM):</strong> Armed RPF (Railway Protection Force) and GRP personnel are officially assigned onboard ladies compartments during night suburban services.</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
-                    <span><strong>Emergency Talk-Back Unit:</strong> Look for the red emergency lever and audio talk-back intercom inside local train ladies coaches to communicate directly with the motorman and guard.</span>
+                    <span><strong>Emergency Talk-Back Unit:</strong> Look for the red emergency lever and audio talk-back intercom inside local train ladies coaches to communicate directly with the motorman and train guard.</span>
                   </li>
                 </ul>
               </div>
@@ -128,11 +128,11 @@ export default function TransitAndRightsModal({ isOpen, onClose }) {
                 <ul className="space-y-2 text-slate-600">
                   <li className="flex items-start gap-2">
                     <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
-                    <span><strong>Dedicated Women Coach:</strong> First coach in the direction of travel is reserved exclusively for women passengers with dedicated platform standing bays.</span>
+                    <span><strong>Dedicated Women Coach:</strong> First coach in the direction of travel is reserved exclusively for women passengers with designated platform queue bays.</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
-                    <span><strong>Passenger Emergency Intercom (PEI):</strong> Located near every train doorway to initiate instant two-way audio-video with the train operator.</span>
+                    <span><strong>Passenger Emergency Intercom (PEI):</strong> Located near train doorways to initiate instant two-way audio communication with the train operator.</span>
                   </li>
                 </ul>
               </div>
@@ -144,7 +144,7 @@ export default function TransitAndRightsModal({ isOpen, onClose }) {
                   Mumbai Police Nirbhaya Squad Patrols
                 </h4>
                 <p className="text-indigo-900 text-xs">
-                  Mumbai Police operates 91 dedicated Nirbhaya patrol vehicles and foot squads stationed near railway stations, colleges, transit hubs, and commercial zones to prevent eve-teasing and ensure rapid 5-minute response.
+                  Mumbai Police operates dedicated Nirbhaya mobile patrol vans and foot squads stationed near railway stations, colleges, transit hubs, and commercial zones for deterrence and rapid response.
                 </p>
               </div>
 
@@ -158,41 +158,55 @@ export default function TransitAndRightsModal({ isOpen, onClose }) {
               <div className="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 space-y-2">
                 <div className="flex items-center gap-2 text-emerald-900 font-extrabold text-sm">
                   <FileText className="w-4 h-4 text-emerald-600" />
-                  1. Zero FIR (Right to Register FIR Anywhere)
+                  1. Zero FIR & e-FIR (BNSS Section 173)
                 </div>
                 <p className="text-emerald-800 text-xs leading-relaxed">
-                  Under the Supreme Court and Ministry of Home Affairs guidelines, a victim of crime can file an FIR at <strong>ANY police station</strong> in Mumbai or India, regardless of where the incident took place. The police station cannot refuse registration citing territorial jurisdiction; they must register a "Zero FIR" and transfer it to the relevant station.
+                  Under <strong>Section 173(1) of the Bharatiya Nagarik Suraksha Sanhita (BNSS), 2023</strong> (previously under CrPC Sec. 154 / MHA guidelines), information relating to a cognizable offence against a woman can be registered at <strong>ANY police station</strong>, irrespective of the area where the crime was committed. The police officer cannot refuse registration for lack of territorial jurisdiction; they must register a "Zero FIR" and transfer it to the jurisdictional station. Electronic registration (e-FIR) is also recognized under Section 173(1).
                 </p>
               </div>
 
               <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
                 <div className="flex items-center gap-2 text-slate-900 font-extrabold text-sm">
                   <Shield className="w-4 h-4 text-blue-600" />
-                  2. Arrest and Detention Safeguards
+                  2. Arrest and Detention Safeguards (BNSS Section 43(5))
                 </div>
                 <p className="text-slate-600 text-xs leading-relaxed">
-                  As per Section 46(4) of the Code of Criminal Procedure, women <strong>cannot be arrested after sunset and before sunrise</strong> except in extraordinary circumstances with prior written permission of a Judicial Magistrate. All bodily searches and interrogations must be conducted strictly by female police officers.
+                  Under <strong>Section 43(5) of the BNSS, 2023</strong> (previously CrPC Sec. 46(4)), as a statutory rule, <strong>no woman shall be arrested after sunset and before sunrise</strong>. Where exceptional circumstances exist, the arrest must be carried out by a woman police officer with prior written permission of the Judicial Magistrate of the First Class. Furthermore, under Section 43(2) and Section 47(2), search or physical arrest of a woman must strictly be conducted by a female officer.
                 </p>
               </div>
 
               <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
                 <div className="flex items-center gap-2 text-slate-900 font-extrabold text-sm">
                   <Scale className="w-4 h-4 text-indigo-600" />
-                  3. Right to Privacy & In-Camera Recording
+                  3. Examination at Residence & In-Camera Recording (BNSS Sec. 179 & 183)
                 </div>
                 <p className="text-slate-600 text-xs leading-relaxed">
-                  Statements relating to assault or harassment must be recorded in absolute privacy at the survivor&apos;s home or a comfortable venue in the presence of a female police officer or lady magistrate (Section 164 CrPC/BNSS). The identity of the victim is strictly confidential under Indian law.
+                  Under <strong>Section 179(1) Proviso of the BNSS, 2023</strong> (previously CrPC Sec. 160), no woman shall be required to attend any place other than the place in which she resides for witness examination. Under <strong>Section 176(1) and Section 183</strong> (previously CrPC Sec. 164), statements of women relating to sexual assault must be recorded by a woman police officer or judicial magistrate, with option for audio-video recording, preserving absolute victim confidentiality.
                 </p>
               </div>
 
               <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
                 <div className="flex items-center gap-2 text-slate-900 font-extrabold text-sm">
                   <HeartHandshake className="w-4 h-4 text-rose-600" />
-                  4. Right to Free Legal Aid
+                  4. Free Legal Aid & Representation
                 </div>
                 <p className="text-slate-600 text-xs leading-relaxed">
-                  Every woman is entitled to free legal counsel under the Legal Services Authorities Act (DLSA Mumbai) at the time of police statement recording and during judicial proceedings.
+                  Under <strong>Section 12 of the Legal Services Authorities Act, 1987</strong> and <strong>Article 39A of the Constitution of India</strong> (along with BNSS Section 340), every woman is entitled to free legal aid and counsel irrespective of income or financial status through the District Legal Services Authority (DLSA Mumbai / MSLSA).
                 </p>
+              </div>
+
+              {/* Legal Disclaimer & Source Metadata */}
+              <div className="p-3 bg-amber-50 border border-amber-200 rounded-xl text-[11px] text-amber-900 space-y-1">
+                <div className="flex items-center gap-1.5 font-bold">
+                  <Info className="w-3.5 h-3.5 text-amber-700 shrink-0" />
+                  <span>General Legal Information Disclaimer</span>
+                </div>
+                <p className="leading-snug">
+                  General legal information only — not legal advice. In case of emergency or legal proceedings, please contact official emergency authorities (112 / 103) or the District Legal Services Authority (DLSA).
+                </p>
+                <div className="pt-1 text-[10px] text-amber-800/80 font-medium">
+                  Source: Bharatiya Nagarik Suraksha Sanhita (BNSS), 2023 & Legal Services Authorities Act, 1987 (India Code). Last verified: 2026.
+                </div>
               </div>
 
             </div>
@@ -202,7 +216,7 @@ export default function TransitAndRightsModal({ isOpen, onClose }) {
           {activeTab === 'sakhi' && (
             <div className="space-y-4">
               <p className="text-xs text-slate-600">
-                <strong>Sakhi One-Stop Centres (OSC)</strong> provide comprehensive, integrated 24/7 emergency support under one roof — including medical treatment, immediate police assistance, legal counselling, psycho-social support, and temporary shelter.
+                <strong>Sakhi One-Stop Centres (OSC)</strong> are established under the Ministry of Women & Child Development (MWCD) to provide integrated emergency support — including medical aid, police assistance, legal counselling, psycho-social support, and temporary shelter.
               </p>
 
               <div className="space-y-3">
@@ -210,19 +224,19 @@ export default function TransitAndRightsModal({ isOpen, onClose }) {
                   {
                     name: 'Sakhi Centre - K.E.M. Hospital (Mumbai City)',
                     location: 'Parel, Mumbai',
-                    desc: '24/7 Trauma Care, Legal Cell & Crisis Ward',
+                    desc: 'Medical Support, Legal Cell & Crisis Ward',
                     phone: '022-24107000'
                   },
                   {
                     name: 'Sakhi Centre - Lokmanya Tilak Municipal General Hospital (Sion)',
                     location: 'Sion West, Mumbai',
-                    desc: 'Emergency Medical, Psychological & Police Assistance',
+                    desc: 'Medical, Psychological & Police Assistance',
                     phone: '022-24076381'
                   },
                   {
                     name: 'Sakhi Centre - Rajawadi Municipal Hospital',
                     location: 'Ghatkopar East, Mumbai',
-                    desc: 'Eastern Suburbs 24/7 Emergency Support Wing',
+                    desc: 'Eastern Suburbs Emergency Support Wing',
                     phone: '022-25115066'
                   },
                   {
@@ -239,12 +253,16 @@ export default function TransitAndRightsModal({ isOpen, onClose }) {
                     </div>
                     <a
                       href={`tel:${item.phone}`}
-                      className="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-xs font-bold flex items-center gap-1 shrink-0"
+                      className="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-xs font-bold flex items-center gap-1 shrink-0 cursor-pointer"
                     >
                       <Phone className="w-3 h-3" /> Call
                     </a>
                   </div>
                 ))}
+              </div>
+
+              <div className="text-[10px] text-slate-400 text-center pt-1">
+                Source: Ministry of Women & Child Development, Government of India. Last verified: 2026.
               </div>
             </div>
           )}
@@ -253,10 +271,10 @@ export default function TransitAndRightsModal({ isOpen, onClose }) {
 
         {/* Modal Footer */}
         <div className="p-4 bg-slate-50 border-t border-slate-200 flex justify-between items-center text-xs text-slate-500">
-          <span>Verified Government & Legal Resources</span>
+          <span>Official Legal & Emergency Infrastructure Reference (2026)</span>
           <button
             onClick={onClose}
-            className="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-xl transition"
+            className="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-xl transition cursor-pointer"
           >
             Close Guide
           </button>

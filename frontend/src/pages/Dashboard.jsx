@@ -27,6 +27,7 @@ import {
   Legend 
 } from 'recharts';
 import API_BASE_URL from '../config/api';
+import { apiRequest } from '../services/apiClient';
 
 export default function Dashboard() {
   const [data, setData] = useState(null);
@@ -36,10 +37,9 @@ export default function Dashboard() {
   const [sortBy, setSortBy] = useState('registered_desc'); // 'registered_desc' | 'detected_desc' | 'rate_desc' | 'name'
 
   useEffect(() => {
-    fetch(`${API_BASE_URL}/api/crimes/summary`)
-      .then(res => res.json())
-      .then(data => {
-        setData(data);
+    apiRequest('/api/crimes/summary')
+      .then(statsData => {
+        setData(statsData);
         setLoading(false);
       })
       .catch(err => {
@@ -57,7 +57,7 @@ export default function Dashboard() {
 
   if (!data) return (
     <div className="pt-28 p-6 text-center text-rose-600 text-sm">
-      Unable to connect to local safety server. Please ensure the Flask backend is active on port 5000.
+      Unable to load safety data. Please try again.
     </div>
   );
 
@@ -90,7 +90,7 @@ export default function Dashboard() {
       name: item.key,
       '2022 Registered': found.Registered_2022,
       '2023 Registered': found.Registered_2023,
-      '2023 Solved/Detected': found.Detected_2023,
+      '2023 Detected': found.Detected_2023,
       rate: found.Detection_Rate_2023
     };
   });
@@ -204,60 +204,60 @@ export default function Dashboard() {
         <div className="p-5 bg-white rounded-2xl border border-slate-200/80 shadow-xs flex flex-col justify-between">
           <div>
             <span className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider block">
-              Year-over-Year Trend
+              Year-over-Year Change
             </span>
             <div className="mt-2 flex items-baseline gap-2">
               <span className="text-3xl font-bold text-emerald-700 tracking-tight">
                 {data.trend_percentage}%
               </span>
-              <span className="text-xs font-medium text-emerald-600">net decline</span>
+              <span className="text-xs font-medium text-emerald-600">registered FIRs</span>
             </div>
           </div>
           <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
-            <span className="text-slate-500">Absolute Change:</span>
+            <span className="text-slate-500">Difference:</span>
             <span className="font-semibold text-emerald-700">
-              -{(data.total_cases_2022 - data.total_cases_2023)} fewer cases
+              -{(data.total_cases_2022 - data.total_cases_2023).toLocaleString()} cases
             </span>
           </div>
         </div>
 
-        {/* Metric 3: City Detection Rate */}
+        {/* Metric 3: City Detection Rate 2023 */}
         <div className="p-5 bg-white rounded-2xl border border-slate-200/80 shadow-xs flex flex-col justify-between">
           <div>
             <span className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider block">
-              Investigation Detection Rate
+              2023 Detection Rate
             </span>
             <div className="mt-2 flex items-baseline gap-2">
               <span className="text-3xl font-bold text-slate-900 tracking-tight">
-                94.2%
+                {data.detection_rate_2023 || 94}%
               </span>
               <span className="text-xs text-emerald-600 font-semibold bg-emerald-50 px-1.5 py-0.5 rounded">
-                +13.2% vs '22
+                vs {data.detection_rate_2022 || 81}% in '22
               </span>
             </div>
           </div>
           <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
-            <span className="text-slate-500">2023 Solved Cases:</span>
-            <span className="font-semibold text-slate-700">5,570 of 5,913</span>
+            <span className="text-slate-500">2023 Detected Cases:</span>
+            <span className="font-semibold text-slate-700">{(data.total_detected_2023 || 5570).toLocaleString()} of {data.total_cases_2023.toLocaleString()}</span>
           </div>
         </div>
 
-        {/* Metric 4: Risk Index Reference */}
+        {/* Metric 4: 2022 Detected Cases */}
         <div className="p-5 bg-white rounded-2xl border border-slate-200/80 shadow-xs flex flex-col justify-between">
           <div>
             <span className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider block">
-              City Risk Index Benchmark
+              2022 Detected Baseline
             </span>
             <div className="mt-2 flex items-baseline gap-2">
-              <span className="text-3xl font-bold text-amber-700 tracking-tight">
-                {data.city_wide_risk_indicator}
+              <span className="text-3xl font-bold text-slate-800 tracking-tight">
+                {(data.total_detected_2022 || 4995).toLocaleString()}
               </span>
-              <span className="text-xs text-slate-400 font-medium">/ 100 benchmark</span>
+              <span className="text-xs text-slate-400 font-medium">detected</span>
             </div>
           </div>
           <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
-            <span className="text-slate-500">State:</span>
-            <span className="font-medium text-amber-800">Moderate Historical Vigilance</span>
+            <span className="text-slate-500">2022 Detection Rate:</span>
+            <span className="font-medium text-slate-700">{data.detection_rate_2022 || 81}% (of {data.total_cases_2022.toLocaleString()})</span>
           </div>
         </div>
 
@@ -274,7 +274,7 @@ export default function Dashboard() {
                 Major Crime Heads: Registered vs Detected (2022 vs 2023)
               </h3>
               <p className="text-xs text-slate-500 mt-0.5">
-                Volume of FIRs registered and cases successfully detected across major offenses
+                Volume of FIRs registered and cases detected across major offenses
               </p>
             </div>
             <div className="text-[11px] text-slate-400 font-medium">
@@ -332,7 +332,7 @@ export default function Dashboard() {
                 />
                 <Bar name="2022 Registered" dataKey="2022 Registered" fill="#94a3b8" radius={[4, 4, 0, 0]} maxBarSize={32} />
                 <Bar name="2023 Registered" dataKey="2023 Registered" fill="#3b82f6" radius={[4, 4, 0, 0]} maxBarSize={32} />
-                <Bar name="2023 Detected" dataKey="2023 Solved/Detected" fill="#10b981" radius={[4, 4, 0, 0]} maxBarSize={32} />
+                <Bar name="2023 Detected" dataKey="2023 Detected" fill="#10b981" radius={[4, 4, 0, 0]} maxBarSize={32} />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -340,15 +340,15 @@ export default function Dashboard() {
           <div className="grid grid-cols-3 gap-2 pt-2 border-t border-slate-100 text-center">
             <div className="p-2 bg-slate-50 rounded-xl">
               <span className="text-[10px] text-slate-500 block uppercase">Outraging Modesty</span>
-              <span className="text-xs font-bold text-slate-800">2,163 FIRs (95% Solved)</span>
+              <span className="text-xs font-bold text-slate-800">2,163 FIRs (95% Detected)</span>
             </div>
             <div className="p-2 bg-slate-50 rounded-xl">
               <span className="text-[10px] text-slate-500 block uppercase">Kidnapping Head</span>
-              <span className="text-xs font-bold text-slate-800">1,167 FIRs (94% Solved)</span>
+              <span className="text-xs font-bold text-slate-800">1,167 FIRs (94% Detected)</span>
             </div>
             <div className="p-2 bg-slate-50 rounded-xl">
-              <span className="text-[10px] text-slate-500 block uppercase">Rape & POCSO</span>
-              <span className="text-xs font-bold text-slate-800">973 FIRs (96% Solved)</span>
+              <span className="text-[10px] text-slate-500 block uppercase">Rape Offences</span>
+              <span className="text-xs font-bold text-slate-800">973 FIRs (96% Detected)</span>
             </div>
           </div>
         </div>
@@ -369,26 +369,33 @@ export default function Dashboard() {
             
             <div className="p-3.5 bg-slate-50 rounded-xl border border-slate-200/70 space-y-1">
               <span className="font-semibold text-slate-900 block flex items-center justify-between">
-                <span>1. Detection Efficiency Surge</span>
+                <span>1. Detection Rate</span>
                 <span className="text-[10px] font-bold text-emerald-700 bg-emerald-100/70 px-1.5 py-0.5 rounded">94% in '23</span>
               </span>
               <p className="text-[11px] text-slate-500">
-                Institutional detection jumped from 81% (4,995 / 6,156 in 2022) to 94.2% (5,570 / 5,913 in 2023) aided by CCTV integration across suburban rail and key intersections.
+                Institutional detection increased from 81.1% (4,995 / 6,156 in 2022) to 94.2% (5,570 / 5,913 in 2023) across recorded categories.
               </p>
             </div>
 
             <div className="p-3.5 bg-slate-50 rounded-xl border border-slate-200/70 space-y-1">
               <span className="font-semibold text-slate-900 block">2. POCSO Act Enactments</span>
               <p className="text-[11px] text-slate-500">
-                Mandatory registration under the POCSO Act accounted for 586 minor rape cases and 495 molestation cases in 2023, with over 97% solve rates recorded by special juvenile units.
+                The registry records 586 minor rape cases and 495 molestation cases in 2023 under POCSO provisions, with detection rates exceeding 97%.
               </p>
             </div>
 
             <div className="p-3.5 bg-slate-50 rounded-xl border border-slate-200/70 space-y-1">
               <span className="font-semibold text-slate-900 block">3. Domestic Harassment (Sec. 498-A)</span>
               <p className="text-[11px] text-slate-500">
-                746 cases registered under Section 498-A in 2023 (down from 868 in 2022). Detection in this category improved from 60% in 2022 to 94% in 2023.
+                746 cases registered under Section 498-A in 2023 (compared to 868 in 2022), with a 94% detection rate in 2023 (up from 60% in 2022).
               </p>
+            </div>
+
+            <div className="p-3 bg-blue-50/70 border border-blue-200/60 rounded-xl text-[11px] text-blue-900 flex items-start gap-2">
+              <Info className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
+              <span>
+                <strong>Overlapping Statutory Categories:</strong> Some statutory categories overlap (e.g. Rape u/s 376 IPC Minor vs No of cases registered Rape with POCSO) and should not be summed together.
+              </span>
             </div>
 
           </div>
@@ -396,7 +403,7 @@ export default function Dashboard() {
           <div className="p-3 bg-amber-50/70 border border-amber-200/60 rounded-xl text-[11px] text-amber-900 flex items-start gap-2">
             <Info className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
             <span>
-              <strong>Note on Interpretation:</strong> Higher registration numbers reflect greater reporting accessibility, mandatory FIR rules, and citizen outreach rather than worsening ground conditions.
+              <strong>Note on Interpretation:</strong> Changes in registered cases can reflect multiple factors and should not be interpreted as a direct measure of underlying incidence without additional context.
             </span>
           </div>
         </div>

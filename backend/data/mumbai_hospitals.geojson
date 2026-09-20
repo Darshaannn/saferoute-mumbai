@@ -17,8 +17,8 @@
         "ward": "E",
         "type": "Major Hospitals",
         "owner_dept": "Public Health Dept",
-        "open24x7": true,
-        "emergency_services": true
+        "operating_hours": "Operating hours not verified",
+        "twitter_handle": "@mybmcHealthDept"
       }
     },
     {
@@ -37,8 +37,8 @@
         "ward": "E",
         "type": "Major Hospitals",
         "owner_dept": "Public Health Dept",
-        "open24x7": true,
-        "emergency_services": true
+        "operating_hours": "Operating hours not verified",
+        "twitter_handle": "@mybmcHealthDept"
       }
     },
     {
@@ -57,8 +57,8 @@
         "ward": "E",
         "type": "Major Hospitals",
         "owner_dept": "Public Health Dept",
-        "open24x7": true,
-        "emergency_services": true
+        "operating_hours": "Operating hours not verified",
+        "twitter_handle": "@mybmcHealthDept"
       }
     },
     {
@@ -77,8 +77,8 @@
         "ward": "FS",
         "type": "Major Hospitals",
         "owner_dept": "Public Health Dept",
-        "open24x7": true,
-        "emergency_services": true
+        "operating_hours": "Operating hours not verified",
+        "twitter_handle": "@mybmcHealthDept"
       }
     },
     {
@@ -97,8 +97,8 @@
         "ward": "FN",
         "type": "Major Hospitals",
         "owner_dept": "Public Health Dept",
-        "open24x7": true,
-        "emergency_services": true
+        "operating_hours": "Operating hours not verified",
+        "twitter_handle": "@mybmcHealthDept"
       }
     },
     {
@@ -117,8 +117,8 @@
         "ward": "KW",
         "type": "Major Hospitals",
         "owner_dept": "Public Health Dept",
-        "open24x7": true,
-        "emergency_services": true
+        "operating_hours": "Operating hours not verified",
+        "twitter_handle": "@mybmcHealthDept"
       }
     },
     {
@@ -137,8 +137,8 @@
         "ward": "A",
         "type": "Peripheral Hospital",
         "owner_dept": "Public Health Dept",
-        "open24x7": true,
-        "emergency_services": true
+        "operating_hours": "Operating hours not verified",
+        "twitter_handle": "@mybmcHealthDept"
       }
     },
     {
@@ -157,8 +157,8 @@
         "ward": "A",
         "type": "Peripheral Hospital",
         "owner_dept": "Public Health Dept",
-        "open24x7": true,
-        "emergency_services": true
+        "operating_hours": "Operating hours not verified",
+        "twitter_handle": "@mybmcHealthDept"
       }
     },
     {
@@ -177,8 +177,8 @@
         "ward": "A",
         "type": "Peripheral Hospital",
         "owner_dept": "Public Health Dept",
-        "open24x7": true,
-        "emergency_services": true
+        "operating_hours": "Operating hours not verified",
+        "twitter_handle": "@mybmcHealthDept"
       }
     },
     {
@@ -197,8 +197,8 @@
         "ward": "HE",
         "type": "Peripheral Hospital",
         "owner_dept": "Public Health Dept",
-        "open24x7": true,
-        "emergency_services": true
+        "operating_hours": "Operating hours not verified",
+        "twitter_handle": "@mybmcHealthDept"
       }
     },
     {
@@ -217,8 +217,8 @@
         "ward": "HW",
         "type": "Peripheral Hospital",
         "owner_dept": "Public Health Dept",
-        "open24x7": true,
-        "emergency_services": true
+        "operating_hours": "Operating hours not verified",
+        "twitter_handle": "@mybmcHealthDept"
       }
     },
     {
@@ -237,8 +237,8 @@
         "ward": "PS",
         "type": "Peripheral Hospital",
         "owner_dept": "Public Health Dept",
-        "open24x7": true,
-        "emergency_services": true
+        "operating_hours": "Operating hours not verified",
+        "twitter_handle": "@mybmcHealthDept"
       }
     },
     {
@@ -257,8 +257,8 @@
         "ward": "PN",
         "type": "Peripheral Hospital",
         "owner_dept": "Public Health Dept",
-        "open24x7": true,
-        "emergency_services": true
+        "operating_hours": "Operating hours not verified",
+        "twitter_handle": "@mybmcHealthDept"
       }
     },
     {
@@ -277,8 +277,8 @@
         "ward": "PN",
         "type": "Peripheral Hospital",
         "owner_dept": "Public Health Dept",
-        "open24x7": true,
-        "emergency_services": true
+        "operating_hours": "Operating hours not verified",
+        "twitter_handle": "@mybmcHealthDept"
       }
     },
     {
@@ -297,8 +297,8 @@
         "ward": "KE",
         "type": "Peripheral Hospital",
         "owner_dept": "Public Health Dept",
-        "open24x7": true,
-        "emergency_services": true
+        "operating_hours": "Operating hours not verified",
+        "twitter_handle": "@mybmcHealthDept"
       }
     },
     {
@@ -317,8 +317,8 @@
         "ward": "RS",
         "type": "Peripheral Hospital",
         "owner_dept": "Public Health Dept",
-        "open24x7": true,
-        "emergency_services": true
+        "operating_hours": "Operating hours not verified",
+        "twitter_handle": "@mybmcHealthDept"
       }
     },
     {
@@ -337,8 +337,8 @@
         "ward": "RN",
         "type": "Peripheral Hospital",
         "owner_dept": "Public Health Dept",
-        "open24x7": true,
-        "emergency_services": true
+        "operating_hours": "Operating hours not verified",
+        "twitter_handle": "@mybmcHealthDept"
       }
     },
     {
@@ -357,8 +357,8 @@
         "ward": "RC",
         "type": "Peripheral Hospital",
         "owner_dept": "Public Health Dept",
-        "open24x7": true,
-        "emergency_services": true
+        "operating_hours": "Operating hours not verified",
+        "twitter_handle": "@mybmcHealthDept"
       }
     },
     {
@@ -377,8 +377,8 @@
         "ward": "L",
         "type": "Peripheral Hospital",
         "owner_dept": "Public Health Dept",
-        "open24x7": true,
-        "emergency_services": true
+        "operating_hours": "Operating hours not verified",
+        "twitter_handle": "@mybmcHealthDept"
       }
     },
     {
@@ -397,8 +397,8 @@
         "ward": "MW",
         "type": "Peripheral Hospital",
         "owner_dept": "Public Health Dept",
-        "open24x7": true,
-        "emergency_services": true
+        "operating_hours": "Operating hours not verified",
+        "twitter_handle": "@mybmcHealthDept"
       }
     },
     {
@@ -417,8 +417,8 @@
         "ward": "ME",
         "type": "Peripheral Hospital",
         "owner_dept": "Public Health Dept",
-        "open24x7": true,
-        "emergency_services": true
+        "operating_hours": "Operating hours not verified",
+        "twitter_handle": "@mybmcHealthDept"
       }
     },
     {
@@ -437,8 +437,8 @@
         "ward": "N",
         "type": "Peripheral Hospital",
         "owner_dept": "Public Health Dept",
-        "open24x7": true,
-        "emergency_services": true
+        "operating_hours": "Operating hours not verified",
+        "twitter_handle": "@mybmcHealthDept"
       }
     },
     {
@@ -457,8 +457,8 @@
         "ward": "S",
         "type": "Peripheral Hospital",
         "owner_dept": "Public Health Dept",
-        "open24x7": true,
-        "emergency_services": true
+        "operating_hours": "Operating hours not verified",
+        "twitter_handle": "@mybmcHealthDept"
       }
     },
     {
@@ -477,8 +477,8 @@
         "ward": "N",
         "type": "Peripheral Hospital",
         "owner_dept": "Public Health Dept",
-        "open24x7": true,
-        "emergency_services": true
+        "operating_hours": "Operating hours not verified",
+        "twitter_handle": "@mybmcHealthDept"
       }
     },
     {
@@ -497,8 +497,8 @@
         "ward": "T",
         "type": "Peripheral Hospital",
         "owner_dept": "Public Health Dept",
-        "open24x7": true,
-        "emergency_services": true
+        "operating_hours": "Operating hours not verified",
+        "twitter_handle": "@mybmcHealthDept"
       }
     },
     {
@@ -517,8 +517,8 @@
         "ward": "T",
         "type": "Peripheral Hospital",
         "owner_dept": "Public Health Dept",
-        "open24x7": true,
-        "emergency_services": true
+        "operating_hours": "Operating hours not verified",
+        "twitter_handle": "@mybmcHealthDept"
       }
     },
     {
@@ -537,8 +537,8 @@
         "ward": "A",
         "type": "Special Hospital",
         "owner_dept": "Public Health Dept",
-        "open24x7": true,
-        "emergency_services": true
+        "operating_hours": "Operating hours not verified",
+        "twitter_handle": "@mybmcHealthDept"
       }
     },
     {
@@ -557,8 +557,8 @@
         "ward": "E",
         "type": "Special Hospital",
         "owner_dept": "Public Health Dept",
-        "open24x7": true,
-        "emergency_services": true
+        "operating_hours": "Operating hours not verified",
+        "twitter_handle": "@mybmcHealthDept"
       }
     },
     {
@@ -577,8 +577,8 @@
         "ward": "E",
         "type": "Special Hospital",
         "owner_dept": "Public Health Dept",
-        "open24x7": true,
-        "emergency_services": true
+        "operating_hours": "Operating hours not verified",
+        "twitter_handle": "@mybmcHealthDept"
       }
     },
     {
@@ -597,8 +597,8 @@
         "ward": "FS",
         "type": "Special Hospital",
         "owner_dept": "Public Health Dept",
-        "open24x7": true,
-        "emergency_services": true
+        "operating_hours": "Operating hours not verified",
+        "twitter_handle": "@mybmcHealthDept"
       }
     },
     {
@@ -617,8 +617,8 @@
         "ward": "FN",
         "type": "Special Hospital",
         "owner_dept": "Public Health Dept",
-        "open24x7": true,
-        "emergency_services": true
+        "operating_hours": "Operating hours not verified",
+        "twitter_handle": "@mybmcHealthDept"
       }
     }
   ]

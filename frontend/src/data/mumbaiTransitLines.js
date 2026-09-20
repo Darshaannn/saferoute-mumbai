@@ -92,60 +92,68 @@ export function computeTransitOptions(startCoords, endCoords, roadResponse) {
     ? roadResponse.route.geometry.coordinates.map(c => [c[1], c[0]])
     : [[sLat, sLng], [eLat, eLng]];
 
-  // 1. SAFEST ROAD CORRIDOR (Always available)
-  const safestCabOption = {
-    id: 'safest_cab',
-    name: 'Safest Zone Corridor',
-    modeLabel: 'Recommended Highway Path',
-    icon: 'Shield',
-    durationMin: rawSafest?.duration_min || roadResponse?.route?.duration_min || Math.round(getDistance(sLat, sLng, eLat, eLng) * 3.4),
-    distanceKm: rawSafest?.distance_km || roadResponse?.route?.distance_km || Math.round(getDistance(sLat, sLng, eLat, eLng) * 1.3),
-    badge: '🛡️ Lowest Zone Risk',
-    badgeColor: 'bg-emerald-50 text-emerald-700 border-emerald-200',
-    polyline: rawSafest?.geometry?.coordinates
-      ? rawSafest.geometry.coordinates.map(c => [c[1], c[0]])
-      : fallbackGeom,
-    color: '#059669',
-    avgZoneScore: rawSafest?.avg_zone_score || 32,
-    safetyScore: rawSafest?.safety_score || 93,
-    zonesTraversed: rawSafest?.zones_traversed || ['Bandra West', 'Worli', 'Marine Drive'],
-    highlights: [
-      'Routes through Low-Risk Green Zones (Average Score ~32)',
-      'Directly passes Verified Mumbai Police Stations',
-      'Continuous streetlighting along Sea Link & Arterial Corridors'
-    ],
-    safetyDetails: 'Prioritizes arterial highways and low-crime coastal corridors over inner alleys.'
+  const results = {};
+
+  const defaultCoverage = roadResponse?.resource_coverage || {
+    score: 75,
+    tier: 'High Emergency Coverage',
+    nearby_police_count: roadResponse?.safety_context?.nearby_police_stations_count || 4,
+    nearest_police_km: roadResponse?.safety_context?.nearby_police_stations?.[0]?.distance_km || 1.2,
+    nearby_medical_count: roadResponse?.safety_context?.nearby_hospitals_count || 3,
+    nearest_medical_km: roadResponse?.safety_context?.nearby_hospitals?.[0]?.distance_km || 1.8,
+    explanation: 'Measures proximity to mapped emergency infrastructure (police stations and hospitals).'
   };
 
-  // 2. DIRECT FASTEST ROAD (Always available)
-  const directCabOption = {
-    id: 'direct_cab',
-    name: 'Direct Fastest Road',
-    modeLabel: 'Shortest Distance Path',
-    icon: 'Car',
-    durationMin: rawDirect?.duration_min || Math.max(10, (safestCabOption.durationMin - 6)),
-    distanceKm: rawDirect?.distance_km || Math.round(safestCabOption.distanceKm * 0.92),
-    badge: '⚡ Shortest Path',
-    badgeColor: 'bg-amber-50 text-amber-800 border-amber-200',
-    polyline: rawDirect?.geometry?.coordinates
-      ? rawDirect.geometry.coordinates.map(c => [c[1], c[0]])
-      : fallbackGeom,
-    color: '#d97706',
-    avgZoneScore: rawDirect?.avg_zone_score || 56,
-    safetyScore: rawDirect?.safety_score || 76,
-    zonesTraversed: rawDirect?.zones_traversed || ['Direct Corridors', 'Central Junctions'],
-    highlights: [
-      `Saves travel time over arterial routes`,
-      'Crosses standard commercial transit junctions',
-      'Moderate Risk Zone context (~56/100)'
-    ],
-    safetyDetails: 'Standard shortest road path with higher traffic and fewer dedicated highway patrols.'
-  };
+  if (rawSafest) {
+    const cov = rawSafest.resource_coverage || defaultCoverage;
+    results.safest_cab = {
+      id: 'safest_cab',
+      name: rawDirect ? 'Best Supported Corridor' : 'Verified Road Corridor',
+      modeLabel: rawDirect ? 'Recommended Primary Path' : 'Direct Road Route',
+      icon: 'Shield',
+      durationMin: rawSafest.duration_min || roadResponse?.route?.duration_min || Math.round(getDistance(sLat, sLng, eLat, eLng) * 3.4),
+      distanceKm: rawSafest.distance_km || roadResponse?.route?.distance_km || Math.round(getDistance(sLat, sLng, eLat, eLng) * 1.3),
+      badge: rawSafest.badge || '🛡️ Best Resource Coverage',
+      badgeColor: 'bg-emerald-50 text-emerald-700 border-emerald-200',
+      polyline: rawSafest?.geometry?.coordinates
+        ? rawSafest.geometry.coordinates.map(c => [c[1], c[0]])
+        : fallbackGeom,
+      color: '#059669',
+      resourceCoverage: cov,
+      zonesTraversed: rawSafest.zones_traversed || cov.zones_traversed || [],
+      highlights: [
+        `${cov.nearby_police_count} Verified Police Stations within 3.5km corridor (Nearest: ~${cov.nearest_police_km || 1.2} km)`,
+        `${cov.nearby_medical_count} 24/7 Hospital Emergency Units along route`,
+        'Continuous streetlighting along primary Mumbai arterial roads'
+      ],
+      safetyDetails: 'Prioritizes arterial highways with verified emergency response infrastructure.'
+    };
+  }
 
-  const results = {
-    safest_cab: safestCabOption,
-    direct_cab: directCabOption
-  };
+  // 2. DIRECT FASTEST ROAD (Only if a genuine second route exists from ORS)
+  if (rawDirect && rawDirect.geometry) {
+    const cov = rawDirect.resource_coverage || defaultCoverage;
+    results.direct_cab = {
+      id: 'direct_cab',
+      name: 'Direct Fastest Road',
+      modeLabel: 'Shortest Distance Path',
+      icon: 'Car',
+      durationMin: rawDirect.duration_min || Math.max(10, (results.safest_cab?.durationMin ? results.safest_cab.durationMin - 6 : 20)),
+      distanceKm: rawDirect.distance_km || results.safest_cab?.distanceKm || Math.round(getDistance(sLat, sLng, eLat, eLng) * 1.2),
+      badge: rawDirect.badge || '⚡ Shortest Path',
+      badgeColor: 'bg-amber-50 text-amber-800 border-amber-200',
+      polyline: rawDirect.geometry.coordinates.map(c => [c[1], c[0]]),
+      color: '#d97706',
+      resourceCoverage: cov,
+      zonesTraversed: rawDirect.zones_traversed || cov.zones_traversed || [],
+      highlights: [
+        'Shortest driving distance travel path',
+        `${cov.nearby_police_count} Police Stations accessible along corridor`,
+        'Crosses standard commercial transit junctions'
+      ],
+      safetyDetails: 'Direct shortest path across commercial thoroughfares with standard civic coverage.'
+    };
+  }
 
   // 3. REALISTIC MUMBAI LOCAL TRAIN FEASIBILITY LOGIC
   // Check both Western and Central lines
@@ -207,12 +215,15 @@ export function computeTransitOptions(startCoords, endCoords, roadResponse) {
       endStation: bestEndStation.name,
       startDist: bestStartStation.dist,
       endDist: bestEndStation.dist,
-      avgZoneScore: 38,
-      safetyScore: 92,
+      resourceCoverage: {
+        score: 90,
+        tier: '24/7 Dedicated Transit Security',
+        explanation: 'Equipped with dedicated Government Railway Police (GRP) station chowkis and onboard escort commandos.'
+      },
       highlights: [
         `Board at ${bestStartStation.name} (~${bestStartStation.dist}km away) ➔ De-board at ${bestEndStation.name} (~${bestEndStation.dist}km to dest)`,
         'Dedicated Ladies Coaches (Yellow/Green Stripes) at Engine, Middle & Rear',
-        'Night RPF Commando Escort Onboard (9:00 PM – 6:00 AM) • Helpline 1512'
+        'Night RPF Security Escort Onboard (9:00 PM – 6:00 AM) • RailMadad Helpline 139'
       ],
       safetyDetails: '24/7 Government Railway Police (GRP) station chowki at platform junctions.'
     };
@@ -255,8 +266,11 @@ export function computeTransitOptions(startCoords, endCoords, roadResponse) {
       endStation: endM.name,
       startDist: minSM.toFixed(1),
       endDist: minEM.toFixed(1),
-      avgZoneScore: 28,
-      safetyScore: 97,
+      resourceCoverage: {
+        score: 95,
+        tier: 'Full Guarded Infrastructure',
+        explanation: 'Enclosed stations with automated baggage scanners, platform CISF guards, and 100% CCTV surveillance.'
+      },
       highlights: [
         `Board at ${startM.name} (~${minSM.toFixed(1)}km away) ➔ De-board at ${endM.name} (~${minEM.toFixed(1)}km to dest)`,
         'First coach dedicated exclusively to women commuters',

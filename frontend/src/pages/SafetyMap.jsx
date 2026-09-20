@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { MapContainer, TileLayer, Polygon, Marker, Popup, useMap, useMapEvents } from 'react-leaflet';
 import { Shield, Search, Locate, Info, Navigation as NavIcon, Layers, Heart, PlusCircle, AlertTriangle, LightbulbOff, Users, ShieldAlert, Phone, ExternalLink, X, ChevronUp, ChevronDown, SlidersHorizontal } from 'lucide-react';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import { MUMBAI_SAFE_HAVENS } from '../data/safeHavens';
-import CommunityReportModal, { INITIAL_HAZARDS } from '../components/CommunityReportModal';
+import CommunityReportModal, { INITIAL_HAZARDS, formatRelativeTime } from '../components/CommunityReportModal';
 import API_BASE_URL from '../config/api';
+import { apiRequest } from '../services/apiClient';
 
 export function getRiskTier(score) {
   if (score <= 20) return { color: '#16a34a', label: 'Very Safe / Low Risk', badge: 'Very Safe (0-20)', bg: 'bg-emerald-50', text: 'text-emerald-700', border: 'border-emerald-500' };
@@ -15,9 +16,9 @@ export function getRiskTier(score) {
   return { color: '#dc2626', label: 'High Caution Zone', badge: 'High Caution (81-100)', bg: 'bg-rose-50', text: 'text-rose-700', border: 'border-rose-500' };
 }
 
-// Center Zone Name & Score Badge
-function createZoneLabelIcon(name, score) {
-  const tier = getRiskTier(score);
+// Center Zone Name & Risk Score Label - Sleek, compact, modern glass capsule
+function createZoneLabelIcon(name, ward, score) {
+  const tier = typeof score === 'number' ? getRiskTier(score) : { color: '#3b82f6' };
   return L.divIcon({
     className: 'mumbai-zone-label',
     html: `
@@ -28,30 +29,46 @@ function createZoneLabelIcon(name, score) {
         user-select: none;
       ">
         <div style="
-          background: rgba(255, 255, 255, 0.92);
-          backdrop-filter: blur(4px);
-          padding: 4px 10px;
+          background: rgba(255, 255, 255, 0.96);
+          backdrop-filter: blur(8px);
+          -webkit-backdrop-filter: blur(8px);
+          padding: 3px 8px;
           border-radius: 9999px;
-          border: 1.5px solid ${tier.color};
-          box-shadow: 0 4px 12px rgba(0,0,0,0.18);
+          border: 1px solid rgba(226, 232, 240, 0.9);
+          box-shadow: 0 2px 8px rgba(0,0,0,0.10), 0 1px 2px rgba(0,0,0,0.06);
           display: inline-flex;
-          flex-direction: column;
           align-items: center;
-          gap: 1px;
+          gap: 5px;
+          white-space: nowrap;
+          transition: all 0.2s ease;
         ">
           <span style="
-            font-weight: 800;
-            font-size: 11px;
-            color: #0f172a;
-            white-space: nowrap;
-            letter-spacing: -0.2px;
-          ">${name}</span>
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background-color: ${tier.color};
+            box-shadow: 0 0 0 1.5px rgba(255,255,255,0.9), 0 0 6px ${tier.color}80;
+            display: inline-block;
+            flex-shrink: 0;
+          "></span>
           <span style="
-            font-weight: 800;
-            font-size: 10px;
-            color: ${tier.color};
-            line-height: 1;
-          ">Risk: ${score}/100</span>
+            font-weight: 700;
+            font-size: 10.5px;
+            color: #0f172a;
+            letter-spacing: -0.1px;
+            line-height: 1.1;
+          ">${name}</span>
+          ${typeof score === 'number' ? `
+            <span style="
+              font-weight: 700;
+              font-size: 9px;
+              color: ${tier.color};
+              background: ${tier.color}15;
+              padding: 1px 4px;
+              border-radius: 4px;
+              line-height: 1;
+            ">${score}</span>
+          ` : ''}
         </div>
       </div>
     `,
@@ -167,7 +184,16 @@ const searchPinIcon = new L.Icon({
   popupAnchor: [1, -34]
 });
 
-const userLocationIcon = new L.Icon({
+// Custom icons
+const policeStationIcon = new L.Icon({
+  iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-blue.png',
+  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34]
+});
+
+const safeHavenIcon = new L.Icon({
   iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-green.png',
   shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
   iconSize: [25, 41],
@@ -175,20 +201,41 @@ const userLocationIcon = new L.Icon({
   popupAnchor: [1, -34]
 });
 
-function MapController({ center, zoom }) {
+const hazardIcon = new L.Icon({
+  iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-gold.png',
+  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34]
+});
+
+const userPinIcon = new L.Icon({
+  iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png',
+  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34]
+});
+
+function MapController({ center, zoom = 12 }) {
   const map = useMap();
   useEffect(() => {
     if (center) {
-      map.flyTo(center, zoom || 13, { duration: 1.2 });
+      map.flyTo(center, zoom, { duration: 1.2 });
     }
   }, [center, zoom, map]);
   return null;
 }
 
-function MapClickHandler({ onMapClick }) {
+function MapEventsHandler({ onMapClick, onZoomChange }) {
   useMapEvents({
-    click: (e) => {
+    click(e) {
       onMapClick(e.latlng);
+    },
+    zoomend(e) {
+      if (onZoomChange) {
+        onZoomChange(e.target.getZoom());
+      }
     }
   });
   return null;
@@ -197,10 +244,10 @@ function MapClickHandler({ onMapClick }) {
 export default function SafetyMap() {
   const [zones, setZones] = useState([]);
   const [stations, setStations] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [activeZone, setActiveZone] = useState(null);
   const [activeStation, setActiveStation] = useState(null);
-  const [mapStyle, setMapStyle] = useState('google-streets');
+  const [mapStyle, setMapStyle] = useState('osm');
   const [showStations, setShowStations] = useState(true);
   const [showHavens, setShowHavens] = useState(true);
   const [showHazards, setShowHazards] = useState(true);
@@ -219,26 +266,30 @@ export default function SafetyMap() {
   });
   const [showReportModal, setShowReportModal] = useState(false);
 
-  // Search state
+  // Search state & Debounce references
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [selectedPoint, setSelectedPoint] = useState(null);
   const [mapCenter, setMapCenter] = useState([19.1200, 72.8650]);
   const [userLocation, setUserLocation] = useState(null);
   const [locating, setLocating] = useState(false);
+  const searchDebounceRef = useRef(null);
+  const searchAbortRef = useRef(null);
 
   useEffect(() => {
     Promise.all([
-      fetch(`${API_BASE_URL}/api/zones`).then(res => res.json()),
-      fetch(`${API_BASE_URL}/api/police-stations`).then(res => res.json())
+      apiRequest('/api/zones'),
+      apiRequest('/api/police-stations')
     ])
       .then(([zonesData, stationsData]) => {
-        setZones(zonesData.features || []);
-        setStations(stationsData);
+        setZones(zonesData?.features || []);
+        setStations(stationsData || { type: 'FeatureCollection', features: [] });
         setLoading(false);
       })
       .catch(err => {
         console.error("Error fetching map datasets", err);
+        setZones([]);
+        setStations({ type: 'FeatureCollection', features: [] });
         setLoading(false);
       });
   }, []);
@@ -253,19 +304,47 @@ export default function SafetyMap() {
     }
   };
 
-  const handleSearch = async (val) => {
-    setSearchQuery(val);
-    if (!val || val.length < 2) {
-      setSearchResults([]);
-      return;
-    }
+  const handleDeleteHazard = (id) => {
+    const updated = hazards.filter(h => h.id !== id);
+    setHazards(updated);
     try {
-      const res = await fetch(`${API_BASE_URL}/api/geocode?q=${encodeURIComponent(val)}`);
-      const data = await res.json();
-      setSearchResults(data.results || []);
+      localStorage.setItem('mumbai_community_hazards', JSON.stringify(updated));
     } catch (e) {
       console.error(e);
     }
+  };
+
+  // Debounced geocoding search with stale request cancellation
+  const handleSearch = (val) => {
+    setSearchQuery(val);
+
+    if (searchDebounceRef.current) {
+      clearTimeout(searchDebounceRef.current);
+    }
+    if (searchAbortRef.current) {
+      searchAbortRef.current.abort();
+    }
+
+    if (!val || val.trim().length < 2) {
+      setSearchResults([]);
+      return;
+    }
+
+    searchDebounceRef.current = setTimeout(async () => {
+      const abortController = new AbortController();
+      searchAbortRef.current = abortController;
+
+      try {
+        const data = await apiRequest(`/api/geocode?q=${encodeURIComponent(val.trim())}`, {
+          signal: abortController.signal
+        });
+        setSearchResults(data.results || []);
+      } catch (e) {
+        if (!e.isAborted) {
+          console.error("Geocoding search error", e);
+        }
+      }
+    }, 350);
   };
 
   const selectPlace = (place) => {
@@ -295,17 +374,17 @@ export default function SafetyMap() {
       },
       (err) => {
         console.warn("GPS failed", err);
-        setUserLocation([19.0760, 72.8777]);
-        setMapCenter([19.0760, 72.8777]);
+        setUserLocation(null);
         setLocating(false);
-      }
+        alert("Location unavailable. You can still browse the map and access emergency resources.");
+      },
+      { enableHighAccuracy: true, timeout: 8000, maximumAge: 10000 }
     );
   };
 
   const handleMapClick = async (latlng) => {
     try {
-      const res = await fetch(`${API_BASE_URL}/api/reverse-geocode?lat=${latlng.lat}&lng=${latlng.lng}`);
-      const data = await res.json();
+      const data = await apiRequest(`/api/reverse-geocode?lat=${latlng.lat}&lng=${latlng.lng}`);
       setSelectedPoint({
         lat: latlng.lat,
         lng: latlng.lng,
@@ -320,7 +399,7 @@ export default function SafetyMap() {
     }
   };
 
-  // Filtered zones
+  // Filtered zones by risk score or area
   const filteredZones = zones.filter(z => {
     const score = z.properties.score;
     if (scoreFilter === '0-20') return score <= 20;
@@ -328,28 +407,27 @@ export default function SafetyMap() {
     if (scoreFilter === '41-60') return score > 40 && score <= 60;
     if (scoreFilter === '61-80') return score > 60 && score <= 80;
     if (scoreFilter === '81-100') return score > 80;
+    if (scoreFilter === 'WESTERN') return ['R/N', 'R/C', 'R/S', 'P/N', 'P/S', 'K/W', 'H/W'].some(w => (z.properties.ward || '').includes(w));
+    if (scoreFilter === 'EASTERN') return ['K/E', 'H/E', 'L', 'M/E', 'M/W', 'N', 'S', 'T'].some(w => (z.properties.ward || '').includes(w));
+    if (scoreFilter === 'SOUTH') return ['A', 'B', 'C', 'D', 'E', 'F/S', 'F/N', 'G/S', 'G/N'].some(w => (z.properties.ward || '').includes(w));
     return true;
   });
 
   const tileLayers = {
-    'google-streets': {
-      url: 'https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',
-      attribution: '&copy; Google Maps & OpenRouteService'
-    },
-    'google-hybrid': {
-      url: 'https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}',
-      attribution: '&copy; Google Satellite & OpenRouteService'
-    },
     'osm': {
       url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-      attribution: '&copy; OpenStreetMap'
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">OpenStreetMap</a> contributors'
+    },
+    'osm-hot': {
+      url: 'https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png',
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">OpenStreetMap</a> contributors, Tiles style by Humanitarian OpenStreetMap Team'
     }
   };
 
   if (loading) return (
     <div className="pt-24 flex flex-col justify-center items-center h-screen space-y-3">
       <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-600"></div>
-      <p className="text-xs font-semibold text-slate-500">Loading Mumbai Zonal Safety Map...</p>
+      <p className="text-xs font-semibold text-slate-500">Loading Mumbai Civic Safety Map...</p>
     </div>
   );
 
@@ -359,18 +437,18 @@ export default function SafetyMap() {
       {/* Top Floating Master Control Card with Close & Re-open toggle */}
       <div className="absolute top-20 left-4 z-[1000]">
         {isControlsOpen ? (
-          <div className="w-[92vw] sm:w-[500px] md:w-[540px] bg-white/95 backdrop-blur-md rounded-2xl shadow-xl border border-slate-200/80 p-3 space-y-2.5 transition-all animate-in fade-in zoom-in-95 duration-200">
+          <div className="w-[92vw] sm:w-[480px] md:w-[500px] bg-white/95 backdrop-blur-md rounded-2xl shadow-xl border border-slate-200/80 p-3.5 space-y-3 transition-all animate-in fade-in zoom-in-95 duration-200">
             
-            {/* Search & Header Row with Close Button */}
+            {/* Search & Action Row */}
             <div className="flex items-center gap-2">
               <div className="relative flex-1 flex items-center">
                 <Search className="absolute left-3 w-4 h-4 text-slate-400" />
                 <input
                   type="text"
-                  placeholder="Search Mumbai places, stations, hospitals..."
+                  placeholder="Search places, stations, hospitals..."
                   value={searchQuery}
                   onChange={(e) => handleSearch(e.target.value)}
-                  className="w-full pl-9 pr-8 py-2 text-xs bg-slate-50 hover:bg-slate-100/70 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none transition"
+                  className="w-full pl-9 pr-8 py-2 text-xs bg-slate-50 hover:bg-slate-100/70 border border-slate-200/80 rounded-xl focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none transition placeholder:text-slate-400 font-medium"
                 />
                 {searchQuery && (
                   <button 
@@ -382,10 +460,20 @@ export default function SafetyMap() {
                 )}
               </div>
 
+              {/* Find Location GPS Button */}
+              <button
+                onClick={handleLocateMe}
+                title="Find my location"
+                className="p-2 rounded-xl bg-slate-100 hover:bg-blue-50 hover:text-blue-600 text-slate-600 transition flex items-center justify-center shrink-0 cursor-pointer"
+                aria-label="Find GPS Location"
+              >
+                <Locate className={`w-4 h-4 ${locating ? 'animate-spin text-blue-600' : ''}`} />
+              </button>
+
               {/* Close Panel Button */}
               <button
                 onClick={() => setIsControlsOpen(false)}
-                className="p-2 rounded-xl bg-slate-100 hover:bg-slate-200/80 text-slate-600 hover:text-slate-900 transition flex items-center justify-center shrink-0 cursor-pointer"
+                className="p-2 rounded-xl bg-slate-100 hover:bg-slate-200/80 text-slate-500 hover:text-slate-900 transition flex items-center justify-center shrink-0 cursor-pointer"
                 title="Hide map controls & filters"
                 aria-label="Hide Map Controls"
               >
@@ -412,138 +500,131 @@ export default function SafetyMap() {
               </div>
             )}
 
-            {/* Safety Filter Pills Row */}
-            <div className="flex items-center gap-1 overflow-x-auto pb-0.5 no-scrollbar text-xs">
-              <span className="text-[11px] font-semibold text-slate-400 mr-1 shrink-0">Filter:</span>
-              
-              <button
-                onClick={() => setScoreFilter('ALL')}
-                className={`px-2.5 py-1 text-[11px] font-medium rounded-lg shrink-0 transition ${
-                  scoreFilter === 'ALL' ? 'bg-slate-900 text-white shadow-xs' : 'text-slate-600 hover:bg-slate-100'
-                }`}
-              >
-                All Zones ({zones.length})
-              </button>
-              
-              <button
-                onClick={() => setScoreFilter('0-20')}
-                className={`px-2.5 py-1 text-[11px] font-medium rounded-lg shrink-0 flex items-center gap-1.5 transition ${
-                  scoreFilter === '0-20' ? 'bg-emerald-600 text-white shadow-xs' : 'text-slate-600 hover:bg-emerald-50'
-                }`}
-              >
-                <span className="w-2 h-2 rounded-full bg-emerald-500"></span> Very Safe
-              </button>
+            {/* Risk Filter Pills (Neat Segments) */}
+            <div className="space-y-1">
+              <div className="flex items-center justify-between text-[11px]">
+                <span className="font-semibold text-slate-400">Risk Filter:</span>
+                {scoreFilter !== 'ALL' && (
+                  <button 
+                    onClick={() => setScoreFilter('ALL')} 
+                    className="text-[10px] font-semibold text-blue-600 hover:underline"
+                  >
+                    Reset Filter
+                  </button>
+                )}
+              </div>
+              <div className="flex items-center gap-1.5 overflow-x-auto pb-1 text-xs">
+                <button
+                  onClick={() => setScoreFilter('ALL')}
+                  className={`px-2.5 py-1 text-[11px] font-medium rounded-lg shrink-0 transition ${
+                    scoreFilter === 'ALL' ? 'bg-slate-900 text-white shadow-xs' : 'bg-slate-100 text-slate-600 hover:bg-slate-200/70'
+                  }`}
+                >
+                  All ({zones.length})
+                </button>
+                
+                <button
+                  onClick={() => setScoreFilter('0-20')}
+                  className={`px-2.5 py-1 text-[11px] font-medium rounded-lg shrink-0 flex items-center gap-1.5 transition ${
+                    scoreFilter === '0-20' ? 'bg-emerald-600 text-white shadow-xs' : 'bg-emerald-50 text-emerald-700 hover:bg-emerald-100/70'
+                  }`}
+                >
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Very Safe
+                </button>
 
-              <button
-                onClick={() => setScoreFilter('21-40')}
-                className={`px-2.5 py-1 text-[11px] font-medium rounded-lg shrink-0 flex items-center gap-1.5 transition ${
-                  scoreFilter === '21-40' ? 'bg-lime-600 text-white shadow-xs' : 'text-slate-600 hover:bg-lime-50'
-                }`}
-              >
-                <span className="w-2 h-2 rounded-full bg-lime-500"></span> Safe
-              </button>
+                <button
+                  onClick={() => setScoreFilter('21-40')}
+                  className={`px-2.5 py-1 text-[11px] font-medium rounded-lg shrink-0 flex items-center gap-1.5 transition ${
+                    scoreFilter === '21-40' ? 'bg-lime-600 text-white shadow-xs' : 'bg-lime-50 text-lime-700 hover:bg-lime-100/70'
+                  }`}
+                >
+                  <span className="w-1.5 h-1.5 rounded-full bg-lime-500"></span> Safe
+                </button>
 
-              <button
-                onClick={() => setScoreFilter('41-60')}
-                className={`px-2.5 py-1 text-[11px] font-medium rounded-lg shrink-0 flex items-center gap-1.5 transition ${
-                  scoreFilter === '41-60' ? 'bg-amber-500 text-white shadow-xs' : 'text-slate-600 hover:bg-amber-50'
-                }`}
-              >
-                <span className="w-2 h-2 rounded-full bg-amber-400"></span> Moderate
-              </button>
+                <button
+                  onClick={() => setScoreFilter('41-60')}
+                  className={`px-2.5 py-1 text-[11px] font-medium rounded-lg shrink-0 flex items-center gap-1.5 transition ${
+                    scoreFilter === '41-60' ? 'bg-amber-500 text-white shadow-xs' : 'bg-amber-50 text-amber-700 hover:bg-amber-100/70'
+                  }`}
+                >
+                  <span className="w-1.5 h-1.5 rounded-full bg-amber-400"></span> Moderate
+                </button>
 
-              <button
-                onClick={() => setScoreFilter('61-80')}
-                className={`px-2.5 py-1 text-[11px] font-medium rounded-lg shrink-0 flex items-center gap-1.5 transition ${
-                  scoreFilter === '61-80' ? 'bg-orange-500 text-white shadow-xs' : 'text-slate-600 hover:bg-orange-50'
-                }`}
-              >
-                <span className="w-2 h-2 rounded-full bg-orange-400"></span> Vigilance
-              </button>
+                <button
+                  onClick={() => setScoreFilter('61-80')}
+                  className={`px-2.5 py-1 text-[11px] font-medium rounded-lg shrink-0 flex items-center gap-1.5 transition ${
+                    scoreFilter === '61-80' ? 'bg-orange-500 text-white shadow-xs' : 'bg-orange-50 text-orange-700 hover:bg-orange-100/70'
+                  }`}
+                >
+                  <span className="w-1.5 h-1.5 rounded-full bg-orange-400"></span> Vigilance
+                </button>
 
-              <button
-                onClick={() => setScoreFilter('81-100')}
-                className={`px-2.5 py-1 text-[11px] font-medium rounded-lg shrink-0 flex items-center gap-1.5 transition ${
-                  scoreFilter === '81-100' ? 'bg-rose-600 text-white shadow-xs' : 'text-slate-600 hover:bg-rose-50'
-                }`}
-              >
-                <span className="w-2 h-2 rounded-full bg-rose-500"></span> Caution
-              </button>
+                <button
+                  onClick={() => setScoreFilter('81-100')}
+                  className={`px-2.5 py-1 text-[11px] font-medium rounded-lg shrink-0 flex items-center gap-1.5 transition ${
+                    scoreFilter === '81-100' ? 'bg-rose-600 text-white shadow-xs' : 'bg-rose-50 text-rose-700 hover:bg-rose-100/70'
+                  }`}
+                >
+                  <span className="w-1.5 h-1.5 rounded-full bg-rose-500"></span> Caution
+                </button>
+              </div>
             </div>
 
-            {/* Map Layer Controls & Quick Actions */}
-            <div className="pt-2 border-t border-slate-100 flex flex-wrap items-center justify-between gap-1.5">
-              <div className="flex items-center gap-1">
-                {/* Map / Satellite Toggle */}
-                <div className="flex items-center bg-slate-100 p-0.5 rounded-lg">
-                  <button
-                    onClick={() => setMapStyle('google-streets')}
-                    className={`px-2 py-1 text-[11px] font-medium rounded-md transition ${
-                      mapStyle === 'google-streets' ? 'bg-white text-slate-900 shadow-xs' : 'text-slate-500 hover:text-slate-900'
-                    }`}
-                  >
-                    Map
-                  </button>
-                  <button
-                    onClick={() => setMapStyle('google-hybrid')}
-                    className={`px-2 py-1 text-[11px] font-medium rounded-md transition ${
-                      mapStyle === 'google-hybrid' ? 'bg-white text-slate-900 shadow-xs' : 'text-slate-500 hover:text-slate-900'
-                    }`}
-                  >
-                    Satellite
-                  </button>
-                </div>
+            {/* Map Layer Toggles & Action Buttons in a Clean Grid */}
+            <div className="pt-2 border-t border-slate-100 flex items-center justify-between gap-2">
+              <div className="flex items-center gap-1 flex-wrap">
+                {/* Zones Toggle */}
+                <button
+                  onClick={() => setShowZones(!showZones)}
+                  className={`px-2 py-1 text-[11px] font-medium rounded-lg flex items-center gap-1 transition ${
+                    showZones ? 'bg-indigo-50 text-indigo-700 border border-indigo-200/80 font-semibold' : 'text-slate-400 hover:text-slate-600 hover:bg-slate-100'
+                  }`}
+                  title="Toggle Safety Choropleth Zones"
+                >
+                  <Layers className="w-3.5 h-3.5" /> Zones
+                </button>
 
                 {/* Police Toggle */}
                 <button
                   onClick={() => setShowStations(!showStations)}
                   className={`px-2 py-1 text-[11px] font-medium rounded-lg flex items-center gap-1 transition ${
-                    showStations ? 'bg-blue-50 text-blue-700 border border-blue-200/80' : 'text-slate-500 hover:bg-slate-100'
+                    showStations ? 'bg-blue-50 text-blue-700 border border-blue-200/80 font-semibold' : 'text-slate-400 hover:text-slate-600 hover:bg-slate-100'
                   }`}
                   title="Toggle Police Stations"
                 >
                   <Shield className="w-3.5 h-3.5" /> Police
                 </button>
 
-                {/* Safe Havens Toggle */}
+                {/* Medical Facilities Toggle */}
                 <button
                   onClick={() => setShowHavens(!showHavens)}
                   className={`px-2 py-1 text-[11px] font-medium rounded-lg flex items-center gap-1 transition ${
-                    showHavens ? 'bg-rose-50 text-rose-700 border border-rose-200/80' : 'text-slate-500 hover:bg-slate-100'
+                    showHavens ? 'bg-rose-50 text-rose-700 border border-rose-200/80 font-semibold' : 'text-slate-400 hover:text-slate-600 hover:bg-slate-100'
                   }`}
-                  title="Toggle 24/7 Safe Havens"
+                  title="Toggle Government Medical Facilities"
                 >
-                  <Heart className="w-3.5 h-3.5" /> 24/7 Havens
+                  <Heart className="w-3.5 h-3.5" /> Medical ({MUMBAI_SAFE_HAVENS.length})
                 </button>
 
-                {/* Hazards Toggle */}
+                {/* Hazards / Safety Notes Toggle */}
                 <button
                   onClick={() => setShowHazards(!showHazards)}
                   className={`px-2 py-1 text-[11px] font-medium rounded-lg flex items-center gap-1 transition ${
-                    showHazards ? 'bg-amber-50 text-amber-800 border border-amber-200/80' : 'text-slate-500 hover:bg-slate-100'
+                    showHazards ? 'bg-amber-50 text-amber-800 border border-amber-200/80 font-semibold' : 'text-slate-400 hover:text-slate-600 hover:bg-slate-100'
                   }`}
-                  title="Toggle Community Hazard Alerts"
+                  title="Toggle Local Safety Notes"
                 >
-                  <AlertTriangle className="w-3.5 h-3.5" /> Hazards ({hazards.length})
+                  <AlertTriangle className="w-3.5 h-3.5" /> Notes ({hazards.length})
                 </button>
               </div>
 
-              <div className="flex items-center gap-1">
-                <button
-                  onClick={() => setShowReportModal(true)}
-                  className="px-2.5 py-1 text-[11px] font-semibold rounded-lg bg-slate-900 hover:bg-slate-800 text-white flex items-center gap-1 transition shadow-xs cursor-pointer"
-                >
-                  <PlusCircle className="w-3.5 h-3.5 text-emerald-400" /> Report Hazard
-                </button>
-
-                <button
-                  onClick={handleLocateMe}
-                  title="Find my location"
-                  className="p-1.5 text-slate-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition"
-                >
-                  <Locate className={`w-4 h-4 ${locating ? 'animate-spin text-blue-600' : ''}`} />
-                </button>
-              </div>
+              {/* Add Safety Note Button */}
+              <button
+                onClick={() => setShowReportModal(true)}
+                className="px-2.5 py-1 text-[11px] font-semibold rounded-lg bg-slate-900 hover:bg-slate-800 text-white flex items-center gap-1 transition shadow-xs shrink-0 cursor-pointer"
+              >
+                <PlusCircle className="w-3.5 h-3.5 text-emerald-400" /> Add Note
+              </button>
             </div>
 
           </div>
@@ -565,47 +646,52 @@ export default function SafetyMap() {
         )}
       </div>
 
-      {/* Clean Minimal Safety Guide Legend (Bottom Left) */}
-      <div className="absolute bottom-6 left-4 z-[1000] bg-white/95 backdrop-blur-md px-4 py-3 rounded-2xl shadow-xl border border-slate-200/80 max-w-sm space-y-2">
-        <div className="flex items-center justify-between">
-          <span className="text-xs font-bold text-slate-900">Area Safety Guide</span>
-          <span className="text-[10px] text-slate-400 font-medium">0 = Safest • 100 = Caution</span>
+      {/* Sleek Area Safety Guide Card (Bottom Left) */}
+      <div className="absolute bottom-6 left-4 z-[1000] bg-white/95 backdrop-blur-md px-3.5 py-3 rounded-2xl shadow-xl border border-slate-200/80 w-[310px] space-y-2.5 transition-all">
+        {/* Header */}
+        <div className="flex items-baseline justify-between gap-2 border-b border-slate-100 pb-1.5">
+          <span className="text-xs font-bold text-slate-900 tracking-tight">Area Safety Guide</span>
+          <span className="text-[10px] text-slate-400 font-medium whitespace-nowrap">0 Safest • 100 Caution</span>
         </div>
 
-        {/* Gradient Scale */}
-        <div className="grid grid-cols-5 gap-1 text-[10px] text-center font-medium">
-          <div className="py-1 rounded-md bg-emerald-50 text-emerald-700 border border-emerald-200/60">
-            0–20
-            <span className="block text-[8px] opacity-80">Very Safe</span>
-          </div>
-          <div className="py-1 rounded-md bg-lime-50 text-lime-700 border border-lime-200/60">
-            21–40
-            <span className="block text-[8px] opacity-80">Safe</span>
-          </div>
-          <div className="py-1 rounded-md bg-amber-50 text-amber-700 border border-amber-200/60">
-            41–60
-            <span className="block text-[8px] opacity-80">Moderate</span>
-          </div>
-          <div className="py-1 rounded-md bg-orange-50 text-orange-700 border border-orange-200/60">
-            61–80
-            <span className="block text-[8px] opacity-80">Vigilance</span>
-          </div>
-          <div className="py-1 rounded-md bg-rose-50 text-rose-700 border border-rose-200/60">
-            81–100
-            <span className="block text-[8px] opacity-80">Caution</span>
+        {/* Continuous Color Gradient Bar with 5 Tier Markers */}
+        <div className="space-y-1.5">
+          <div className="h-2 w-full rounded-full bg-gradient-to-r from-emerald-500 via-yellow-400 via-orange-500 to-rose-600 shadow-inner"></div>
+          
+          <div className="grid grid-cols-5 text-center text-[9px] font-semibold">
+            <div className="text-emerald-700">
+              <span>0–20</span>
+              <span className="block text-[8px] font-normal text-slate-400">Safe</span>
+            </div>
+            <div className="text-lime-700">
+              <span>21–40</span>
+              <span className="block text-[8px] font-normal text-slate-400">Low</span>
+            </div>
+            <div className="text-amber-700">
+              <span>41–60</span>
+              <span className="block text-[8px] font-normal text-slate-400">Mod</span>
+            </div>
+            <div className="text-orange-700">
+              <span>61–80</span>
+              <span className="block text-[8px] font-normal text-slate-400">Vigilant</span>
+            </div>
+            <div className="text-rose-700">
+              <span>81–100</span>
+              <span className="block text-[8px] font-normal text-slate-400">Caution</span>
+            </div>
           </div>
         </div>
 
-        {/* Map Legend Icons */}
-        <div className="flex items-center justify-between text-[10px] text-slate-500 pt-1 border-t border-slate-100">
-          <span className="flex items-center gap-1">
-            <span className="w-2 h-2 rounded-full bg-blue-600 inline-block"></span> Police Station
+        {/* Mapped Resources Legend Items */}
+        <div className="flex items-center justify-between text-[10px] text-slate-600 pt-1.5 border-t border-slate-100">
+          <span className="flex items-center gap-1.5 font-medium">
+            <span className="w-2 h-2 rounded-full bg-blue-600 ring-2 ring-blue-100 shrink-0"></span> Police
           </span>
-          <span className="flex items-center gap-1">
-            <span className="w-2 h-2 rounded-full bg-rose-600 inline-block"></span> 24/7 Haven
+          <span className="flex items-center gap-1.5 font-medium">
+            <span className="w-2 h-2 rounded-full bg-rose-600 ring-2 ring-rose-100 shrink-0"></span> Medical
           </span>
-          <span className="flex items-center gap-1">
-            <span className="w-2 h-2 rounded-full bg-orange-500 inline-block"></span> Hazard Pin
+          <span className="flex items-center gap-1.5 font-medium">
+            <span className="w-2 h-2 rounded-full bg-orange-500 ring-2 ring-orange-100 shrink-0"></span> Notes
           </span>
         </div>
       </div>
@@ -624,7 +710,7 @@ export default function SafetyMap() {
         zoomControl={false}
       >
         <MapController center={mapCenter} />
-        <MapClickHandler onMapClick={handleMapClick} />
+        <MapEventsHandler onMapClick={handleMapClick} />
         
         <TileLayer
           key={mapStyle}
@@ -633,22 +719,23 @@ export default function SafetyMap() {
           maxZoom={20}
         />
 
-        {/* 🗺️ CHOROPLETH POLYGONS (Matching Reference Image) */}
+        {/* 🗺️ CHOROPLETH DANGER ZONE POLYGONS */}
         {showZones && filteredZones.map((zone, idx) => {
           const props = zone.properties;
           const coords = zone.geometry.coordinates[0].map(c => [c[1], c[0]]); // Leaflet [lat, lon]
-          const color = props.color || '#FACC15';
-          const tier = getRiskTier(props.score);
+          const color = props.color || (typeof props.score === 'number' ? getRiskTier(props.score).color : '#3b82f6');
+          const tier = typeof props.score === 'number' ? getRiskTier(props.score) : { label: 'Mumbai Area', color: '#3b82f6' };
 
           return (
-            <div key={idx}>
+            <React.Fragment key={idx}>
               <Polygon
                 positions={coords}
                 pathOptions={{
                   fillColor: color,
-                  fillOpacity: 0.62,
-                  color: '#ffffff',
+                  fillOpacity: 0.45,
+                  color: color,
                   weight: 2,
+                  dashArray: '3, 3',
                   opacity: 0.95
                 }}
                 eventHandlers={{
@@ -659,12 +746,14 @@ export default function SafetyMap() {
                   <div className="min-w-[220px] p-1">
                     <div className="flex justify-between items-center mb-1">
                       <span className="text-xs font-black text-slate-900">{props.name}</span>
-                      <span 
-                        style={{ backgroundColor: `${color}20`, color: color, borderColor: `${color}50` }}
-                        className="text-[10px] font-extrabold px-2 py-0.5 rounded-full border"
-                      >
-                        Risk: {props.score}/100
-                      </span>
+                      {typeof props.score === 'number' && (
+                        <span 
+                          style={{ backgroundColor: `${color}20`, color: color, borderColor: `${color}50` }}
+                          className="text-[10px] font-extrabold px-2 py-0.5 rounded-full border"
+                        >
+                          Risk: {props.score}/100
+                        </span>
+                      )}
                     </div>
                     <p className="text-[11px] text-slate-500 mb-2 font-medium">BMC Ward: {props.ward || 'Mumbai Metropolitan'}</p>
                     <div className="p-2.5 bg-slate-50 rounded-xl text-[11px] text-slate-700 border border-slate-100 space-y-1.5">
@@ -681,15 +770,15 @@ export default function SafetyMap() {
                 </Popup>
               </Polygon>
 
-              {/* Big Centered Name + Score Label */}
+              {/* Centered Area + Ward + Score Label */}
               {props.center && (
                 <Marker 
                   position={props.center} 
-                  icon={createZoneLabelIcon(props.name, props.score)}
+                  icon={createZoneLabelIcon(props.name, props.ward, props.score)}
                   interactive={false}
                 />
               )}
-            </div>
+            </React.Fragment>
           );
         })}
 
@@ -729,38 +818,39 @@ export default function SafetyMap() {
           );
         })}
 
-        {/* 🏥 24/7 SAFE HAVENS (Hospitals & Pharmacies) */}
-        {showHavens && MUMBAI_SAFE_HAVENS.map((haven) => {
-          const isHosp = haven.type === 'hospital';
+        {/* 🏥 GOVERNMENT MEDICAL FACILITIES */}
+        {showHavens && MUMBAI_SAFE_HAVENS.map((facility) => {
+          const isHosp = facility.type === 'hospital';
           const icon = isHosp ? hospitalHavenIcon : pharmacyHavenIcon;
 
           return (
             <Marker
-              key={haven.id}
-              position={haven.coordinates}
+              key={facility.id}
+              position={facility.coordinates}
               icon={icon}
             >
               <Popup>
                 <div className="min-w-[220px] p-1">
                   <div className="flex items-center gap-1.5 font-bold text-xs mb-1">
                     <Heart className="w-4 h-4 text-rose-600" />
-                    <h4 className="text-slate-900">{haven.name}</h4>
+                    <h4 className="text-slate-900">{facility.name}</h4>
                   </div>
                   <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-rose-50 text-rose-700 border border-rose-200 block w-fit mb-2">
-                    {haven.category}
+                    {facility.category || 'Government Medical Facility'}
                   </span>
-                  <p className="text-[11px] text-slate-600 mb-2">{haven.address}</p>
+                  <p className="text-[11px] text-slate-600 mb-2">{facility.address}</p>
                   <div className="bg-slate-50 p-2 rounded-lg text-[10px] text-slate-700 border border-slate-100 space-y-1 mb-2">
-                    <div><strong>Key Services:</strong> {haven.services?.join(', ')}</div>
-                    <div><strong>Phone:</strong> <a href={`tel:${haven.phone}`} className="text-blue-600 font-bold">{haven.phone}</a></div>
+                    <div><strong>Department:</strong> {facility.owner_dept || 'Public Health Dept'}</div>
+                    <div><strong>Ward:</strong> BMC Ward {facility.ward || 'Mumbai'}</div>
+                    <div className="text-slate-500 italic">Operating hours not verified</div>
                   </div>
                   <a
-                    href={`https://www.google.com/maps/dir/?api=1&destination=${haven.coordinates[0]},${haven.coordinates[1]}`}
+                    href={`https://www.google.com/maps/dir/?api=1&destination=${facility.coordinates[0]},${facility.coordinates[1]}`}
                     target="_blank"
                     rel="noreferrer"
                     className="w-full py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-[10px] font-bold flex items-center justify-center gap-1 shadow-xs"
                   >
-                    <ExternalLink className="w-3 h-3" /> Navigate to Haven
+                    <ExternalLink className="w-3 h-3" /> Navigate to Facility
                   </a>
                 </div>
               </Popup>
@@ -768,7 +858,7 @@ export default function SafetyMap() {
           );
         })}
 
-        {/* ⚠️ CITIZEN COMMUNITY HAZARDS */}
+        {/* ⚠️ LOCAL SAFETY NOTES */}
         {showHazards && hazards.map((haz) => (
           <Marker
             key={haz.id}
@@ -777,15 +867,26 @@ export default function SafetyMap() {
           >
             <Popup>
               <div className="min-w-[210px] p-1">
-                <div className="flex items-center gap-1 text-orange-600 font-bold text-xs mb-1">
-                  <AlertTriangle className="w-4 h-4" />
-                  <h4>Community Hazard Pin</h4>
+                <div className="flex items-center justify-between text-orange-600 font-bold text-xs mb-1">
+                  <div className="flex items-center gap-1">
+                    <AlertTriangle className="w-4 h-4" />
+                    <h4>Local Safety Note</h4>
+                  </div>
+                  <button 
+                    onClick={() => handleDeleteHazard(haz.id)}
+                    className="text-slate-400 hover:text-rose-600 text-[10px] font-normal cursor-pointer"
+                    title="Delete local note"
+                  >
+                    Delete
+                  </button>
                 </div>
                 <p className="text-xs font-extrabold text-slate-900 mb-1">{haz.title}</p>
-                <p className="text-[11px] text-slate-500 mb-2">Area: <strong>{haz.area}</strong> • Reported {haz.reportedAt}</p>
-                <div className="bg-amber-50 p-2 rounded-lg text-[10px] text-amber-950 border border-amber-200 flex items-center justify-between">
-                  <span>Community Verified</span>
-                  <span className="font-bold text-orange-600">👍 {haz.votes} votes</span>
+                <p className="text-[11px] text-slate-500 mb-2">
+                  Area: <strong>{haz.area}</strong> • {formatRelativeTime(haz.createdAt || haz.reportedAt)}
+                </p>
+                <div className="bg-slate-50 p-2 rounded-lg text-[10px] text-slate-600 border border-slate-200 flex items-center justify-between">
+                  <span>Device Storage Only</span>
+                  <span className="font-medium text-slate-400">Personal Note</span>
                 </div>
               </div>
             </Popup>
@@ -824,7 +925,11 @@ export default function SafetyMap() {
         isOpen={showReportModal}
         onClose={() => setShowReportModal(false)}
         onAddHazard={handleAddHazard}
-        currentCoords={userLocation ? { lat: userLocation[0], lng: userLocation[1] } : null}
+        currentCoords={
+          selectedPoint 
+            ? { lat: selectedPoint.lat, lng: selectedPoint.lng, name: selectedPoint.name }
+            : (userLocation ? { lat: userLocation[0], lng: userLocation[1], name: 'Detected GPS Location' } : null)
+        }
       />
     </div>
   );

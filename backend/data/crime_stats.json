@@ -1,9 +1,10 @@
 {
-    "city_wide_risk_indicator": 50.0,
-    "risk_color": "#FACC15",
-    "risk_label": "Moderate Recorded Risk",
     "total_cases_2022": 6156,
     "total_cases_2023": 5913,
+    "total_detected_2022": 4995,
+    "total_detected_2023": 5570,
+    "detection_rate_2022": 81,
+    "detection_rate_2023": 94,
     "trend_percentage": -3.95,
     "categories": [
         {

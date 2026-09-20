@@ -3,7 +3,10 @@ from flask_cors import CORS
 import json
 import os
 import math
+import time
 import requests
+from collections import defaultdict
+from functools import wraps
 from dotenv import load_dotenv
 
 # Load environment variables
@@ -14,6 +17,62 @@ CORS(app)
 
 DATA_DIR = os.path.join(os.path.dirname(__file__), 'data')
 ORS_API_KEY = os.getenv('ORS_API_KEY', '')
+
+# --- In-Memory TTL Geocoding Cache (Short TTL: 10 mins, no user GPS stored) ---
+GEOCODE_CACHE = {}
+GEOCODE_CACHE_TTL_SECS = 600  # 10 minutes
+
+def get_cached_geocode(key):
+    now = time.time()
+    if key in GEOCODE_CACHE:
+        data, exp = GEOCODE_CACHE[key]
+        if exp > now:
+            return data
+        else:
+            del GEOCODE_CACHE[key]
+    return None
+
+def set_cached_geocode(key, data):
+    now = time.time()
+    # Housekeeping: clean expired items if cache grows
+    if len(GEOCODE_CACHE) > 500:
+        expired = [k for k, (_, exp) in GEOCODE_CACHE.items() if exp <= now]
+        for k in expired:
+            del GEOCODE_CACHE[k]
+    GEOCODE_CACHE[key] = (data, now + GEOCODE_CACHE_TTL_SECS)
+
+# --- Lightweight IP-based Sliding Window Rate Limiter ---
+RATE_LIMIT_STORE = defaultdict(list)
+
+def rate_limit(max_requests=60, window_secs=60):
+    """
+    Lightweight, dependency-free in-memory rate limiter per client IP.
+    Returns HTTP 429 with clean JSON if limit exceeded.
+    """
+    def decorator(f):
+        @wraps(f)
+        def wrapped(*args, **kwargs):
+            # Resolve client IP (supporting X-Forwarded-For if behind reverse proxy like Render)
+            forwarded = request.headers.get('X-Forwarded-For')
+            ip = forwarded.split(',')[0].strip() if forwarded else request.remote_addr or '127.0.0.1'
+            endpoint_key = f"{f.__name__}:{ip}"
+            
+            now = time.time()
+            timestamps = RATE_LIMIT_STORE[endpoint_key]
+            
+            # Prune timestamps older than the sliding window
+            RATE_LIMIT_STORE[endpoint_key] = [t for t in timestamps if t > now - window_secs]
+            
+            if len(RATE_LIMIT_STORE[endpoint_key]) >= max_requests:
+                return jsonify({
+                    "error": "Too Many Requests",
+                    "message": "Rate limit exceeded. Please wait a moment before sending another request."
+                }), 429
+                
+            RATE_LIMIT_STORE[endpoint_key].append(now)
+            return f(*args, **kwargs)
+        return wrapped
+    return decorator
 
 # Comprehensive Mumbai Landmarks Fallback Map
 MUMBAI_LANDMARKS = {
@@ -121,6 +180,7 @@ def mumbai_zones():
     return jsonify({"error": "Mumbai zones data not found"}), 404
 
 @app.route('/api/reverse-geocode', methods=['GET'])
+@rate_limit(max_requests=60, window_secs=60)
 def reverse_geocode():
     lat = request.args.get('lat')
     lng = request.args.get('lng')
@@ -144,6 +204,7 @@ def reverse_geocode():
     return jsonify({"name": f"Location ({float(lat):.4f}, {float(lng):.4f})"})
 
 @app.route('/api/geocode', methods=['GET', 'POST'])
+@rate_limit(max_requests=60, window_secs=60)
 def geocode():
     query = request.args.get('q', '').strip()
     if not query and request.is_json:
@@ -152,7 +213,13 @@ def geocode():
     if not query:
         return jsonify({"results": []})
     
-    q_clean = query.lower()
+    q_clean = query.lower().strip()
+
+    # Check in-memory short TTL cache (key is normalized query text)
+    cached_results = get_cached_geocode(q_clean)
+    if cached_results is not None:
+        return jsonify({"results": cached_results, "cached": True})
+
     results = []
     seen_coords = set()
 
@@ -277,67 +344,111 @@ def geocode():
         except Exception as e:
             print(f"Nominatim Geocoding error: {e}")
 
-    return jsonify({"results": results[:8]})
+    final_results = results[:8]
+    if final_results:
+        set_cached_geocode(q_clean, final_results)
+
+    return jsonify({"results": final_results})
 
 @app.route('/api/journey/analyze', methods=['POST'])
+@rate_limit(max_requests=30, window_secs=60)
 def analyze_journey():
     req_data = request.json or {}
     start = req_data.get('start')
     end = req_data.get('end')
-    origin_name = req_data.get('origin', '')
-    destination_name = req_data.get('destination', '')
+    origin_name = req_data.get('origin', '').strip()
+    destination_name = req_data.get('destination', '').strip()
     travel_mode = req_data.get('mode', 'driving-car')
     
-    # Geocode if coordinates not directly passed
-    if (not start or not end) and (origin_name and destination_name):
-        def find_coords(name, is_destination=False):
-            n_clean = name.strip().lower()
-            for k, v in MUMBAI_LANDMARKS.items():
-                if k in n_clean or n_clean in k:
-                    return {"lat": v["lat"], "lng": v["lng"]}
-            
-            # 1. Try Photon Komoot geocoder
-            try:
-                search_q = f"{name} Mumbai" if "mumbai" not in n_clean else name
-                r = requests.get("https://photon.komoot.io/api/", params={"q": search_q, "lat": 19.0760, "lon": 72.8777, "limit": 1}, headers={"User-Agent": "SafeRouteMumbaiApp/1.0"}, timeout=3)
-                if r.status_code == 200:
-                    feats = r.json().get('features', [])
-                    if feats:
-                        c = feats[0]['geometry']['coordinates']
-                        lat, lon = c[1], c[0]
-                        if 18.80 <= lat <= 19.38 and 72.73 <= lon <= 73.20:
-                            return {"lat": lat, "lng": lon}
-            except Exception:
-                pass
-                
-            # 2. Try Nominatim geocoder
-            try:
-                nom_url = "https://nominatim.openstreetmap.org/search"
-                nom_params = {"q": f"{name}, Mumbai", "format": "json", "limit": 1, "viewbox": "72.73,19.38,73.20,18.80", "bounded": 1}
-                nom_headers = {"User-Agent": "SafeRouteMumbaiApp/1.0"}
-                nom_res = requests.get(nom_url, params=nom_params, headers=nom_headers, timeout=3)
-                if nom_res.status_code == 200:
-                    nom_items = nom_res.json()
-                    if nom_items:
-                        lat, lon = float(nom_items[0]['lat']), float(nom_items[0]['lon'])
-                        if 18.80 <= lat <= 19.38 and 72.73 <= lon <= 73.20:
-                            return {"lat": lat, "lng": lon}
-            except Exception:
-                pass
+    def validate_coord(coord_obj):
+        if not isinstance(coord_obj, dict):
+            return None
+        try:
+            lat = float(coord_obj.get('lat'))
+            lng = float(coord_obj.get('lng'))
+            # Check for NaN / Inf
+            if lat != lat or lng != lng:
+                return None
+            # Validate within Mumbai Metropolitan Region (MMR)
+            if 18.80 <= lat <= 19.38 and 72.73 <= lng <= 73.20:
+                return {"lat": lat, "lng": lng}
+            return None
+        except (ValueError, TypeError):
+            return None
 
-            # Safe Mumbai MMR default offset if completely unknown
-            return {"lat": 18.9220 if is_destination else 19.1136, "lng": 72.8347 if is_destination else 72.8697}
+    def find_coords(name):
+        if not name:
+            return None
+        n_clean = name.strip().lower()
+        for k, v in MUMBAI_LANDMARKS.items():
+            if k in n_clean or n_clean in k:
+                return {"lat": v["lat"], "lng": v["lng"]}
         
-        if not start:
-            start = find_coords(origin_name, is_destination=False)
-        if not end:
-            end = find_coords(destination_name, is_destination=True)
+        # 1. Try Photon Komoot geocoder
+        try:
+            search_q = f"{name} Mumbai" if "mumbai" not in n_clean else name
+            r = requests.get(
+                "https://photon.komoot.io/api/",
+                params={"q": search_q, "lat": 19.0760, "lon": 72.8777, "limit": 1},
+                headers={"User-Agent": "SafeRouteMumbaiApp/1.0"},
+                timeout=3
+            )
+            if r.status_code == 200:
+                feats = r.json().get('features', [])
+                if feats:
+                    c = feats[0]['geometry']['coordinates']
+                    lat, lon = c[1], c[0]
+                    if 18.80 <= lat <= 19.38 and 72.73 <= lon <= 73.20:
+                        return {"lat": lat, "lng": lon}
+        except Exception:
+            pass
             
-    if not start or not end:
-        return jsonify({"error": "Start and end coordinates or names required"}), 400
-        
-    start_lat, start_lng = float(start['lat']), float(start['lng'])
-    end_lat, end_lng = float(end['lat']), float(end['lng'])
+        # 2. Try Nominatim geocoder
+        try:
+            nom_url = "https://nominatim.openstreetmap.org/search"
+            nom_params = {
+                "q": f"{name}, Mumbai",
+                "format": "json",
+                "limit": 1,
+                "viewbox": "72.73,19.38,73.20,18.80",
+                "bounded": 1
+            }
+            nom_headers = {"User-Agent": "SafeRouteMumbaiApp/1.0"}
+            nom_res = requests.get(nom_url, params=nom_params, headers=nom_headers, timeout=3)
+            if nom_res.status_code == 200:
+                nom_items = nom_res.json()
+                if nom_items:
+                    lat, lon = float(nom_items[0]['lat']), float(nom_items[0]['lon'])
+                    if 18.80 <= lat <= 19.38 and 72.73 <= lon <= 73.20:
+                        return {"lat": lat, "lng": lon}
+        except Exception:
+            pass
+
+        # Return None if location is unknown (DO NOT use hardcoded fake coordinates)
+        return None
+
+    valid_start = validate_coord(start)
+    if not valid_start:
+        if origin_name:
+            valid_start = find_coords(origin_name)
+        if not valid_start:
+            return jsonify({
+                "error": "origin_not_found",
+                "message": f"We could not confidently identify the starting location '{origin_name or 'Origin'}' in Mumbai. Please select a suggested Mumbai location."
+            }), 422
+
+    valid_end = validate_coord(end)
+    if not valid_end:
+        if destination_name:
+            valid_end = find_coords(destination_name)
+        if not valid_end:
+            return jsonify({
+                "error": "destination_not_found",
+                "message": f"We could not confidently identify the destination '{destination_name or 'Destination'}' in Mumbai. Please select a suggested Mumbai destination."
+            }), 422
+
+    start_lat, start_lng = valid_start['lat'], valid_start['lng']
+    end_lat, end_lng = valid_end['lat'], valid_end['lng']
     
     crime_stats = load_json('crime_stats.json') or {}
     stations_geojson = load_json('police_stations.geojson') or {"features": []}
@@ -346,10 +457,20 @@ def analyze_journey():
     
     zones_geojson = load_json('mumbai_zones.geojson') or {"features": []}
     
-    def evaluate_route_safety(coords_list):
+    def evaluate_route_resources(coords_list):
         if not coords_list:
-            return {"avg_zone_score": 50, "safety_score": 75, "zones_traversed": ["Mumbai Central"]}
-        zone_scores = []
+            return {
+                "coverage_score": 50,
+                "coverage_tier": "Moderate Support",
+                "nearby_police_count": 0,
+                "nearest_police_km": 99.0,
+                "nearby_medical_count": 0,
+                "nearest_medical_km": 99.0,
+                "zones_traversed": ["Mumbai Central"],
+                "explanation": "Measures proximity to mapped emergency infrastructure. It does not predict personal safety."
+            }
+
+        # 1. Identify administrative neighborhoods / areas traversed
         traversed = []
         step = max(1, len(coords_list) // 20)
         sampled = coords_list[::step]
@@ -364,22 +485,126 @@ def analyze_journey():
                     closest_d = d
                     closest_zone = z.get('properties', {})
             if closest_zone:
-                zone_scores.append(closest_zone.get('score', 50))
-                traversed.append(closest_zone.get('name', 'Mumbai'))
-        
-        avg_score = round(sum(zone_scores) / len(zone_scores), 1) if zone_scores else 50.0
-        safety_index = round(max(55, min(96, 100 - (avg_score * 0.55) + 8)), 1)
-        # Unique zones
+                traversed.append(closest_zone.get('name', 'Mumbai Area'))
+
         unique_zones = list(dict.fromkeys(traversed))[:5]
+
+        # 2. Measurable Police Proximity & Corridor Count
+        min_police_dist = float('inf')
+        police_in_corridor = 0
+        for feat in stations_geojson.get('features', []):
+            coords = feat.get('geometry', {}).get('coordinates', [])
+            if len(coords) < 2:
+                continue
+            s_lon, s_lat = coords[0], coords[1]
+            d = float('inf')
+            if len(coords_list) > 1:
+                step_size = max(1, len(coords_list) // 30)
+                sampled_pts = coords_list[::step_size]
+                for i in range(len(sampled_pts) - 1):
+                    p1_lon, p1_lat = sampled_pts[i][0], sampled_pts[i][1]
+                    p2_lon, p2_lat = sampled_pts[i+1][0], sampled_pts[i+1][1]
+                    seg_d = distance_to_segment(s_lat, s_lon, p1_lat, p1_lon, p2_lat, p2_lon)
+                    if seg_d < d:
+                        d = seg_d
+            else:
+                d = haversine(start_lat, start_lng, s_lat, s_lon)
+            if d < min_police_dist:
+                min_police_dist = d
+            if d <= 3.5:
+                police_in_corridor += 1
+
+        # 3. Measurable Medical Proximity & Corridor Count
+        hospitals_geojson = load_json('mumbai_hospitals.geojson') or {"features": []}
+        min_medical_dist = float('inf')
+        medical_in_corridor = 0
+        for feat in hospitals_geojson.get('features', []):
+            coords = feat.get('geometry', {}).get('coordinates', [])
+            if len(coords) < 2:
+                continue
+            h_lon, h_lat = coords[0], coords[1]
+            d = float('inf')
+            if len(coords_list) > 1:
+                step_size = max(1, len(coords_list) // 30)
+                sampled_pts = coords_list[::step_size]
+                for i in range(len(sampled_pts) - 1):
+                    p1_lon, p1_lat = sampled_pts[i][0], sampled_pts[i][1]
+                    p2_lon, p2_lat = sampled_pts[i+1][0], sampled_pts[i+1][1]
+                    seg_d = distance_to_segment(h_lat, h_lon, p1_lat, p1_lon, p2_lat, p2_lon)
+                    if seg_d < d:
+                        d = seg_d
+            else:
+                d = haversine(start_lat, start_lng, h_lat, h_lon)
+            if d < min_medical_dist:
+                min_medical_dist = d
+            if d <= 4.0:
+                medical_in_corridor += 1
+
+        # 4. Transparent Deterministic Resource Coverage Calculation (0 to 100)
+        # Police Proximity: max 40 pts (<1km: 40, <2km: 30, <3.5km: 20, <5km: 10, else 5)
+        if min_police_dist <= 1.0:
+            police_prox_pts = 40
+        elif min_police_dist <= 2.0:
+            police_prox_pts = 30
+        elif min_police_dist <= 3.5:
+            police_prox_pts = 20
+        elif min_police_dist <= 5.0:
+            police_prox_pts = 10
+        else:
+            police_prox_pts = 5
+
+        # Police Corridor Count: max 25 pts (5+ stations: 25, 3-4: 20, 1-2: 12, 0: 0)
+        if police_in_corridor >= 5:
+            police_count_pts = 25
+        elif police_in_corridor >= 3:
+            police_count_pts = 20
+        elif police_in_corridor >= 1:
+            police_count_pts = 12
+        else:
+            police_count_pts = 0
+
+        # Medical Proximity: max 20 pts (<1.5km: 20, <3km: 15, <4.5km: 10, else 5)
+        if min_medical_dist <= 1.5:
+            med_prox_pts = 20
+        elif min_medical_dist <= 3.0:
+            med_prox_pts = 15
+        elif min_medical_dist <= 4.5:
+            med_prox_pts = 10
+        else:
+            med_prox_pts = 5
+
+        # Medical Corridor Count: max 15 pts (3+ hospitals: 15, 1-2: 10, 0: 0)
+        if medical_in_corridor >= 3:
+            med_count_pts = 15
+        elif medical_in_corridor >= 1:
+            med_count_pts = 10
+        else:
+            med_count_pts = 0
+
+        total_coverage_score = police_prox_pts + police_count_pts + med_prox_pts + med_count_pts
+        total_coverage_score = min(100, max(15, total_coverage_score))
+
+        if total_coverage_score >= 80:
+            tier_label = "High Emergency Coverage"
+        elif total_coverage_score >= 55:
+            tier_label = "Moderate Emergency Coverage"
+        else:
+            tier_label = "Standard Emergency Coverage"
+
         return {
-            "avg_zone_score": avg_score,
-            "safety_score": safety_index,
-            "zones_traversed": unique_zones
+            "score": total_coverage_score,
+            "tier": tier_label,
+            "nearby_police_count": police_in_corridor,
+            "nearest_police_km": round(min_police_dist, 2) if min_police_dist != float('inf') else None,
+            "nearby_medical_count": medical_in_corridor,
+            "nearest_medical_km": round(min_medical_dist, 2) if min_medical_dist != float('inf') else None,
+            "zones_traversed": unique_zones,
+            "explanation": "Measures proximity to mapped emergency infrastructure (police stations and municipal medical facilities). It does not predict personal safety or crime probability."
         }
 
     routes_found = []
     
-    # 1. Fetch genuine road route from OpenRouteService
+    # 1. Primary: Fetch genuine road route from OpenRouteService
     if ORS_API_KEY:
         try:
             profile = "foot-walking" if "walk" in travel_mode else "driving-car"
@@ -405,73 +630,72 @@ def analyze_journey():
                         d_km = round(seg.get('distance', 0) / 1000.0, 2)
                         d_min = round(seg.get('duration', 0) / 60.0, 1)
                         r_coords = r_geom.get('coordinates', [])
-                        safety_eval = evaluate_route_safety(r_coords)
+                        res_eval = evaluate_route_resources(r_coords)
                         routes_found.append({
                             "route_id": f"route_{idx+1}",
                             "geometry": r_geom,
                             "distance_km": d_km,
                             "duration_min": d_min,
-                            "avg_zone_score": safety_eval["avg_zone_score"],
-                            "safety_score": safety_eval["safety_score"],
-                            "zones_traversed": safety_eval["zones_traversed"]
+                            "resource_coverage": res_eval,
+                            "resource_score": res_eval["score"],
+                            "zones_traversed": res_eval["zones_traversed"],
+                            "engine": "OpenRouteService Road Engine"
                         })
         except Exception as e:
             print(f"ORS Directions error: {e}")
-            
-    # Fallback / synthetic alternative if only 1 route found
+
+    # 2. Resilient Fallback: Fetch genuine road route from OSRM (OpenStreetMap Routing Engine)
     if not routes_found:
-        straight_dist = haversine(start_lat, start_lng, end_lat, end_lng)
-        d_km = round(straight_dist * 1.3, 2)
-        d_min = round(d_km * 3.5, 1)
-        r_geom = {
-            "type": "LineString",
-            "coordinates": [[start_lng, start_lat], [end_lng, end_lat]]
-        }
-        safety_eval = evaluate_route_safety(r_geom['coordinates'])
-        routes_found.append({
-            "route_id": "route_1",
-            "geometry": r_geom,
-            "distance_km": d_km,
-            "duration_min": d_min,
-            "avg_zone_score": safety_eval["avg_zone_score"],
-            "safety_score": safety_eval["safety_score"],
-            "zones_traversed": safety_eval["zones_traversed"]
-        })
+        try:
+            osrm_mode = "walking" if "walk" in travel_mode else "driving"
+            osrm_url = f"https://router.project-osrm.org/route/v1/{osrm_mode}/{start_lng},{start_lat};{end_lng},{end_lat}?overview=full&geometries=geojson&alternatives=true"
+            osrm_resp = requests.get(osrm_url, headers={"User-Agent": "SafeRouteMumbaiApp/1.0"}, timeout=6)
+            if osrm_resp.status_code == 200:
+                osrm_json = osrm_resp.json()
+                osrm_routes = osrm_json.get('routes', [])
+                for idx, route_item in enumerate(osrm_routes[:2]):
+                    r_geom = route_item.get('geometry', {})
+                    d_km = round(route_item.get('distance', 0) / 1000.0, 2)
+                    d_min = round(route_item.get('duration', 0) / 60.0, 1)
+                    r_coords = r_geom.get('coordinates', [])
+                    res_eval = evaluate_route_resources(r_coords)
+                    routes_found.append({
+                        "route_id": f"route_{idx+1}",
+                        "geometry": r_geom,
+                        "distance_km": d_km,
+                        "duration_min": d_min,
+                        "resource_coverage": res_eval,
+                        "resource_score": res_eval["score"],
+                        "zones_traversed": res_eval["zones_traversed"],
+                        "engine": "OSRM OpenStreetMap Engine"
+                    })
+        except Exception as e:
+            print(f"OSRM Directions fallback error: {e}")
+            
+    # If no genuine road routes returned from any routing service
+    if not routes_found:
+        return jsonify({
+            "error": "Routing service is temporarily unavailable. Please try again."
+        }), 503
 
-    # If only 1 route, create a safe coastal alternative path
-    if len(routes_found) == 1:
-        base_r = routes_found[0]
-        # Alternate path via coastal offset
-        base_coords = base_r["geometry"]["coordinates"]
-        alt_coords = []
-        for pt in base_coords:
-            # slightly shifted toward coastal longitude
-            alt_coords.append([round(pt[0] - 0.008, 5), round(pt[1], 5)])
-        
-        alt_safety = evaluate_route_safety(alt_coords)
-        # Ensure distinct scores for demo clarity
-        routes_found.append({
-            "route_id": "route_2",
-            "geometry": {"type": "LineString", "coordinates": alt_coords},
-            "distance_km": round(base_r["distance_km"] * 1.08, 2),
-            "duration_min": round(base_r["duration_min"] + 4.5, 1),
-            "avg_zone_score": max(25.0, round(base_r["avg_zone_score"] - 14.0, 1)),
-            "safety_score": min(95.0, round(base_r["safety_score"] + 12.0, 1)),
-            "zones_traversed": ["Coastal Arterial", "Worli", "Marine Drive"]
-        })
+    # Classify genuine routes by resource coverage and travel efficiency
+    if len(routes_found) >= 2:
+        r1, r2 = routes_found[0], routes_found[1]
+        if r1["resource_score"] >= r2["resource_score"]:
+            safest_r, direct_r = r1, r2
+        else:
+            safest_r, direct_r = r2, r1
 
-    # Classify the 2 routes into "safest" vs "fastest"
-    # Safest is the one with lower avg_zone_score / higher safety_score
-    r1, r2 = routes_found[0], routes_found[1]
-    if r1["safety_score"] >= r2["safety_score"]:
-        safest_r, direct_r = r1, r2
+        safest_r["badge"] = "🛡️ Best Supported Corridor (Recommended)"
+        safest_r["type"] = "safest"
+        direct_r["badge"] = "⚡ Direct Shortest Route"
+        direct_r["type"] = "direct"
     else:
-        safest_r, direct_r = r2, r1
-
-    safest_r["badge"] = "🛡️ Safest Zone Corridor (Recommended)"
-    safest_r["type"] = "safest"
-    direct_r["badge"] = "⚡ Direct Shortest Route"
-    direct_r["type"] = "direct"
+        # Exactly 1 genuine route found
+        safest_r = routes_found[0]
+        safest_r["badge"] = "🛡️ Verified Road Corridor"
+        safest_r["type"] = "safest"
+        direct_r = None
 
     primary_route = safest_r
     route_geometry = primary_route["geometry"]
@@ -480,7 +704,7 @@ def analyze_journey():
     route_coords = route_geometry.get('coordinates', [])
     steps = []
     
-    # Calculate nearest police stations along the corridor
+    # Calculate nearest police stations along the corridor for detailed display
     nearby_stations = []
     features_list = stations_geojson.get('features', [])
     
@@ -512,7 +736,7 @@ def analyze_journey():
             
     nearby_stations = sorted(nearby_stations, key=lambda x: x['distance_km'])[:6]
 
-    # Calculate nearest hospitals and maternity homes along the corridor
+    # Calculate nearest hospitals and maternity homes along the corridor for detailed display
     hospitals_geojson = load_json('mumbai_hospitals.geojson') or {"features": []}
     nearby_hospitals = []
     for feat in hospitals_geojson.get('features', []):
@@ -550,15 +774,16 @@ def analyze_journey():
             "duration_min": duration_min,
             "geometry": route_geometry,
             "steps": steps,
-            "routing_engine": "OpenRouteService Road Engine" if ORS_API_KEY else "Geometric Approximation"
+            "routing_engine": primary_route.get("engine", "OpenStreetMap Road Engine")
         },
         "routes": {
             "safest": safest_r,
             "direct": direct_r
         },
+        "resource_coverage": primary_route["resource_coverage"],
         "safety_context": {
             "city_wide_risk_indicator": city_risk,
-            "indicator_label": "Moderate Recorded-Crime Activity" if city_risk <= 60 else "Higher Recorded-Crime Activity",
+            "indicator_label": "City-Wide Statistical Activity Indicator",
             "nearby_police_stations_count": len(nearby_stations),
             "nearest_police_station": nearby_stations[0]['name'] if nearby_stations else "Mumbai Central Control Room",
             "nearby_police_stations": nearby_stations,
@@ -570,20 +795,21 @@ def analyze_journey():
             {"name": "National Emergency Helpline", "number": "112", "type": "Police / Fire / Ambulance"},
             {"name": "Mumbai Women Helpline", "number": "103", "type": "Women Safety Cell"},
             {"name": "Mumbai Police Control Room", "number": "100", "type": "Direct Police Line"},
-            {"name": "Railway Police Helpline (GRP)", "number": "1512", "type": "Suburban Trains & Stations"}
+            {"name": "Railway Security & Assistance (RailMadad)", "number": "139", "type": "Suburban Trains & Stations"}
         ],
-        "disclaimer": "Historical recorded-crime data cannot guarantee future safety. Indicators provide retrospective context."
+        "disclaimer": "Safety Resource Coverage indicates proximity to verified emergency infrastructure (police stations and hospitals). Historical crime data cannot predict personal safety."
     }
     
     return jsonify(response)
 
 @app.route('/api/assistant', methods=['POST'])
+@rate_limit(max_requests=60, window_secs=60)
 def safety_assistant():
     req_data = request.json or {}
     message = req_data.get('message', '').strip()
     
     if not message:
-        return jsonify({"reply": "Hello! I am your SafeRoute Safety Intelligence Assistant. You can ask about recorded crime patterns across Mumbai, route corridor safety, women's legal rights (Zero FIR, virtual FIR), suburban railway guidelines, or 24/7 emergency response numbers."})
+        return jsonify({"reply": "Hello! I am your SafeRoute Mumbai Safety Guide. You can ask about recorded crime patterns across Mumbai, route corridor safety, women's legal rights (Zero FIR under BNSS, night arrest rules), or emergency response numbers."})
         
     m_lower = message.lower()
     crime_stats = load_json('crime_stats.json') or {}
@@ -595,56 +821,56 @@ def safety_assistant():
     
     reply = ""
     
-    # 1. Travel Route Queries
-    if any(w in m_lower for w in ["from", "to", "travel", "journey", "going", "route", "night", "reach", "dadar", "andheri", "bkc", "bandra", "colaba", "kurla", "borivali", "thane"]):
+    # 1. Legal Rights / Zero FIR Queries (Priority matching)
+    if any(w in m_lower for w in ["right", "rights", "law", "fir", "zero fir", "arrest", "night arrest", "aid", "legal aid", "statement", "section", "bnss", "crpc", "legal"]):
+        reply = (
+            f"**Key Statutory Rights for Women in India (BNSS, 2023):**\n\n"
+            f"1. **Zero FIR & e-FIR (Sec. 173(1) BNSS / formerly Sec. 154 CrPC):** Any police station is legally obligated to register an FIR for cognizable offences against women regardless of territorial jurisdiction and transfer it to the jurisdictional station. Electronic registration (e-FIR) is also codified.\n"
+            f"2. **Safeguard Against Night Arrest (Sec. 43(5) BNSS / formerly Sec. 46(4) CrPC):** As a statutory rule, no woman shall be arrested after sunset and before sunrise except in extraordinary circumstances with prior written permission of a Judicial Magistrate, executed by a female officer.\n"
+            f"3. **Examination at Residence (Sec. 179(1) Proviso BNSS / formerly Sec. 160 CrPC):** No woman can be compelled to attend a police station for witness examination; examination must take place at her place of residence. Statements of sexual assault survivors must be recorded by a woman officer (Sec. 176/183 BNSS).\n"
+            f"4. **Free Legal Aid (Sec. 12 Legal Services Authorities Act, 1987 & Sec. 340 BNSS):** Every woman is entitled to free legal aid and counsel irrespective of income through the District Legal Services Authority (DLSA Mumbai).\n\n"
+            f"*General legal information only — not legal advice. Source: BNSS, 2023 & Legal Services Authorities Act, 1987 (India Code). Last verified: 2026.*"
+        )
+    # 2. Emergency Helplines & Police Contacts
+    elif any(w in m_lower for w in ["helpline", "helplines", "emergency", "sos", "contact", "contacts", "phone", "railway number", "police number", "112", "103", "139", "100", "railway emergency", "railmadad", "call"]):
+        reply = (
+            f"**Verified Emergency Contacts in Mumbai:**\n\n"
+            f"• **112:** National Unified Emergency Service (Police, Fire, Medical Ambulance)\n"
+            f"• **103:** Mumbai Police Dedicated Women Safety Cell (Immediate response squad)\n"
+            f"• **139:** Indian Railways (RailMadad) 24/7 Security & Medical Assistance\n"
+            f"• **100:** Mumbai Police Central Control Room\n\n"
+            f"Over **118 active police stations** and municipal medical facilities are mapped across Greater Mumbai on our Map."
+        )
+    # 3. Travel Route Queries
+    elif any(w in m_lower for w in ["from", "to", "travel", "journey", "going", "route", "reach", "dadar", "andheri", "bkc", "bandra", "colaba", "kurla", "borivali", "thane", "train", "metro"]):
         reply = (
             f"**Mumbai Route Safety Guidelines:**\n\n"
             f"• **Corridor Recommendation:** For night travel across Mumbai, always favor primary arterial roads (Western Express Highway, Eastern Express Highway, or the Coastal Arterials) which have active highway police patrols and continuous lighting.\n"
-            f"• **Suburban Railway:** Dedicated ladies coaches are positioned at the engine, center, and rear of 12/15-car local trains. After 9:00 PM, armed RPF/GRP personnel are assigned onboard. Suburban Railway Helpline: **1512**.\n"
-            f"• **Safe Journey Tool:** You can plan this exact route on our **Safe Journey** page to compare lowest-risk corridors, activate live tracking, and set an automated Safety Check-in timer.\n"
+            f"• **Suburban Railway:** Dedicated ladies coaches are positioned at the engine, center, and rear of 12/15-car local trains. After 9:00 PM, armed RPF/GRP personnel are assigned onboard. RailMadad Railway Helpline: **139**.\n"
+            f"• **Safe Journey Tool:** You can plan this exact route on our **Safe Journey** page to compare lowest-risk corridors, inspect safety resources, and set an Emergency Check-in timer.\n"
             f"• **Emergency Helplines:** Dial **103** (Mumbai Women Police Cell) or **112** (All-in-One Emergency)."
         )
-    # 2. Legal Rights / Zero FIR Queries
-    elif any(w in m_lower for w in ["right", "law", "fir", "zero fir", "complaint", "refuse", "arrest", "section"]):
-        reply = (
-            f"**Key Legal Rights for Women in India (Criminal Procedure & IPC):**\n\n"
-            f"1. **Right to Zero FIR (Sec. 154 CrPC):** Any police station in Mumbai is legally obligated to register an FIR for cognizable offenses against women, regardless of whether the incident occurred within their geographical jurisdiction. They cannot turn you away.\n"
-            f"2. **Right Against Night Arrest (Sec. 46(4) CrPC):** Women cannot be arrested after sunset (6:00 PM) and before sunrise (6:00 AM) except in exceptional circumstances with prior written permission of a Judicial Magistrate.\n"
-            f"3. **Right to Free Legal Aid (Sec. 304 CrPC):** Women are entitled to free legal counsel and a female officer present during statement recording.\n"
-            f"4. **Virtual / Online Complaint:** If unable to visit a station in person, complaints can be lodged via email to the Mumbai Police Commissioner or via the 103 helpline."
-        )
-    # 3. Crime Statistics & Data Breakdown
-    elif any(w in m_lower for w in ["stats", "trend", "data", "crime", "rate", "number", "2023", "2022", "dataset", "cases"]):
+    # 4. Crime Statistics & Data Breakdown
+    elif any(w in m_lower for w in ["stats", "statistics", "trend", "data", "crime", "rate", "2023", "2022", "dataset", "cases"]):
         reply = (
             f"**Official Mumbai Crime Against Women Statistics (2022 vs 2023):**\n\n"
             f"• **Total Registered Cases (2023):** 5,913 (down from 6,156 in 2022 — a **{abs(trend)}% net decrease**).\n"
-            f"• **Institutional Detection Rate:** **94.2%** of cases detected in 2023 (5,570 solved out of 5,913), up significantly from 81.1% in 2022.\n"
-            f"• **Major Heads Registered:** Outraging Modesty (2,163 cases, 95% solved), Kidnapping (1,167 cases, 94% solved), Rape & POCSO (973 cases, 96% solved), Domestic Harassment Sec. 498-A (746 cases, 94% solved).\n"
-            f"• **City Risk Index Benchmark:** {city_risk}/100 based on ward crime weights."
-        )
-    # 4. Emergency Helplines & Police Chowkis
-    elif any(w in m_lower for w in ["police", "station", "help", "emergency", "sos", "contact", "number", "call", "helpline", "haven", "hospital"]):
-        reply = (
-            f"**24/7 Verified Emergency Safety Contacts in Mumbai:**\n\n"
-            f"• **112:** National Unified Emergency Service (Police, Fire, Medical Ambulance)\n"
-            f"• **103:** Mumbai Police Dedicated Women Safety Cell (Immediate response squad)\n"
-            f"• **1512:** Railway Protection Force (RPF) & Government Railway Police (GRP) Suburban Rail Helpline\n"
-            f"• **100:** Mumbai Police Central Control Room\n"
-            f"• **1091:** Women in Distress National Helpline\n\n"
-            f"Over **118 active police stations** and 24/7 hospital havens are mapped across Greater Mumbai on our Live Map."
+            f"• **Institutional Detection Rate:** **94.2%** of cases detected in 2023 (5,570 detected out of 5,913), compared to 81.1% in 2022 (4,995 detected).\n"
+            f"• **Major Heads Registered:** Outraging Modesty (2,163 cases, 95% detected), Kidnapping (1,167 cases, 94% detected), Rape & POCSO (973 cases, 96% detected), Domestic Harassment Sec. 498-A (746 cases, 94% detected).\n"
+            f"• **Statistical Provenance:** Source: Mumbai Police Annual Statistical Registry (Calendar Years 2022 vs 2023)."
         )
     # 5. Risk Calculation & Methodology
     elif any(w in m_lower for w in ["score", "calculate", "risk", "methodology", "formula", "algorithm"]):
         reply = (
-            f"**How SafeRoute Calculates Corridor Risk:**\n\n"
-            f"1. **Ward Risk Baseline:** Weighted aggregation of reported FIR volumes across 24 administrative municipal wards (Ward A through T).\n"
-            f"2. **Spatial Distance Sampling:** As you plan a journey, the route is sampled every 500 meters against municipal zone boundaries, nearby active police stations, and 24/7 havens.\n"
-            f"3. **Zero Synthetic Inferences:** All baseline scores derive strictly from the official Mumbai Police 2022-2023 statutory registry.\n"
-            f"4. **Transit Optimization:** Evaluates Western/Central Local trains, Metro 3 Aqua Line, and highway corridors to find the lowest risk route."
+            f"**How SafeRoute Evaluates Corridor Coverage:**\n\n"
+            f"1. **Emergency Proximity:** As you plan a journey, the route is sampled every 500 meters against municipal zone boundaries, nearby active police stations, and municipal medical facilities.\n"
+            f"2. **Safety Infrastructure Coverage:** Measures access to official emergency and medical infrastructure.\n"
+            f"3. **Zero Synthetic Inferences:** All baseline infrastructure derives strictly from statutory registries and official spatial boundaries.\n"
+            f"4. **Transit Optimization:** Evaluates Western/Central Local trains, Metro lines, and highway corridors to find well-supported routes."
         )
     else:
         reply = (
-            f"I am your **Mumbai Safety Intelligence Assistant**. Here is what you can ask me:\n\n"
+            f"I am your **Mumbai Safety Guide**. Here is what you can ask me:\n\n"
             f"• **Route Safety:** *'How safe is traveling from Bandra to Dadar late at night?'*\n"
             f"• **Legal Rights:** *'What are my rights regarding Zero FIR and night arrest?'*\n"
             f"• **Crime Data:** *'What are the official 2022-2023 Mumbai crime trends and solve rates?'*\n"

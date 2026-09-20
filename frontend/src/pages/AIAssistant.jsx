@@ -4,7 +4,6 @@ import {
   Send, 
   User, 
   Shield, 
-  Sparkles, 
   Phone, 
   Compass, 
   ShieldCheck, 
@@ -13,12 +12,13 @@ import {
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import API_BASE_URL from '../config/api';
+import { apiRequest } from '../services/apiClient';
 
 export default function AIAssistant() {
   const [messages, setMessages] = useState([
     {
       sender: 'bot',
-      text: "Hello! I am your Mumbai Safety Assistant. Ask me about travel routes, suburban train safety (ladies coach / RPF 1512), women's legal rights (Zero FIR, night arrest rules), or 24/7 emergency helplines.",
+      text: "Namaste! I am your SafeRoute Mumbai Safety Guide. Ask me about recorded crime patterns across Mumbai, route corridor safety, women's legal rights (Zero FIR under BNSS, night arrest rules), or emergency response numbers (112, 103, RailMadad 139).",
       timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
     }
   ]);
@@ -32,7 +32,7 @@ export default function AIAssistant() {
 
   useEffect(() => {
     scrollToBottom();
-  }, [messages, loading]);
+  }, [messages]);
 
   const handleSend = async (e, textOverride = null) => {
     if (e) e.preventDefault();
@@ -45,12 +45,11 @@ export default function AIAssistant() {
     setLoading(true);
 
     try {
-      const res = await fetch(`${API_BASE_URL}/api/assistant`, {
+      const data = await apiRequest('/api/assistant', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: queryToSend })
       });
-      const data = await res.json();
       setMessages(prev => [...prev, { 
         sender: 'bot', 
         text: data.reply, 
@@ -60,7 +59,9 @@ export default function AIAssistant() {
       console.error(err);
       setMessages(prev => [...prev, { 
         sender: 'bot', 
-        text: "Unable to connect to the SafeRoute analytics engine. Please ensure your local Flask server is active on port 5000.", 
+        text: err.isTimeout
+          ? "Safety data service is starting. This may take a moment. Please try sending your question again."
+          : "Unable to load safety data. Please try again.", 
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) 
       }]);
     } finally {
@@ -72,7 +73,7 @@ export default function AIAssistant() {
     { label: "Night travel: Dadar to Andheri", icon: Compass },
     { label: "What is my right to Zero FIR?", icon: Scale },
     { label: "2022 vs 2023 Mumbai crime stats", icon: ShieldCheck },
-    { label: "Train women's safety & GRP 1512", icon: Train },
+    { label: "Train safety & RailMadad 139", icon: Train },
     { label: "Emergency helplines (112, 103)", icon: Phone },
   ];
 
@@ -85,10 +86,10 @@ export default function AIAssistant() {
         {/* Compact Sub-Header */}
         <div className="px-4 py-2.5 bg-slate-50/80 border-b border-slate-100 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-            <span className="text-xs font-semibold text-slate-800">Safety Intelligence Assistant</span>
+            <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
+            <span className="text-xs font-semibold text-slate-800">Mumbai Safety Guide</span>
           </div>
-          <span className="text-[11px] text-slate-400 font-medium">Official Mumbai Dataset 2022–2023</span>
+          <span className="text-[11px] text-slate-400 font-medium">Verified Safety Information</span>
         </div>
 
         {/* Messages Scroll Area */}
@@ -137,7 +138,7 @@ export default function AIAssistant() {
               className="flex gap-2.5 items-center text-xs text-slate-500 bg-slate-50 p-2.5 rounded-xl border border-slate-200/70 w-fit"
             >
               <div className="w-3.5 h-3.5 border-2 border-slate-900 border-t-transparent rounded-full animate-spin"></div>
-              <span>Searching Mumbai safety intelligence...</span>
+              <span>Checking Mumbai safety information...</span>
             </motion.div>
           )}
 
@@ -183,7 +184,7 @@ export default function AIAssistant() {
             </button>
           </form>
           <div className="flex justify-between items-center px-1 pt-1.5 text-[10px] text-slate-400">
-            <span>Verified 2022–2023 Mumbai Records</span>
+            <span>Responses use predefined rules and the safety datasets included in this prototype.</span>
             <span>Helpline: <strong>112</strong> / <strong>103</strong></span>
           </div>
         </div>

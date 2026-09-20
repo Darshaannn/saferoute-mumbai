@@ -33,3 +33,9 @@ pnpm-debug.log*
 Thumbs.db
 .vscode/
 .idea/
+
+# Testing artifacts
+frontend/test-results/
+.pytest_cache/
+playwright-report/
+

@@ -1,2129 +1,1775 @@
 {
-    "type": "FeatureCollection",
-    "features": [
-        {
-            "type": "Feature",
-            "properties": {
-                "name": "Additional Commissioner of Police (P & S)",
-                "ward": "A",
-                "location": "Moghal Building, 25, Vaju Kotak Marg, Ballard Estate, Fort. Mumbai 400001",
-                "risk_score": 16,
-                "risk_color": "#22C55E",
-                "risk_label": "Low Recorded Risk"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    72.8383152,
-                    18.9371169
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "name": "Anti-Corruption Bureau",
-                "ward": "G/S",
-                "location": "6th Floor, Sir Pochkhanawala Rd, B Wing, Worli Police Camp, Worli, Mumbai, Maharashtra 400030",
-                "risk_score": 33,
-                "risk_color": "#84CC16",
-                "risk_label": "Moderate-Low Recorded Risk"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    72.816253,
-                    19.006542
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "name": "Addl Comm. Of Police central Region Office",
-                "ward": "E",
-                "location": "123, Tukaram Bhikaji Kadam Marg, Dhaku Prabhuchi Wadi, Byculla East, Mazgaon, Mumbai, Maharashtra 400027",
-                "risk_score": 51,
-                "risk_color": "#FACC15",
-                "risk_label": "Moderate Recorded Risk"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    72.835757,
-                    18.983707
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "name": "Armed Police Headquarters",
-                "ward": "F/S",
-                "location": "67-C/8, Parel Bhoiwada St, Police Colony, Naigaon, Mumbai, Maharashtra 400014",
-                "risk_score": 51,
-                "risk_color": "#FACC15",
-                "risk_label": "Moderate Recorded Risk"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    72.846027,
-                    19.007634
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "name": "Police M.T.Section",
-                "ward": "E",
-                "location": "Sofia Zubair Road, Police Colony, New Nagpada, Mazgaon, Mumbai, Maharashtra 400008",
-                "risk_score": 39,
-                "risk_color": "#84CC16",
-                "risk_label": "Moderate-Low Recorded Risk"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    72.831568,
-                    18.96718
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "name": "Azad Maidan Police Station",
-                "ward": "A",
-                "location": "Esplaned Bldg., Gr. Floor, Mahapalika Marg, Near BMC Head Office, Mumbai - 400001.",
-                "risk_score": 12,
-                "risk_color": "#22C55E",
-                "risk_label": "Low Recorded Risk"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    72.8332066,
-                    18.9414839
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "name": "M R A Police Satation",
-                "ward": "A",
-                "location": "Mata Ramabai Ambedkar Marg, Near Haj House, Mumbai - 400001.",
-                "risk_score": 21,
-                "risk_color": "#84CC16",
-                "risk_label": "Moderate-Low Recorded Risk"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    72.835234,
-                    18.945923
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "name": "Colaba Police Station",
-                "ward": "A",
-                "location": "Near Electric House, Shahid Bhagat Singh Road,Colaba, Mumbai-400005.",
-                "risk_score": 16,
-                "risk_color": "#22C55E",
-                "risk_label": "Low Recorded Risk"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    72.831078,
-                    18.922388
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "name": "Cyber Police Station",
-                "ward": "H/E",
-                "location": "Bandra Kurla Complex, Opp. ICICI Bank, BKC Road, Bandra (East), Mumbai 400051,",
-                "risk_score": 58,
-                "risk_color": "#FACC15",
-                "risk_label": "Moderate Recorded Risk"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    72.860325,
-                    19.064436
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "name": "Centre Investgestion Branch",
-                "ward": "F/N",
-                "location": "Madhukarrao Ambedkar Road, Opposite Of Antop Hill Hospita, Antop Hill, Mumbai, 400037",
-                "risk_score": 58,
-                "risk_color": "#FACC15",
-                "risk_label": "Moderate Recorded Risk"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    72.8663144,
-                    19.0337252
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "name": "State Inteligence Department Mumbai",
-                "ward": "F/N",
-                "location": "Lokmaya Tilak Coloney Road, In Front of Laxumi Krupa CHS Near Light Pol No LNR 61-5 Near Dadar Station, Dadar East, Mumbai, 400014",
-                "risk_score": 57,
-                "risk_color": "#FACC15",
-                "risk_label": "Moderate Recorded Risk"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    72.8459614,
-                    19.0180835
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "name": "Khar Police Station",
-                "ward": "H/W",
-                "location": "Khar Police Station, Swami Vivekanand Rd., Ram Krishna Nagar, Khar West, Mumbai 400052.",
-                "risk_score": 40,
-                "risk_color": "#84CC16",
-                "risk_label": "Moderate-Low Recorded Risk"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    72.8378859,
-                    19.0726959
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "name": "Tardeo Police Station",
-                "ward": "General",
-                "location": "Tardeo Officer Quarter B No.1 Gr. Fl., M.P.Mill, Compound, Tardeo, Mumbai-400034. Nagesh Sambhaji Jadhav 9967837888 tardeopolicestation@mtnl.net.in",
-                "risk_score": 55,
-                "risk_color": "#FACC15",
-                "risk_label": "Moderate Recorded Risk"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    72.8184715,
-                    18.9716976
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "name": "D N Nagar Police Station",
-                "ward": "K/W",
-                "location": "New Link Road, Shiv Nagar, D N Nagar, Andheri (W) Mumbai 400058.",
-                "risk_score": 50,
-                "risk_color": "#FACC15",
-                "risk_label": "Moderate Recorded Risk"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    72.8297873,
-                    19.1221937
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "name": "Jogeshwari Police Station",
-                "ward": "K/E",
-                "location": "Swami compound, Caves Road, Jogeshwari (East), Mumbai - 400060.",
-                "risk_score": 70,
-                "risk_color": "#F97316",
-                "risk_label": "Elevated Recorded Risk"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    72.8544366,
-                    19.1377406
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "name": "Sahar Police Station",
-                "ward": "K/E",
-                "location": "Sahar Indian Olil Road, Opp. Hotel Hayyat Regency, Sahar Airport Road, Andheri (E), Mumbai - 400099.",
-                "risk_score": 74,
-                "risk_color": "#F97316",
-                "risk_label": "Elevated Recorded Risk"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    72.870195,
-                    19.0999268
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "name": "Wadala T.T. Police Station",
-                "ward": "F/N",
-                "location": "Wadala Truck Treminal, MMRDA Compound, Near R.T.O. Office, Wadala (E), Mumbai- 400037.",
-                "risk_score": 59,
-                "risk_color": "#FACC15",
-                "risk_label": "Moderate Recorded Risk"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    72.875038,
-                    19.033083
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "name": "Bhoiwada Police Station",
-                "ward": "F/S",
-                "location": "Bhoiwada, Opp. Sadakant Dhavan Khashaba Jadhav Marg, Parel, Mumbai-14.",
-                "risk_score": 43,
-                "risk_color": "#FACC15",
-                "risk_label": "Moderate Recorded Risk"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    72.8439134,
-                    19.0066914
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "name": "Rafi Ahmed Kidwai Marg Police Station",
-                "ward": "F/S",
-                "location": "Kidwai Nagar, Wadala, Mumbai - 400031.",
-                "risk_score": 49,
-                "risk_color": "#FACC15",
-                "risk_label": "Moderate Recorded Risk"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    72.8543443,
-                    19.0047509
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "name": "Sewree Police Station",
-                "ward": "F/S",
-                "location": "Ray Road, Darukhana, Sewree, Mumbai-400010.",
-                "risk_score": 53,
-                "risk_color": "#FACC15",
-                "risk_label": "Moderate Recorded Risk"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    72.849051,
-                    18.978244
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "name": "Police Station-2323790001073",
-                "ward": "N",
-                "location": "Mumbai, Maharashtra",
-                "risk_score": 59,
-                "risk_color": "#FACC15",
-                "risk_label": "Moderate Recorded Risk"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    72.915932,
-                    19.103022
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "name": "Police Station-1410050000289",
-                "ward": "E",
-                "location": "Mumbai, Maharashtra",
-                "risk_score": 46,
-                "risk_color": "#FACC15",
-                "risk_label": "Moderate Recorded Risk"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    72.826149,
-                    18.980703
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "name": "Vikhroli Police Station",
-                "ward": "S",
-                "location": "Kannamwar Nagar 2, Near Vikas College, Vikhroli (E), Mumbai-83. Dinesh Manikrao Desai 9594059444  vikhrolipstn@gmail.com",
-                "risk_score": 58,
-                "risk_color": "#FACC15",
-                "risk_label": "Moderate Recorded Risk"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    72.9374089,
-                    19.1187619
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "name": "Malad Police Station",
-                "ward": "P/N",
-                "location": "Malad Police Station, Somvar Bazar, Underai Road, Malad (west), Near S V Road, Mumbai - 400064.  Shashank Sandbhor   9870157955 maladpolicestation@mtnl.net.in",
-                "risk_score": 67,
-                "risk_color": "#F97316",
-                "risk_label": "Elevated Recorded Risk"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    72.8434862,
-                    19.1834693
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "name": "Kurar Police Station",
-                "ward": "P/N",
-                "location": "Shantaram Talao, Western Express Highway, Konkanipada, Malad (E), Mumbai-400097. Raghvendra Madanlal Thakur 9870236236 kurarpolicestation@mtnl.net.in",
-                "risk_score": 72,
-                "risk_color": "#F97316",
-                "risk_label": "Elevated Recorded Risk"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    72.859337,
-                    19.185535
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "name": "Malwani Police Station",
-                "ward": "P/N",
-                "location": "Gate No.5, Shahid Abdul Hamid Marg, Malwani, Malad (W), Mumbai- 400095.  Milind Khetle 9821592487 malvanipolicestation@mtnl.net.in",
-                "risk_score": 73,
-                "risk_color": "#F97316",
-                "risk_label": "Elevated Recorded Risk"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    72.822197,
-                    19.191673
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "name": "Bangur Nagar Police Station",
-                "ward": "P/N",
-                "location": "Malad Police Station Compound, Underai Road, Malad (W), Mumbai - 400064.  Santosh Dyaneshwar Bhandare 9870474901 bangurnagarpolicestn@mtnl.net.in",
-                "risk_score": 68,
-                "risk_color": "#F97316",
-                "risk_label": "Elevated Recorded Risk"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    72.8448145,
-                    19.1837977
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "name": "Goregaon Police Station",
-                "ward": "P/S",
-                "location": "S.V.Road, Near Cinemax Theatre, Goregaon (West), Mumbai - 400062.  Sunil Dattatray Wadke 9892097890 goregaonpolicestation@mtnl.net.in goregaonpolice@gmail.com",
-                "risk_score": 56,
-                "risk_color": "#FACC15",
-                "risk_label": "Moderate Recorded Risk"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    72.845757,
-                    19.15729
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "name": "Charkop Police Station",
-                "ward": "R/S",
-                "location": "C.T.S. No. 03 A,Plot No.150, 152,153,155, R.D.P. 1, Netaji Subhashchandra Bose Marg, Charkop, Kandivali (w), Mumbai - 400067.  Ramchandra T. Gaikwad  9870241424 charkoppolicestation@mtnl.net.in",
-                "risk_score": 64,
-                "risk_color": "#F97316",
-                "risk_label": "Elevated Recorded Risk"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    72.820671,
-                    19.214643
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "name": "Kandivali Police Station",
-                "ward": "R/S",
-                "location": "S.V.Road, Near M.T.N.L. Office, Parekh Nagar, Kandivali (W), Mumbai-400067. Mukund Pawar 9870157825 kandivali police station@gmail.com kandivalipolicestation@mtnl.net.in",
-                "risk_score": 65,
-                "risk_color": "#F97316",
-                "risk_label": "Elevated Recorded Risk"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    72.850548,
-                    19.209669
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "name": "Samata Nagar Police Station",
-                "ward": "R/S",
-                "location": "P T College Junction, Kandivali(W),  Mumbai-400101.  L.C.Bhalerao 9870464754   acpsamatanagar@mtnl.net.in  D.S.Yadav  9821458322  samtanagarpolicestation@mtnl.net.in",
-                "risk_score": 57,
-                "risk_color": "#FACC15",
-                "risk_label": "Moderate Recorded Risk"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    72.861526,
-                    19.199926
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "name": "(Chowky) Sewree Poice Station",
-                "ward": "F/S",
-                "location": "Sewree Poice Station",
-                "risk_score": 44,
-                "risk_color": "#FACC15",
-                "risk_label": "Moderate Recorded Risk"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    72.8535613,
-                    18.9973501
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "name": "Santacruz Railway Police Station",
-                "ward": "H/W",
-                "location": "Santacruz Railway Station office, Mumbai",
-                "risk_score": 40,
-                "risk_color": "#84CC16",
-                "risk_label": "Moderate-Low Recorded Risk"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    72.841479,
-                    19.089976
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "name": "Bandra Police Station",
-                "ward": "H/W",
-                "location": "Hill Road, ,Near Petit High Schoo Bandra (W), Mumbai - 400050.",
-                "risk_score": 37,
-                "risk_color": "#84CC16",
-                "risk_label": "Moderate-Low Recorded Risk"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    72.8357572,
-                    19.0558698
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "name": "(Duplicate) Wadala T T Police Station",
-                "ward": "F/N",
-                "location": "Wadala T T Police Station",
-                "risk_score": 49,
-                "risk_color": "#FACC15",
-                "risk_label": "Moderate Recorded Risk"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    72.853745,
-                    19.016542
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "name": "L T Marg Police Station",
-                "ward": "C",
-                "location": "27, R Champsi Road, Takwadi, Lohar Chawl, Nr Small Causes Court, Mumbai - 400002.",
-                "risk_score": 27,
-                "risk_color": "#84CC16",
-                "risk_label": "Moderate-Low Recorded Risk"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    72.8305052,
-                    18.9453442
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "name": "Malbar Hill Police Station",
-                "ward": "D",
-                "location": "Malbar Hill Police Station, Abhay Bunglow, B.G. Khair Marg, Malbar Hill, Mumbai-400006.",
-                "risk_score": 32,
-                "risk_color": "#84CC16",
-                "risk_label": "Moderate-Low Recorded Risk"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    72.7992588,
-                    18.9494146
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "name": "Nagpada Police Station",
-                "ward": "E",
-                "location": "Sofia Zuber Road, Chhota Sonapur, Kamathipura, Mumbai - 400008.",
-                "risk_score": 40,
-                "risk_color": "#84CC16",
-                "risk_label": "Moderate-Low Recorded Risk"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    72.82921,
-                    18.9670527
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "name": "V P Road Police Station",
-                "ward": "D",
-                "location": "Vitthalbhai Patel Road, Near Church, Ambewadi, Girgaon, Mumbai-400004.",
-                "risk_score": 38,
-                "risk_color": "#84CC16",
-                "risk_label": "Moderate-Low Recorded Risk"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    72.8237507,
-                    18.9558284
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "name": "Duplicate) Police Station-1838770001271",
-                "ward": "R/C",
-                "location": "Mumbai, Maharashtra",
-                "risk_score": 70,
-                "risk_color": "#F97316",
-                "risk_label": "Elevated Recorded Risk"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    72.867134,
-                    19.235952
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "name": "Mumbai Police South Region",
-                "ward": "E",
-                "location": "Police Colony, New Nagpada, Madanpura, Mumbai, Maharashtra 400008",
-                "risk_score": 42,
-                "risk_color": "#FACC15",
-                "risk_label": "Moderate Recorded Risk"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    72.8323193,
-                    18.9675953
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "name": "Deputy Commissioner of Police",
-                "ward": "R/N",
-                "location": "Shiv Shakti Complex, Shailendra Vidyalay Marg,, Dahisar East, Mumbai, Maharashtra 400068",
-                "risk_score": 85,
-                "risk_color": "#EF4444",
-                "risk_label": "Higher Recorded Risk"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    72.861592,
-                    19.2459401
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "name": "Yellow Gate Police Station",
-                "ward": "A",
-                "location": "P. D. Mello Road, Near Karnak Bunder, Mumbai-400009.",
-                "risk_score": 22,
-                "risk_color": "#84CC16",
-                "risk_label": "Moderate-Low Recorded Risk"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    72.8410289,
-                    18.9482339
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "name": "Shivaji Nagar Police Station",
-                "ward": "M/E",
-                "location": "Near Dnyansampada High School, Behind Post Office, Govandi, Mumbai - 400043. Balasaheb Jadhav  9821525255 shivajinagarpolicestation@mtnl.net.in",
-                "risk_score": 91,
-                "risk_color": "#EF4444",
-                "risk_label": "Higher Recorded Risk"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    72.9211795,
-                    19.0612531
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "name": "Office of the ACP - Bandra Division",
-                "ward": "H/W",
-                "location": "Sangeet Samrat Naushad Ali Marg  Near Ashirwad Bungalow, Bandra West",
-                "risk_score": 38,
-                "risk_color": "#84CC16",
-                "risk_label": "Moderate-Low Recorded Risk"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    72.822683,
-                    19.0628173
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "name": "Dindoshi Police Station_Test",
-                "ward": "P/N",
-                "location": "Vrindavan Society., Behind Saibaba Temple, NearWestern Exp. Highway, Malad (E), Mumbai- 400097. A.B.Sawant 9987333040dindoshipolicestation@mtnl.net.in",
-                "risk_score": 70,
-                "risk_color": "#F97316",
-                "risk_label": "Elevated Recorded Risk"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    72.8574024,
-                    19.178704
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "name": "(Duplicate) Andheri Kurla Road Police Station",
-                "ward": "K/E",
-                "location": "Andheri Kurla Road, Andheri East, Mumbai - 400069",
-                "risk_score": 62,
-                "risk_color": "#F97316",
-                "risk_label": "Elevated Recorded Risk"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    72.86879,
-                    19.111807
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "name": "Gowanpada Police Station",
-                "ward": "M/E",
-                "location": "Prayag Nagar, Mahul, Trombay, Mumbai, Maharashtra 400071",
-                "risk_score": 92,
-                "risk_color": "#EF4444",
-                "risk_label": "Higher Recorded Risk"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    72.908676,
-                    19.019228
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "name": "MIDC Police Station",
-                "ward": "K/E",
-                "location": "MIDC Central Road, Opp E.S.I.S Hospital, Andheri (E), Mumbai - 400093.",
-                "risk_score": 69,
-                "risk_color": "#F97316",
-                "risk_label": "Elevated Recorded Risk"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    72.868155,
-                    19.117653
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "name": "Bhandup Police Station",
-                "ward": "S",
-                "location": "Near Krishna Theatre, L. B. S. Marg, Bhandup (W), Mumbai - 400078. Shripat Kale   9870333434 bhanduppstn@gmail.com",
-                "risk_score": 56,
-                "risk_color": "#FACC15",
-                "risk_label": "Moderate Recorded Risk"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    72.9365403,
-                    19.1512852
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "name": "Mumbai Police Headquarters",
-                "ward": "A",
-                "location": "Commissioner of Police Office, Dadabhai Naoroji Road, Opp Crawford Market, Dhobi Talao, Fort, Mumbai 400001",
-                "risk_score": 16,
-                "risk_color": "#22C55E",
-                "risk_label": "Low Recorded Risk"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    72.8330459,
-                    18.9466048
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "name": "288-TRIAL-Kurla Police Station 21",
-                "ward": "L",
-                "location": "CST Road, Lal Bahadur Shastri Marg, Kapadia Nagar, Kurla, Mumbai, Maharashtra 400070  CST Road, Lal Bahadur Shastri Marg, Kapadia Nagar, Kurla, Mumbai, Maharashtra 400070",
-                "risk_score": 79,
-                "risk_color": "#F97316",
-                "risk_label": "Elevated Recorded Risk"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    72.878273,
-                    19.076687
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "name": "Juhu Police Station",
-                "ward": "K/W",
-                "location": "V.M.Road, Near Kalaniketan, Yamuna Nagar, Juhu, Vile Parle (W), Mumbai-400056.",
-                "risk_score": 42,
-                "risk_color": "#FACC15",
-                "risk_label": "Moderate Recorded Risk"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    72.8328046,
-                    19.103172
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "name": "Nehru Nagar Police Station",
-                "ward": "L",
-                "location": "Nehru Nagar Colony, Kurla (E), Mumbai - 400024.  Pramod Khoparde   9821624266 neharunagar1985@gmail.com",
-                "risk_score": 79,
-                "risk_color": "#F97316",
-                "risk_label": "Elevated Recorded Risk"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    72.8806665,
-                    19.0587439
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "name": "Maharashtra State Police Headquarters",
-                "ward": "A",
-                "location": "Maharashtra Police Mukhyalaya, Chhatrapati Shivaji Maharaj Marg, Colaba, Mumbai - 400001.",
-                "risk_score": 13,
-                "risk_color": "#22C55E",
-                "risk_label": "Low Recorded Risk"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    72.83342,
-                    18.925152
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "name": "Deputy Commissioner of Police DCP Z-I",
-                "ward": "A",
-                "location": "109, Valchand Hirachand Marg, 1st Floor, Opp. G.P.O., Fort, Mumbai 400001.  Dr. Ravindra A.Shisave 9423121011 dcpzone1-mum@mahapolice.gov.in",
-                "risk_score": 12,
-                "risk_color": "#22C55E",
-                "risk_label": "Low Recorded Risk"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    72.835922,
-                    18.938305
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "name": "Kurla Police Station",
-                "ward": "L",
-                "location": "CST Road, Satejeevan Society, Kurla West",
-                "risk_score": 84,
-                "risk_color": "#EF4444",
-                "risk_label": "Higher Recorded Risk"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    72.8762344,
-                    19.0649449
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "name": "Chembur Traffice Division",
-                "ward": "M/W",
-                "location": "Near Vijay Sales, Sumannagar, Chembur, Mumbai -74",
-                "risk_score": 43,
-                "risk_color": "#FACC15",
-                "risk_label": "Moderate Recorded Risk"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    72.884099,
-                    19.0538625
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "name": "Ashok Nagar Police Outpost",
-                "ward": "T",
-                "location": "Ashoknagar Police Outpost Mulund West",
-                "risk_score": 39,
-                "risk_color": "#84CC16",
-                "risk_label": "Moderate-Low Recorded Risk"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    72.948227,
-                    19.164789
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "name": "Powai Police Station",
-                "ward": "S",
-                "location": "Rambaug Junction, A.D. Marg, Powai, Mumbai - 400072.  B.K.Mahadeshwar  9594376376 powaipolicestation@mtnl.net.in",
-                "risk_score": 47,
-                "risk_color": "#FACC15",
-                "risk_label": "Moderate Recorded Risk"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    72.8994752,
-                    19.1197044
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "name": "Deonar Police Station",
-                "ward": "M/E",
-                "location": "Behind Deonar Slaughter House, Govandi,  Mumbai-400043. Dhanraj.S.Gaikwad 9769908904 deonarpolicestation@mtnl.net.in",
-                "risk_score": 91,
-                "risk_color": "#EF4444",
-                "risk_label": "Higher Recorded Risk"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    72.9171225,
-                    19.058595
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "name": "Trombay Police Station",
-                "ward": "M/E",
-                "location": "Cheeta Camp, Sion-Trombay Road, Mumbai -400088. Nitin Vinayak Yadav trombaypolicestation@gmail.com",
-                "risk_score": 87,
-                "risk_color": "#EF4444",
-                "risk_label": "Higher Recorded Risk"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    72.9454227,
-                    19.0382176
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "name": "C G Road Police Station",
-                "ward": "M/E",
-                "location": "Police Station, Dr Choitram Gidwani Road, Chembur, Mumbai,",
-                "risk_score": 84,
-                "risk_color": "#EF4444",
-                "risk_label": "Higher Recorded Risk"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    72.906967,
-                    19.045599
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "name": "Mankhurd Police Station",
-                "ward": "M/E",
-                "location": "Bld.No.7/A, Lallubhai Compound, Mankhurd, Mumbai - 400043.  Nasor A.H.Shaikh 9320091966 mankhurdpolicestation@mtnl.net.in",
-                "risk_score": 88,
-                "risk_color": "#EF4444",
-                "risk_label": "Higher Recorded Risk"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    72.9262581,
-                    19.0532228
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "name": "Mumbai Sagari Police Station",
-                "ward": "G/N",
-                "location": "New Mahim Police Line, Ground Floor, Building No 09, S.L.Raheja Road, Mahim, Mumbai - 400016.  Vijay M. Kadam 9821671217 mumbaisagaripolicestation@mtnl.net.in",
-                "risk_score": 60,
-                "risk_color": "#FACC15",
-                "risk_label": "Moderate Recorded Risk"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    72.8422953,
-                    19.0482591
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "name": "V B Nagar Police Station",
-                "ward": "L",
-                "location": "H.I.G Colony, BLD NO. 7 Kohonoor Co.op Hs . Society. V.B Nagar, Kurla (W), Mumbai - 400070. Pravin More  9821517320 vbnagarpolicestation@mtnl.net.in",
-                "risk_score": 83,
-                "risk_color": "#EF4444",
-                "risk_label": "Higher Recorded Risk"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    72.8841818,
-                    19.0717166
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "name": "R C F Police Station",
-                "ward": "M/E",
-                "location": "Survey No 12 B, 13 B, CTS No 213,215, 216, Rc Marg,   Hemu Kalani Marg, Sindhi Society, Chembur, Mumbai 400074.  Dilip Vishnu Raut 9870204020 rcfpolicestation@mtnl.net.in",
-                "risk_score": 91,
-                "risk_color": "#EF4444",
-                "risk_label": "Higher Recorded Risk"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    72.895599,
-                    19.036489
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "name": "Kurla Police Station",
-                "ward": "N",
-                "location": "Sarveshwar Mandir Marg, Takiya Ward, Kurla (W) Mumbai 400070",
-                "risk_score": 72,
-                "risk_color": "#F97316",
-                "risk_label": "Elevated Recorded Risk"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    72.9367756,
-                    19.0766504
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "name": "Meghwadi Police Station",
-                "ward": "K/E",
-                "location": "Income Tax Colony, R R Thakur Road, Jogeshwari East, Mumbai- 400060. A.Vastrad 9867251988 acpmeghwadi@mtnl.net.in  Vinod V. Shinde 9821239102 meghwadipolicestation@mtnl.net.in",
-                "risk_score": 71,
-                "risk_color": "#F97316",
-                "risk_label": "Elevated Recorded Risk"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    72.8610788,
-                    19.1314908
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "name": "Kalachowki Police Station",
-                "ward": "F/S",
-                "location": "Veer Shrikant Hadkar Marg, Chatai Chawl, Abhyudaya Nagar, Kalachowki, Parel Mumbai - 400033.",
-                "risk_score": 41,
-                "risk_color": "#FACC15",
-                "risk_label": "Moderate Recorded Risk"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    72.8423906,
-                    18.9879121
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "name": "Sion Police Station",
-                "ward": "F/N",
-                "location": "Matunga Police Station compound,King's Circle Flyover, Mutunga,  Mumbai-400019.",
-                "risk_score": 58,
-                "risk_color": "#FACC15",
-                "risk_label": "Moderate Recorded Risk"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    72.857656,
-                    19.030869
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "name": "Matunga Police Station",
-                "ward": "F/N",
-                "location": "Dr. Babasaheb Ambedkar Road, King's Circle Flyover, Mutunga,  Mumbai-400019.",
-                "risk_score": 53,
-                "risk_color": "#FACC15",
-                "risk_label": "Moderate Recorded Risk"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    72.857839,
-                    19.031156
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "name": "Antop Hill Police Station",
-                "ward": "F/N",
-                "location": "Bldg. No.229, Ground Flr, Sector - VI, Antop Hill, Mumbai-37. M.Khollam, 9870549544 antophillpolicestation@mtnl.net.in",
-                "risk_score": 50,
-                "risk_color": "#FACC15",
-                "risk_label": "Moderate Recorded Risk"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    72.8646705,
-                    19.0305167
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "name": "Byculla Police Station",
-                "ward": "E",
-                "location": "16, Hansraj Lane, Near Moti Shah Jain Temple, Byculla (E), Mumbai-400027.",
-                "risk_score": 44,
-                "risk_color": "#FACC15",
-                "risk_label": "Moderate Recorded Risk"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    72.8340621,
-                    18.9735429
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "name": "Agripada Police Station",
-                "ward": "E",
-                "location": "Agripada Police Station, Dr. Nair  Road, Agripada, Mumbai-400011.",
-                "risk_score": 46,
-                "risk_color": "#FACC15",
-                "risk_label": "Moderate Recorded Risk"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    72.824173,
-                    18.976616
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "name": "Mandvi Police Station",
-                "ward": "B",
-                "location": "Frere Road, Dana Bandar, Mandvi, Mumbai - 400009.",
-                "risk_score": 22,
-                "risk_color": "#84CC16",
-                "risk_label": "Moderate-Low Recorded Risk"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    72.842255,
-                    18.957191
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "name": "New Police Line",
-                "ward": "K/E",
-                "location": "New Police Line,S Radha Krishnan Road,Near Andheri Station,Andheri East,Mumbai, 400069",
-                "risk_score": 64,
-                "risk_color": "#F97316",
-                "risk_label": "Elevated Recorded Risk"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    72.84827,
-                    19.11946
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "name": "Vanrai Police Station",
-                "ward": "P/S",
-                "location": "Bldg, Nos. 2/Mhada vanrai Colony, Goregaon (E), Mumbai - 400063. Chandrakant N Gurav 9821624681 goregaoneastpolicestation07@yahoo.in",
-                "risk_score": 48,
-                "risk_color": "#FACC15",
-                "risk_label": "Moderate Recorded Risk"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    72.857735,
-                    19.155743
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "name": "Kasturba Marg Police Station",
-                "ward": "R/C",
-                "location": "at the Junction of Main Kasturba Road & Cross Road No.1, Borivali (E), Mumbai-400066. Suhas Raikar  9594344111 kasturbapolicestation@mtnl.net.in",
-                "risk_score": 79,
-                "risk_color": "#F97316",
-                "risk_label": "Elevated Recorded Risk"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    72.857933,
-                    19.228308
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "name": "M H B Police Station",
-                "ward": "R/C",
-                "location": "Old. M.H.B Colony, Near Borivali Main Post Office, New Link Road, Borivali (W), Mumbai - 400091.  Subhas Krishna Chavan 9870298510 mhbpolicestation@mtnl.net.in",
-                "risk_score": 70,
-                "risk_color": "#F97316",
-                "risk_label": "Elevated Recorded Risk"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    72.840408,
-                    19.23222
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "name": "Aarey Police Station",
-                "ward": "P/S",
-                "location": "Near O.P.Garden, Dinkarrao Desai Marg, Aaery Colony, Near Chotta Kashmir Boating Club,Goregaon (E), Mumbai - 400065.Vilas Shrikant Chavan aareysubpolicestation@mtnl.net.in aareypolicestation@gmail.com",
-                "risk_score": 52,
-                "risk_color": "#FACC15",
-                "risk_label": "Moderate Recorded Risk"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    72.87178,
-                    19.162741
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "name": "Govandi Police Station",
-                "ward": "M/E",
-                "location": "CTS No. 373/5, HP Petrol Pump Lane, Near Raheja Acropolis-II, Off V.N Purav Marg, Deonar, Mumbai - 400088.  Uttam Kolekar 9821629922  srpigovandi@gmail.com",
-                "risk_score": 82,
-                "risk_color": "#EF4444",
-                "risk_label": "Higher Recorded Risk"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    72.9177698,
-                    19.0486326
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "name": "Borivali Police Station",
-                "ward": "R/C",
-                "location": "Opp.Borivali Railway Station, S. V. Road, Borivali (W), Mumbai - 400066. Gunaji Sawant  9821334681 borivalipolicestation@mtnl.net.in",
-                "risk_score": 69,
-                "risk_color": "#F97316",
-                "risk_label": "Elevated Recorded Risk"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    72.8559244,
-                    19.2291142
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "name": "Kanjur Marg Police Station",
-                "ward": "S",
-                "location": "Nehru Nagar, Near Pariwar Co-Opp. Housing Socity,kanjur marg East,  Mumbai - 400042. A.L Satpute   9821898799 kanjurmargpstn@gmail.com",
-                "risk_score": 57,
-                "risk_color": "#FACC15",
-                "risk_label": "Moderate Recorded Risk"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    72.9373573,
-                    19.1301221
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "name": "Pant Nagar Police Station",
-                "ward": "General",
-                "location": "B.N.72, Gr. Floor, Swamy Samarth Ramdas Road. Pant Nagar, Ghatkopar (E), Mumbai-400075.  Shankar Anandrao Dhanavade   9870148622pantnagarpstn@gmail.com",
-                "risk_score": 48,
-                "risk_color": "#FACC15",
-                "risk_label": "Moderate Recorded Risk"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    72.91634,
-                    19.087191
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "name": "Police Station-1715260000365",
-                "ward": "F/N",
-                "location": "Mumbai, Maharashtra",
-                "risk_score": 59,
-                "risk_color": "#FACC15",
-                "risk_label": "Moderate Recorded Risk"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    72.855331,
-                    19.026953
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "name": "Police Station-1714540000366",
-                "ward": "F/N",
-                "location": "Raffi Ahemad Kidwai marg, Wadala.",
-                "risk_score": 58,
-                "risk_color": "#FACC15",
-                "risk_label": "Moderate Recorded Risk"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    72.8586778,
-                    19.0165499
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "name": "Deputy Commissioner Office",
-                "ward": "F/S",
-                "location": "Deputy Commisioner Office Police Headquarter, Apana Bazar, Borivada, Naigaon, Dadar",
-                "risk_score": 51,
-                "risk_color": "#FACC15",
-                "risk_label": "Moderate Recorded Risk"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    72.846375,
-                    19.010983
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "name": "G D Marg Police Station",
-                "ward": "F/S",
-                "location": "G D Ambekar Marg, Naigaon, Dadar East, Mumbai,",
-                "risk_score": 50,
-                "risk_color": "#FACC15",
-                "risk_label": "Moderate Recorded Risk"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    72.846916,
-                    19.007332
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "name": "Wadala Police Station1",
-                "ward": "F/S",
-                "location": "Wadala Police Station",
-                "risk_score": 49,
-                "risk_color": "#FACC15",
-                "risk_label": "Moderate Recorded Risk"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    72.860413,
-                    19.011597
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "name": "G H Road Police Station",
-                "ward": "K/E",
-                "location": "Guru Hargovindji Road, Andheri East, Mumbai 400053",
-                "risk_score": 70,
-                "risk_color": "#F97316",
-                "risk_label": "Elevated Recorded Risk"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    72.857948,
-                    19.111944
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "name": "Wadala Police station",
-                "ward": "F/N",
-                "location": "Antop Hill Road, Near Korba Mithagar, Nadkarni Park, Wadala (E), Mumbai-400037.",
-                "risk_score": 57,
-                "risk_color": "#FACC15",
-                "risk_label": "Moderate Recorded Risk"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    72.863663,
-                    19.01549
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "name": "Mahalakshmi Police Station",
-                "ward": "G/S",
-                "location": "Mahalakshmi Police Station, Mumbai, Maharashtra",
-                "risk_score": 40,
-                "risk_color": "#84CC16",
-                "risk_label": "Moderate-Low Recorded Risk"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    72.814316,
-                    18.986382
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "name": "Police Station-1628030000824",
-                "ward": "K/W",
-                "location": "Police JogeshwariSubway Bridge, Gumpha Road, Jogeshwari East, Mumbai 400060",
-                "risk_score": 53,
-                "risk_color": "#FACC15",
-                "risk_label": "Moderate Recorded Risk"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    72.84269,
-                    19.142096
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "name": "Kurla Railway Police Station",
-                "ward": "L",
-                "location": "Mumbai, Maharashtra",
-                "risk_score": 84,
-                "risk_color": "#EF4444",
-                "risk_label": "Higher Recorded Risk"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    72.876251,
-                    19.064808
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "name": "Police Station-2424430001072",
-                "ward": "N",
-                "location": "Mumbai, Maharashtra",
-                "risk_score": 69,
-                "risk_color": "#F97316",
-                "risk_label": "Elevated Recorded Risk"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    72.9226199,
-                    19.1060169
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "name": "Vileparle Police Station",
-                "ward": "K/E",
-                "location": "Nehru Road, Near Centuar Hotel, Navpada, Vileparle (E), Mumbai - 400099.",
-                "risk_score": 75,
-                "risk_color": "#F97316",
-                "risk_label": "Elevated Recorded Risk"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    72.855143,
-                    19.096262
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "name": "Dahisar Police Station",
-                "ward": "R/N",
-                "location": "S V Road, Near Union Bank, Dahisar (E), Mumbai - 400068.  Prakash Nana Jadhav 9821131509dahisarpolicestation@mtnl.net.indahisarpolicestation@gmail.com",
-                "risk_score": 85,
-                "risk_color": "#EF4444",
-                "risk_label": "Higher Recorded Risk"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    72.8643764,
-                    19.2527603
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "name": "Dadasaheb Bhadkamkar Road Police station",
-                "ward": "D",
-                "location": "Lamington Road, Shapur Baug, Near HDFC Bank, Grant Road (East), Mumbai 400007",
-                "risk_score": 35,
-                "risk_color": "#84CC16",
-                "risk_label": "Moderate-Low Recorded Risk"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    72.8170867,
-                    18.9609011
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "name": "Deputy Commissioner Of Police (QRT)",
-                "ward": "H/E",
-                "location": "Bala Marg, Yashwant Nagar, Vakola, Santacruz (East)  Mumbai 400055.",
-                "risk_score": 57,
-                "risk_color": "#FACC15",
-                "risk_label": "Moderate Recorded Risk"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    72.8563059,
-                    19.0758921
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "name": "B K C Police Station",
-                "ward": "H/E",
-                "location": "Bandra-Kurla Complex Road, Opp. I.C.I.C.I. Bank, Bandra (E), Mumbai - 400051.",
-                "risk_score": 68,
-                "risk_color": "#F97316",
-                "risk_label": "Elevated Recorded Risk"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    72.8603032,
-                    19.0646042
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "name": "Dongri Police Station",
-                "ward": "B",
-                "location": "Dr. Maheshwari Road, Near Sandhurst  Road Railway Station, Dongri, Mumbai - 400009.",
-                "risk_score": 29,
-                "risk_color": "#84CC16",
-                "risk_label": "Moderate-Low Recorded Risk"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    72.839038,
-                    18.9621806
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "name": "Pydhonie Police Station",
-                "ward": "B",
-                "location": "Ibrahim Rahmatullah Road, Opp Hamidiya Masjid, Mumbadevi Area, Mumbai - 400003.",
-                "risk_score": 17,
-                "risk_color": "#22C55E",
-                "risk_label": "Low Recorded Risk"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    72.831943,
-                    18.954067
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "name": "Gaondevi Police Station",
-                "ward": "D",
-                "location": "7, Pandita Ramabai Marg, Papanas Wadi, Gaondevi,  Mumbai -400007.",
-                "risk_score": 27,
-                "risk_color": "#84CC16",
-                "risk_label": "Moderate-Low Recorded Risk"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    72.812416,
-                    18.960472
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "name": "Cuffe Parade Police Station",
-                "ward": "A",
-                "location": "Sadhu T. L. Waswani Marg, Near World Trade Center, Babasaheb Ambedkar Nagar, Cuffe Parade, Mumbai - 400005.",
-                "risk_score": 23,
-                "risk_color": "#84CC16",
-                "risk_label": "Moderate-Low Recorded Risk"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    72.8189364,
-                    18.9119522
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "name": "Marine Drive Police Station",
-                "ward": "A",
-                "location": "Dinshaw Vaccha Road, Behind Yashodhan Bldg. In front of C.C.I. Club, Mumbai-400020.",
-                "risk_score": 12,
-                "risk_color": "#22C55E",
-                "risk_label": "Low Recorded Risk"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    72.824654,
-                    18.930164
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "name": "J J Marg Police Station",
-                "ward": "E",
-                "location": "Sir J.J. Hospital Compound, Sir J. J. Road, Byculla, Mumbai - 400008.",
-                "risk_score": 48,
-                "risk_color": "#FACC15",
-                "risk_label": "Moderate Recorded Risk"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    72.832324,
-                    18.962951
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "name": "Vakola Police Station",
-                "ward": "H/E",
-                "location": "Anand Nagar, Western Highway, Santacruz (E), Mumbai-55.",
-                "risk_score": 64,
-                "risk_color": "#F97316",
-                "risk_label": "Elevated Recorded Risk"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    72.847748,
-                    19.080891
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "name": "Kherwadi Police Station",
-                "ward": "H/E",
-                "location": "Government Colony, Bldg No. 5, Gr floor, Ambedkar Nagar, Bandra (E), Mumbai - 400051.",
-                "risk_score": 66,
-                "risk_color": "#F97316",
-                "risk_label": "Elevated Recorded Risk"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    72.850105,
-                    19.0658833
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "name": "Airport Police Station",
-                "ward": "K/E",
-                "location": "Airport Terminal Building, Near Gate no 01, Domestic Airport, CSIA, Mumbai 400099.",
-                "risk_score": 63,
-                "risk_color": "#F97316",
-                "risk_label": "Elevated Recorded Risk"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    72.865889,
-                    19.09408
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "name": "Nirmal Nagar Police Station",
-                "ward": "H/E",
-                "location": "Jay Prakash Road, Nirmal Nagar, Bandra (East), Mumbai - 400051.",
-                "risk_score": 64,
-                "risk_color": "#F97316",
-                "risk_label": "Elevated Recorded Risk"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    72.844902,
-                    19.065434
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "name": "Andheri Police Station",
-                "ward": "K/E",
-                "location": "Sahar Road, Opp. Andheri Railway Station, Vertex Junction, Andheri Kurla Road, Andheri East, Mumbai - 400069.",
-                "risk_score": 72,
-                "risk_color": "#F97316",
-                "risk_label": "Elevated Recorded Risk"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    72.8480663,
-                    19.1204984
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "name": "Versova Police Station",
-                "ward": "K/W",
-                "location": "Link Road, Near C.D.Barfiwalla School, D.N.Nagar, Andheri (West), Mumbai-400053.",
-                "risk_score": 42,
-                "risk_color": "#FACC15",
-                "risk_label": "Moderate Recorded Risk"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    72.8303846,
-                    19.1244929
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "name": "Oshiwara Police Station",
-                "ward": "K/W",
-                "location": "New Link Road, Opp. Mhada, Oshiwara, Jogeshwari (West), Mumbai.  400047",
-                "risk_score": 40,
-                "risk_color": "#84CC16",
-                "risk_label": "Moderate-Low Recorded Risk"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    72.8315996,
-                    19.1475735
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "name": "Amboli Police Station",
-                "ward": "K/W",
-                "location": "Patel Estate Road, Opp. Pushtik Society, Jogeshwari (W), Mumbai-400058.",
-                "risk_score": 52,
-                "risk_color": "#FACC15",
-                "risk_label": "Moderate Recorded Risk"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    72.8485408,
-                    19.1425368
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "name": "Santacruz Police Station",
-                "ward": "H/W",
-                "location": "Juhu Tara Road, Linking Road, Opp. Juhu Garden,Santacruz (W), Mumbai-400054.",
-                "risk_score": 43,
-                "risk_color": "#FACC15",
-                "risk_label": "Moderate Recorded Risk"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    72.834816,
-                    19.084148
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "name": "ACP Office",
-                "ward": "K/E",
-                "location": "Sahar Road, Opp. Andheri Railway Station, Vertex Junction, Railway Colony, Andheri East, Railway Colony, Andheri East, Mumbai, Maharashtra, 400053",
-                "risk_score": 66,
-                "risk_color": "#F97316",
-                "risk_label": "Elevated Recorded Risk"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    72.848199,
-                    19.12056
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "name": "Traffic Police Head Office",
-                "ward": "G/S",
-                "location": "Worli Police Camp, Sir Pochkhanwala Road, Near Hill Top Hotel, Worli, Mumbai - 400018,",
-                "risk_score": 30,
-                "risk_color": "#84CC16",
-                "risk_label": "Moderate-Low Recorded Risk"
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    72.8177388,
-                    19.0097723
-                ]
-            }
-        }
-    ]
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Additional Commissioner of Police (P & S)",
+        "ward": "A",
+        "location": "Moghal Building, 25, Vaju Kotak Marg, Ballard Estate, Fort. Mumbai 400001"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.8383152,
+          18.9371169
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Anti-Corruption Bureau",
+        "ward": "G/S",
+        "location": "6th Floor, Sir Pochkhanawala Rd, B Wing, Worli Police Camp, Worli, Mumbai, Maharashtra 400030"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.816253,
+          19.006542
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Addl Comm. Of Police central Region Office",
+        "ward": "E",
+        "location": "123, Tukaram Bhikaji Kadam Marg, Dhaku Prabhuchi Wadi, Byculla East, Mazgaon, Mumbai, Maharashtra 400027"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.835757,
+          18.983707
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Armed Police Headquarters",
+        "ward": "F/S",
+        "location": "67-C/8, Parel Bhoiwada St, Police Colony, Naigaon, Mumbai, Maharashtra 400014"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.846027,
+          19.007634
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Police M.T.Section",
+        "ward": "E",
+        "location": "Sofia Zubair Road, Police Colony, New Nagpada, Mazgaon, Mumbai, Maharashtra 400008"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.831568,
+          18.96718
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Azad Maidan Police Station",
+        "ward": "A",
+        "location": "Esplaned Bldg., Gr. Floor, Mahapalika Marg, Near BMC Head Office, Mumbai - 400001."
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.8332066,
+          18.9414839
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "M R A Police Satation",
+        "ward": "A",
+        "location": "Mata Ramabai Ambedkar Marg, Near Haj House, Mumbai - 400001."
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.835234,
+          18.945923
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Colaba Police Station",
+        "ward": "A",
+        "location": "Near Electric House, Shahid Bhagat Singh Road,Colaba, Mumbai-400005."
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.831078,
+          18.922388
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Cyber Police Station",
+        "ward": "H/E",
+        "location": "Bandra Kurla Complex, Opp. ICICI Bank, BKC Road, Bandra (East), Mumbai 400051,"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.860325,
+          19.064436
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Centre Investgestion Branch",
+        "ward": "F/N",
+        "location": "Madhukarrao Ambedkar Road, Opposite Of Antop Hill Hospita, Antop Hill, Mumbai, 400037"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.8663144,
+          19.0337252
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "State Inteligence Department Mumbai",
+        "ward": "F/N",
+        "location": "Lokmaya Tilak Coloney Road, In Front of Laxumi Krupa CHS Near Light Pol No LNR 61-5 Near Dadar Station, Dadar East, Mumbai, 400014"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.8459614,
+          19.0180835
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Khar Police Station",
+        "ward": "H/W",
+        "location": "Khar Police Station, Swami Vivekanand Rd., Ram Krishna Nagar, Khar West, Mumbai 400052."
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.8378859,
+          19.0726959
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Tardeo Police Station",
+        "ward": "General",
+        "location": "Tardeo Officer Quarter B No.1 Gr. Fl., M.P.Mill, Compound, Tardeo, Mumbai-400034. Nagesh Sambhaji Jadhav 9967837888 tardeopolicestation@mtnl.net.in"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.8184715,
+          18.9716976
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "D N Nagar Police Station",
+        "ward": "K/W",
+        "location": "New Link Road, Shiv Nagar, D N Nagar, Andheri (W) Mumbai 400058."
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.8297873,
+          19.1221937
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Jogeshwari Police Station",
+        "ward": "K/E",
+        "location": "Swami compound, Caves Road, Jogeshwari (East), Mumbai - 400060."
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.8544366,
+          19.1377406
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Sahar Police Station",
+        "ward": "K/E",
+        "location": "Sahar Indian Olil Road, Opp. Hotel Hayyat Regency, Sahar Airport Road, Andheri (E), Mumbai - 400099."
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.870195,
+          19.0999268
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Wadala T.T. Police Station",
+        "ward": "F/N",
+        "location": "Wadala Truck Treminal, MMRDA Compound, Near R.T.O. Office, Wadala (E), Mumbai- 400037."
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.875038,
+          19.033083
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Bhoiwada Police Station",
+        "ward": "F/S",
+        "location": "Bhoiwada, Opp. Sadakant Dhavan Khashaba Jadhav Marg, Parel, Mumbai-14."
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.8439134,
+          19.0066914
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Rafi Ahmed Kidwai Marg Police Station",
+        "ward": "F/S",
+        "location": "Kidwai Nagar, Wadala, Mumbai - 400031."
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.8543443,
+          19.0047509
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Sewree Police Station",
+        "ward": "F/S",
+        "location": "Ray Road, Darukhana, Sewree, Mumbai-400010."
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.849051,
+          18.978244
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Police Station-2323790001073",
+        "ward": "N",
+        "location": "Mumbai, Maharashtra"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.915932,
+          19.103022
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Police Station-1410050000289",
+        "ward": "E",
+        "location": "Mumbai, Maharashtra"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.826149,
+          18.980703
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Vikhroli Police Station",
+        "ward": "S",
+        "location": "Kannamwar Nagar 2, Near Vikas College, Vikhroli (E), Mumbai-83. Dinesh Manikrao Desai 9594059444  vikhrolipstn@gmail.com"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.9374089,
+          19.1187619
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Malad Police Station",
+        "ward": "P/N",
+        "location": "Malad Police Station, Somvar Bazar, Underai Road, Malad (west), Near S V Road, Mumbai - 400064.  Shashank Sandbhor   9870157955 maladpolicestation@mtnl.net.in"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.8434862,
+          19.1834693
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Kurar Police Station",
+        "ward": "P/N",
+        "location": "Shantaram Talao, Western Express Highway, Konkanipada, Malad (E), Mumbai-400097. Raghvendra Madanlal Thakur 9870236236 kurarpolicestation@mtnl.net.in"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.859337,
+          19.185535
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Malwani Police Station",
+        "ward": "P/N",
+        "location": "Gate No.5, Shahid Abdul Hamid Marg, Malwani, Malad (W), Mumbai- 400095.  Milind Khetle 9821592487 malvanipolicestation@mtnl.net.in"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.822197,
+          19.191673
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Bangur Nagar Police Station",
+        "ward": "P/N",
+        "location": "Malad Police Station Compound, Underai Road, Malad (W), Mumbai - 400064.  Santosh Dyaneshwar Bhandare 9870474901 bangurnagarpolicestn@mtnl.net.in"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.8448145,
+          19.1837977
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Goregaon Police Station",
+        "ward": "P/S",
+        "location": "S.V.Road, Near Cinemax Theatre, Goregaon (West), Mumbai - 400062.  Sunil Dattatray Wadke 9892097890 goregaonpolicestation@mtnl.net.in goregaonpolice@gmail.com"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.845757,
+          19.15729
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Charkop Police Station",
+        "ward": "R/S",
+        "location": "C.T.S. No. 03 A,Plot No.150, 152,153,155, R.D.P. 1, Netaji Subhashchandra Bose Marg, Charkop, Kandivali (w), Mumbai - 400067.  Ramchandra T. Gaikwad  9870241424 charkoppolicestation@mtnl.net.in"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.820671,
+          19.214643
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Kandivali Police Station",
+        "ward": "R/S",
+        "location": "S.V.Road, Near M.T.N.L. Office, Parekh Nagar, Kandivali (W), Mumbai-400067. Mukund Pawar 9870157825 kandivali police station@gmail.com kandivalipolicestation@mtnl.net.in"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.850548,
+          19.209669
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Samata Nagar Police Station",
+        "ward": "R/S",
+        "location": "P T College Junction, Kandivali(W),  Mumbai-400101.  L.C.Bhalerao 9870464754   acpsamatanagar@mtnl.net.in  D.S.Yadav  9821458322  samtanagarpolicestation@mtnl.net.in"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.861526,
+          19.199926
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(Chowky) Sewree Poice Station",
+        "ward": "F/S",
+        "location": "Sewree Poice Station"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.8535613,
+          18.9973501
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Santacruz Railway Police Station",
+        "ward": "H/W",
+        "location": "Santacruz Railway Station office, Mumbai"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.841479,
+          19.089976
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Bandra Police Station",
+        "ward": "H/W",
+        "location": "Hill Road, ,Near Petit High Schoo Bandra (W), Mumbai - 400050."
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.8357572,
+          19.0558698
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(Duplicate) Wadala T T Police Station",
+        "ward": "F/N",
+        "location": "Wadala T T Police Station"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.853745,
+          19.016542
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "L T Marg Police Station",
+        "ward": "C",
+        "location": "27, R Champsi Road, Takwadi, Lohar Chawl, Nr Small Causes Court, Mumbai - 400002."
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.8305052,
+          18.9453442
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Malbar Hill Police Station",
+        "ward": "D",
+        "location": "Malbar Hill Police Station, Abhay Bunglow, B.G. Khair Marg, Malbar Hill, Mumbai-400006."
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.7992588,
+          18.9494146
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Nagpada Police Station",
+        "ward": "E",
+        "location": "Sofia Zuber Road, Chhota Sonapur, Kamathipura, Mumbai - 400008."
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.82921,
+          18.9670527
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "V P Road Police Station",
+        "ward": "D",
+        "location": "Vitthalbhai Patel Road, Near Church, Ambewadi, Girgaon, Mumbai-400004."
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.8237507,
+          18.9558284
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Duplicate) Police Station-1838770001271",
+        "ward": "R/C",
+        "location": "Mumbai, Maharashtra"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.867134,
+          19.235952
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Mumbai Police South Region",
+        "ward": "E",
+        "location": "Police Colony, New Nagpada, Madanpura, Mumbai, Maharashtra 400008"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.8323193,
+          18.9675953
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Deputy Commissioner of Police",
+        "ward": "R/N",
+        "location": "Shiv Shakti Complex, Shailendra Vidyalay Marg,, Dahisar East, Mumbai, Maharashtra 400068"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.861592,
+          19.2459401
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Yellow Gate Police Station",
+        "ward": "A",
+        "location": "P. D. Mello Road, Near Karnak Bunder, Mumbai-400009."
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.8410289,
+          18.9482339
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Shivaji Nagar Police Station",
+        "ward": "M/E",
+        "location": "Near Dnyansampada High School, Behind Post Office, Govandi, Mumbai - 400043. Balasaheb Jadhav  9821525255 shivajinagarpolicestation@mtnl.net.in"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.9211795,
+          19.0612531
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Office of the ACP - Bandra Division",
+        "ward": "H/W",
+        "location": "Sangeet Samrat Naushad Ali Marg  Near Ashirwad Bungalow, Bandra West"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.822683,
+          19.0628173
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Dindoshi Police Station_Test",
+        "ward": "P/N",
+        "location": "Vrindavan Society., Behind Saibaba Temple, NearWestern Exp. Highway, Malad (E), Mumbai- 400097. A.B.Sawant 9987333040dindoshipolicestation@mtnl.net.in"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.8574024,
+          19.178704
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "(Duplicate) Andheri Kurla Road Police Station",
+        "ward": "K/E",
+        "location": "Andheri Kurla Road, Andheri East, Mumbai - 400069"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.86879,
+          19.111807
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Gowanpada Police Station",
+        "ward": "M/E",
+        "location": "Prayag Nagar, Mahul, Trombay, Mumbai, Maharashtra 400071"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.908676,
+          19.019228
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "MIDC Police Station",
+        "ward": "K/E",
+        "location": "MIDC Central Road, Opp E.S.I.S Hospital, Andheri (E), Mumbai - 400093."
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.868155,
+          19.117653
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Bhandup Police Station",
+        "ward": "S",
+        "location": "Near Krishna Theatre, L. B. S. Marg, Bhandup (W), Mumbai - 400078. Shripat Kale   9870333434 bhanduppstn@gmail.com"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.9365403,
+          19.1512852
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Mumbai Police Headquarters",
+        "ward": "A",
+        "location": "Commissioner of Police Office, Dadabhai Naoroji Road, Opp Crawford Market, Dhobi Talao, Fort, Mumbai 400001"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.8330459,
+          18.9466048
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "288-TRIAL-Kurla Police Station 21",
+        "ward": "L",
+        "location": "CST Road, Lal Bahadur Shastri Marg, Kapadia Nagar, Kurla, Mumbai, Maharashtra 400070  CST Road, Lal Bahadur Shastri Marg, Kapadia Nagar, Kurla, Mumbai, Maharashtra 400070"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.878273,
+          19.076687
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Juhu Police Station",
+        "ward": "K/W",
+        "location": "V.M.Road, Near Kalaniketan, Yamuna Nagar, Juhu, Vile Parle (W), Mumbai-400056."
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.8328046,
+          19.103172
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Nehru Nagar Police Station",
+        "ward": "L",
+        "location": "Nehru Nagar Colony, Kurla (E), Mumbai - 400024.  Pramod Khoparde   9821624266 neharunagar1985@gmail.com"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.8806665,
+          19.0587439
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Maharashtra State Police Headquarters",
+        "ward": "A",
+        "location": "Maharashtra Police Mukhyalaya, Chhatrapati Shivaji Maharaj Marg, Colaba, Mumbai - 400001."
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.83342,
+          18.925152
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Deputy Commissioner of Police DCP Z-I",
+        "ward": "A",
+        "location": "109, Valchand Hirachand Marg, 1st Floor, Opp. G.P.O., Fort, Mumbai 400001.  Dr. Ravindra A.Shisave 9423121011 dcpzone1-mum@mahapolice.gov.in"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.835922,
+          18.938305
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Kurla Police Station",
+        "ward": "L",
+        "location": "CST Road, Satejeevan Society, Kurla West"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.8762344,
+          19.0649449
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Chembur Traffice Division",
+        "ward": "M/W",
+        "location": "Near Vijay Sales, Sumannagar, Chembur, Mumbai -74"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.884099,
+          19.0538625
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Ashok Nagar Police Outpost",
+        "ward": "T",
+        "location": "Ashoknagar Police Outpost Mulund West"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.948227,
+          19.164789
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Powai Police Station",
+        "ward": "S",
+        "location": "Rambaug Junction, A.D. Marg, Powai, Mumbai - 400072.  B.K.Mahadeshwar  9594376376 powaipolicestation@mtnl.net.in"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.8994752,
+          19.1197044
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Deonar Police Station",
+        "ward": "M/E",
+        "location": "Behind Deonar Slaughter House, Govandi,  Mumbai-400043. Dhanraj.S.Gaikwad 9769908904 deonarpolicestation@mtnl.net.in"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.9171225,
+          19.058595
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Trombay Police Station",
+        "ward": "M/E",
+        "location": "Cheeta Camp, Sion-Trombay Road, Mumbai -400088. Nitin Vinayak Yadav trombaypolicestation@gmail.com"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.9454227,
+          19.0382176
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "C G Road Police Station",
+        "ward": "M/E",
+        "location": "Police Station, Dr Choitram Gidwani Road, Chembur, Mumbai,"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.906967,
+          19.045599
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Mankhurd Police Station",
+        "ward": "M/E",
+        "location": "Bld.No.7/A, Lallubhai Compound, Mankhurd, Mumbai - 400043.  Nasor A.H.Shaikh 9320091966 mankhurdpolicestation@mtnl.net.in"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.9262581,
+          19.0532228
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Mumbai Sagari Police Station",
+        "ward": "G/N",
+        "location": "New Mahim Police Line, Ground Floor, Building No 09, S.L.Raheja Road, Mahim, Mumbai - 400016.  Vijay M. Kadam 9821671217 mumbaisagaripolicestation@mtnl.net.in"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.8422953,
+          19.0482591
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "V B Nagar Police Station",
+        "ward": "L",
+        "location": "H.I.G Colony, BLD NO. 7 Kohonoor Co.op Hs . Society. V.B Nagar, Kurla (W), Mumbai - 400070. Pravin More  9821517320 vbnagarpolicestation@mtnl.net.in"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.8841818,
+          19.0717166
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "R C F Police Station",
+        "ward": "M/E",
+        "location": "Survey No 12 B, 13 B, CTS No 213,215, 216, Rc Marg,   Hemu Kalani Marg, Sindhi Society, Chembur, Mumbai 400074.  Dilip Vishnu Raut 9870204020 rcfpolicestation@mtnl.net.in"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.895599,
+          19.036489
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Kurla Police Station",
+        "ward": "N",
+        "location": "Sarveshwar Mandir Marg, Takiya Ward, Kurla (W) Mumbai 400070"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.9367756,
+          19.0766504
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Meghwadi Police Station",
+        "ward": "K/E",
+        "location": "Income Tax Colony, R R Thakur Road, Jogeshwari East, Mumbai- 400060. A.Vastrad 9867251988 acpmeghwadi@mtnl.net.in  Vinod V. Shinde 9821239102 meghwadipolicestation@mtnl.net.in"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.8610788,
+          19.1314908
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Kalachowki Police Station",
+        "ward": "F/S",
+        "location": "Veer Shrikant Hadkar Marg, Chatai Chawl, Abhyudaya Nagar, Kalachowki, Parel Mumbai - 400033."
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.8423906,
+          18.9879121
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Sion Police Station",
+        "ward": "F/N",
+        "location": "Matunga Police Station compound,King's Circle Flyover, Mutunga,  Mumbai-400019."
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.857656,
+          19.030869
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Matunga Police Station",
+        "ward": "F/N",
+        "location": "Dr. Babasaheb Ambedkar Road, King's Circle Flyover, Mutunga,  Mumbai-400019."
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.857839,
+          19.031156
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Antop Hill Police Station",
+        "ward": "F/N",
+        "location": "Bldg. No.229, Ground Flr, Sector - VI, Antop Hill, Mumbai-37. M.Khollam, 9870549544 antophillpolicestation@mtnl.net.in"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.8646705,
+          19.0305167
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Byculla Police Station",
+        "ward": "E",
+        "location": "16, Hansraj Lane, Near Moti Shah Jain Temple, Byculla (E), Mumbai-400027."
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.8340621,
+          18.9735429
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Agripada Police Station",
+        "ward": "E",
+        "location": "Agripada Police Station, Dr. Nair  Road, Agripada, Mumbai-400011."
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.824173,
+          18.976616
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Mandvi Police Station",
+        "ward": "B",
+        "location": "Frere Road, Dana Bandar, Mandvi, Mumbai - 400009."
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.842255,
+          18.957191
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "New Police Line",
+        "ward": "K/E",
+        "location": "New Police Line,S Radha Krishnan Road,Near Andheri Station,Andheri East,Mumbai, 400069"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.84827,
+          19.11946
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Vanrai Police Station",
+        "ward": "P/S",
+        "location": "Bldg, Nos. 2/Mhada vanrai Colony, Goregaon (E), Mumbai - 400063. Chandrakant N Gurav 9821624681 goregaoneastpolicestation07@yahoo.in"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.857735,
+          19.155743
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Kasturba Marg Police Station",
+        "ward": "R/C",
+        "location": "at the Junction of Main Kasturba Road & Cross Road No.1, Borivali (E), Mumbai-400066. Suhas Raikar  9594344111 kasturbapolicestation@mtnl.net.in"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.857933,
+          19.228308
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "M H B Police Station",
+        "ward": "R/C",
+        "location": "Old. M.H.B Colony, Near Borivali Main Post Office, New Link Road, Borivali (W), Mumbai - 400091.  Subhas Krishna Chavan 9870298510 mhbpolicestation@mtnl.net.in"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.840408,
+          19.23222
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Aarey Police Station",
+        "ward": "P/S",
+        "location": "Near O.P.Garden, Dinkarrao Desai Marg, Aaery Colony, Near Chotta Kashmir Boating Club,Goregaon (E), Mumbai - 400065.Vilas Shrikant Chavan aareysubpolicestation@mtnl.net.in aareypolicestation@gmail.com"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.87178,
+          19.162741
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Govandi Police Station",
+        "ward": "M/E",
+        "location": "CTS No. 373/5, HP Petrol Pump Lane, Near Raheja Acropolis-II, Off V.N Purav Marg, Deonar, Mumbai - 400088.  Uttam Kolekar 9821629922  srpigovandi@gmail.com"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.9177698,
+          19.0486326
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Borivali Police Station",
+        "ward": "R/C",
+        "location": "Opp.Borivali Railway Station, S. V. Road, Borivali (W), Mumbai - 400066. Gunaji Sawant  9821334681 borivalipolicestation@mtnl.net.in"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.8559244,
+          19.2291142
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Kanjur Marg Police Station",
+        "ward": "S",
+        "location": "Nehru Nagar, Near Pariwar Co-Opp. Housing Socity,kanjur marg East,  Mumbai - 400042. A.L Satpute   9821898799 kanjurmargpstn@gmail.com"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.9373573,
+          19.1301221
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Pant Nagar Police Station",
+        "ward": "General",
+        "location": "B.N.72, Gr. Floor, Swamy Samarth Ramdas Road. Pant Nagar, Ghatkopar (E), Mumbai-400075.  Shankar Anandrao Dhanavade   9870148622pantnagarpstn@gmail.com"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.91634,
+          19.087191
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Police Station-1715260000365",
+        "ward": "F/N",
+        "location": "Mumbai, Maharashtra"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.855331,
+          19.026953
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Police Station-1714540000366",
+        "ward": "F/N",
+        "location": "Raffi Ahemad Kidwai marg, Wadala."
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.8586778,
+          19.0165499
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Deputy Commissioner Office",
+        "ward": "F/S",
+        "location": "Deputy Commisioner Office Police Headquarter, Apana Bazar, Borivada, Naigaon, Dadar"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.846375,
+          19.010983
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "G D Marg Police Station",
+        "ward": "F/S",
+        "location": "G D Ambekar Marg, Naigaon, Dadar East, Mumbai,"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.846916,
+          19.007332
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Wadala Police Station1",
+        "ward": "F/S",
+        "location": "Wadala Police Station"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.860413,
+          19.011597
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "G H Road Police Station",
+        "ward": "K/E",
+        "location": "Guru Hargovindji Road, Andheri East, Mumbai 400053"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.857948,
+          19.111944
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Wadala Police station",
+        "ward": "F/N",
+        "location": "Antop Hill Road, Near Korba Mithagar, Nadkarni Park, Wadala (E), Mumbai-400037."
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.863663,
+          19.01549
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Mahalakshmi Police Station",
+        "ward": "G/S",
+        "location": "Mahalakshmi Police Station, Mumbai, Maharashtra"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.814316,
+          18.986382
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Police Station-1628030000824",
+        "ward": "K/W",
+        "location": "Police JogeshwariSubway Bridge, Gumpha Road, Jogeshwari East, Mumbai 400060"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.84269,
+          19.142096
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Kurla Railway Police Station",
+        "ward": "L",
+        "location": "Mumbai, Maharashtra"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.876251,
+          19.064808
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Police Station-2424430001072",
+        "ward": "N",
+        "location": "Mumbai, Maharashtra"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.9226199,
+          19.1060169
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Vileparle Police Station",
+        "ward": "K/E",
+        "location": "Nehru Road, Near Centuar Hotel, Navpada, Vileparle (E), Mumbai - 400099."
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.855143,
+          19.096262
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Dahisar Police Station",
+        "ward": "R/N",
+        "location": "S V Road, Near Union Bank, Dahisar (E), Mumbai - 400068.  Prakash Nana Jadhav 9821131509dahisarpolicestation@mtnl.net.indahisarpolicestation@gmail.com"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.8643764,
+          19.2527603
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Dadasaheb Bhadkamkar Road Police station",
+        "ward": "D",
+        "location": "Lamington Road, Shapur Baug, Near HDFC Bank, Grant Road (East), Mumbai 400007"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.8170867,
+          18.9609011
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Deputy Commissioner Of Police (QRT)",
+        "ward": "H/E",
+        "location": "Bala Marg, Yashwant Nagar, Vakola, Santacruz (East)  Mumbai 400055."
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.8563059,
+          19.0758921
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "B K C Police Station",
+        "ward": "H/E",
+        "location": "Bandra-Kurla Complex Road, Opp. I.C.I.C.I. Bank, Bandra (E), Mumbai - 400051."
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.8603032,
+          19.0646042
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Dongri Police Station",
+        "ward": "B",
+        "location": "Dr. Maheshwari Road, Near Sandhurst  Road Railway Station, Dongri, Mumbai - 400009."
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.839038,
+          18.9621806
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Pydhonie Police Station",
+        "ward": "B",
+        "location": "Ibrahim Rahmatullah Road, Opp Hamidiya Masjid, Mumbadevi Area, Mumbai - 400003."
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.831943,
+          18.954067
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Gaondevi Police Station",
+        "ward": "D",
+        "location": "7, Pandita Ramabai Marg, Papanas Wadi, Gaondevi,  Mumbai -400007."
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.812416,
+          18.960472
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Cuffe Parade Police Station",
+        "ward": "A",
+        "location": "Sadhu T. L. Waswani Marg, Near World Trade Center, Babasaheb Ambedkar Nagar, Cuffe Parade, Mumbai - 400005."
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.8189364,
+          18.9119522
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Marine Drive Police Station",
+        "ward": "A",
+        "location": "Dinshaw Vaccha Road, Behind Yashodhan Bldg. In front of C.C.I. Club, Mumbai-400020."
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.824654,
+          18.930164
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "J J Marg Police Station",
+        "ward": "E",
+        "location": "Sir J.J. Hospital Compound, Sir J. J. Road, Byculla, Mumbai - 400008."
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.832324,
+          18.962951
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Vakola Police Station",
+        "ward": "H/E",
+        "location": "Anand Nagar, Western Highway, Santacruz (E), Mumbai-55."
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.847748,
+          19.080891
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Kherwadi Police Station",
+        "ward": "H/E",
+        "location": "Government Colony, Bldg No. 5, Gr floor, Ambedkar Nagar, Bandra (E), Mumbai - 400051."
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.850105,
+          19.0658833
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Airport Police Station",
+        "ward": "K/E",
+        "location": "Airport Terminal Building, Near Gate no 01, Domestic Airport, CSIA, Mumbai 400099."
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.865889,
+          19.09408
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Nirmal Nagar Police Station",
+        "ward": "H/E",
+        "location": "Jay Prakash Road, Nirmal Nagar, Bandra (East), Mumbai - 400051."
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.844902,
+          19.065434
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Andheri Police Station",
+        "ward": "K/E",
+        "location": "Sahar Road, Opp. Andheri Railway Station, Vertex Junction, Andheri Kurla Road, Andheri East, Mumbai - 400069."
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.8480663,
+          19.1204984
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Versova Police Station",
+        "ward": "K/W",
+        "location": "Link Road, Near C.D.Barfiwalla School, D.N.Nagar, Andheri (West), Mumbai-400053."
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.8303846,
+          19.1244929
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Oshiwara Police Station",
+        "ward": "K/W",
+        "location": "New Link Road, Opp. Mhada, Oshiwara, Jogeshwari (West), Mumbai.  400047"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.8315996,
+          19.1475735
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Amboli Police Station",
+        "ward": "K/W",
+        "location": "Patel Estate Road, Opp. Pushtik Society, Jogeshwari (W), Mumbai-400058."
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.8485408,
+          19.1425368
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Santacruz Police Station",
+        "ward": "H/W",
+        "location": "Juhu Tara Road, Linking Road, Opp. Juhu Garden,Santacruz (W), Mumbai-400054."
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.834816,
+          19.084148
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "ACP Office",
+        "ward": "K/E",
+        "location": "Sahar Road, Opp. Andheri Railway Station, Vertex Junction, Railway Colony, Andheri East, Railway Colony, Andheri East, Mumbai, Maharashtra, 400053"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.848199,
+          19.12056
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Traffic Police Head Office",
+        "ward": "G/S",
+        "location": "Worli Police Camp, Sir Pochkhanwala Road, Near Hill Top Hotel, Worli, Mumbai - 400018,"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.8177388,
+          19.0097723
+        ]
+      }
+    }
+  ]
 }
