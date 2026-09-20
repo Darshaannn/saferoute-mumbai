@@ -1,0 +1,625 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.83,
+          18.96
+        ]
+      },
+      "properties": {
+        "id": "hosp-1",
+        "name": "Grant Med.College & J.J. Hospital",
+        "address": "J.J.Marg Nagpada,Near Sandhurst Road station Mumbai-400008",
+        "ward": "E",
+        "type": "Major Hospitals",
+        "owner_dept": "Public Health Dept",
+        "open24x7": true,
+        "emergency_services": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.82,
+          18.97
+        ]
+      },
+      "properties": {
+        "id": "hosp-2",
+        "name": "NAIR HOSPITAL DENTAL COLLEGE",
+        "address": "Dr. Anandrao L. Nair Road, Mumbai Central, Mumbai \u2013 400 008",
+        "ward": "E",
+        "type": "Major Hospitals",
+        "owner_dept": "Public Health Dept",
+        "open24x7": true,
+        "emergency_services": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.82,
+          18.97
+        ]
+      },
+      "properties": {
+        "id": "hosp-3",
+        "name": "B. Y. L. NAIR CHARITABLE HOSPITAL AND T. N. MEDICAL COLLEGE",
+        "address": "Dr. Anandrao L. Nair Road, Mumbai Central, Mumbai \u2013 400 008.",
+        "ward": "E",
+        "type": "Major Hospitals",
+        "owner_dept": "Public Health Dept",
+        "open24x7": true,
+        "emergency_services": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.84,
+          19.0
+        ]
+      },
+      "properties": {
+        "id": "hosp-4",
+        "name": "Seth G.S.Medical college &KEM Hospital",
+        "address": "Acharya Donde Road,Parel,Mumbai-400012.",
+        "ward": "FS",
+        "type": "Major Hospitals",
+        "owner_dept": "Public Health Dept",
+        "open24x7": true,
+        "emergency_services": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.86,
+          19.04
+        ]
+      },
+      "properties": {
+        "id": "hosp-5",
+        "name": "LOKMANYA TILAK MUNICIPAL GENERAL HOSPITAL AND MEDICAL COLLEGE",
+        "address": "Laxmibai Kelkar Road,Sion,Mumbai-400022.",
+        "ward": "FN",
+        "type": "Major Hospitals",
+        "owner_dept": "Public Health Dept",
+        "open24x7": true,
+        "emergency_services": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.84,
+          19.11
+        ]
+      },
+      "properties": {
+        "id": "hosp-6",
+        "name": "Hinduhrudaysamrat Balasaheb Thackeray Med.College & Dr.R.N Cooper Hospital",
+        "address": "JVPD Sceme,Gulmohor Road,Juhu,Vile Paele()W,Mumbai-400056",
+        "ward": "KW",
+        "type": "Major Hospitals",
+        "owner_dept": "Public Health Dept",
+        "open24x7": true,
+        "emergency_services": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.84,
+          18.94
+        ]
+      },
+      "properties": {
+        "id": "hosp-7",
+        "name": "St George Hospital",
+        "address": "St.Georges Road,C.S.T.,Mumbai-400001",
+        "ward": "A",
+        "type": "Peripheral Hospital",
+        "owner_dept": "Public Health Dept",
+        "open24x7": true,
+        "emergency_services": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.83,
+          18.94
+        ]
+      },
+      "properties": {
+        "id": "hosp-8",
+        "name": "Cama Albless Hospital",
+        "address": "Mahapalika Marg,Dhobi Talao,Mumai-400001",
+        "ward": "A",
+        "type": "Peripheral Hospital",
+        "owner_dept": "Public Health Dept",
+        "open24x7": true,
+        "emergency_services": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.8336,
+          18.9411
+        ]
+      },
+      "properties": {
+        "id": "hosp-9",
+        "name": "G.T.Hospital",
+        "address": "L.T.Road,Dhobi Talao,Near Crowford Market,Mumbai-400001.",
+        "ward": "A",
+        "type": "Peripheral Hospital",
+        "owner_dept": "Public Health Dept",
+        "open24x7": true,
+        "emergency_services": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.85,
+          19.08
+        ]
+      },
+      "properties": {
+        "id": "hosp-10",
+        "name": "V.N Desai Hospital",
+        "address": "Golibar Road,Santacrus (E),Mumbai-400055",
+        "ward": "HE",
+        "type": "Peripheral Hospital",
+        "owner_dept": "Public Health Dept",
+        "open24x7": true,
+        "emergency_services": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.83,
+          19.06
+        ]
+      },
+      "properties": {
+        "id": "hosp-11",
+        "name": "K.B  Bhabha Hospital",
+        "address": "R. K. Patkar Marg, Bandra(W),Mumbai-400050.",
+        "ward": "HW",
+        "type": "Peripheral Hospital",
+        "owner_dept": "Public Health Dept",
+        "open24x7": true,
+        "emergency_services": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.84,
+          19.16
+        ]
+      },
+      "properties": {
+        "id": "hosp-12",
+        "name": "Siddharth Municipal General Hospital",
+        "address": "Shrirang Shabde Road, Opp.Motilala Nagar Post Office,Goregaon (W),Mumbai-400053",
+        "ward": "PS",
+        "type": "Peripheral Hospital",
+        "owner_dept": "Public Health Dept",
+        "open24x7": true,
+        "emergency_services": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.85,
+          19.18
+        ]
+      },
+      "properties": {
+        "id": "hosp-13",
+        "name": "MW Desai Mun.Gen.Hospital",
+        "address": "Govind Nagar ,HB..P. Road,Malad (East),Mumbai-400097",
+        "ward": "PN",
+        "type": "Peripheral Hospital",
+        "owner_dept": "Public Health Dept",
+        "open24x7": true,
+        "emergency_services": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.85,
+          19.19
+        ]
+      },
+      "properties": {
+        "id": "hosp-14",
+        "name": "S.K.Patil Mun.Gen.Hospital",
+        "address": "Daftari Road,Malad (E),Mumbai-400097.",
+        "ward": "PN",
+        "type": "Peripheral Hospital",
+        "owner_dept": "Public Health Dept",
+        "open24x7": true,
+        "emergency_services": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.85,
+          19.14
+        ]
+      },
+      "properties": {
+        "id": "hosp-15",
+        "name": "Hinduhridaysamrat Balasaheb Thackeray Trauma Care Hospital",
+        "address": "Jogeshwari(E),Mumbai-400060.",
+        "ward": "KE",
+        "type": "Peripheral Hospital",
+        "owner_dept": "Public Health Dept",
+        "open24x7": true,
+        "emergency_services": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.85,
+          19.21
+        ]
+      },
+      "properties": {
+        "id": "hosp-16",
+        "name": "Bharat ratna Babasaheb Ambedkar Hospital",
+        "address": "S.V.Road Opp.Police Station, Kandivli (W),Mumbai-400067.",
+        "ward": "RS",
+        "type": "Peripheral Hospital",
+        "owner_dept": "Public Health Dept",
+        "open24x7": true,
+        "emergency_services": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.85,
+          19.24
+        ]
+      },
+      "properties": {
+        "id": "hosp-17",
+        "name": "Harilal Bhagwati Mun.Gen.Hosp",
+        "address": "S.V.Patel Road,Borivali,Mumbau-400068.",
+        "ward": "RN",
+        "type": "Peripheral Hospital",
+        "owner_dept": "Public Health Dept",
+        "open24x7": true,
+        "emergency_services": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.85,
+          19.24
+        ]
+      },
+      "properties": {
+        "id": "hosp-18",
+        "name": "Kasturba Cross Road Hospital",
+        "address": "Kasturba Cross Road No.2,Borivali (W),Mumbai-400066.",
+        "ward": "RC",
+        "type": "Peripheral Hospital",
+        "owner_dept": "Public Health Dept",
+        "open24x7": true,
+        "emergency_services": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.88,
+          19.07
+        ]
+      },
+      "properties": {
+        "id": "hosp-19",
+        "name": "Kurla Bhabha Hospital",
+        "address": "Belgrami Road, Kurla (West), Mumbai - 400 070.",
+        "ward": "L",
+        "type": "Peripheral Hospital",
+        "owner_dept": "Public Health Dept",
+        "open24x7": true,
+        "emergency_services": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.9,
+          19.06
+        ]
+      },
+      "properties": {
+        "id": "hosp-20",
+        "name": "MAA Mun.Gen.Hospital",
+        "address": "Postal Colony Road,Chembur,Mumbai-400071",
+        "ward": "MW",
+        "type": "Peripheral Hospital",
+        "owner_dept": "Public Health Dept",
+        "open24x7": true,
+        "emergency_services": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.91,
+          19.05
+        ]
+      },
+      "properties": {
+        "id": "hosp-21",
+        "name": "Pt. MMM Centenery Hospital",
+        "address": "Waman Tukaram Patil Marg,Govandi (E),Mumbai-400088.",
+        "ward": "ME",
+        "type": "Peripheral Hospital",
+        "owner_dept": "Public Health Dept",
+        "open24x7": true,
+        "emergency_services": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.9,
+          19.08
+        ]
+      },
+      "properties": {
+        "id": "hosp-22",
+        "name": "Rajawadi Hospital",
+        "address": "7,M.G.Road,Near Somaiya College, Ghatkopar (East), Mumbai \u2013 400 077.",
+        "ward": "N",
+        "type": "Peripheral Hospital",
+        "owner_dept": "Public Health Dept",
+        "open24x7": true,
+        "emergency_services": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.94,
+          19.12
+        ]
+      },
+      "properties": {
+        "id": "hosp-23",
+        "name": "KMJ Phule Mun.Gen.Hospital",
+        "address": "Kannamwar Nagar-2,Vikhroli(E),Mumbai-400083.",
+        "ward": "S",
+        "type": "Peripheral Hospital",
+        "owner_dept": "Public Health Dept",
+        "open24x7": true,
+        "emergency_services": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.9,
+          19.1
+        ]
+      },
+      "properties": {
+        "id": "hosp-24",
+        "name": "Sant Muktabai Hospital",
+        "address": "Barvenagar,Bhatwadi,Ghatkopar (W),Mumbai-400084",
+        "ward": "N",
+        "type": "Peripheral Hospital",
+        "owner_dept": "Public Health Dept",
+        "open24x7": true,
+        "emergency_services": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.96,
+          19.17
+        ]
+      },
+      "properties": {
+        "id": "hosp-25",
+        "name": "SVD Savarkar Hospital",
+        "address": "Mahatma Phule Road,Opp.C.D.Deshmukh Road Mulund(East).Mumbai-400081",
+        "ward": "T",
+        "type": "Peripheral Hospital",
+        "owner_dept": "Public Health Dept",
+        "open24x7": true,
+        "emergency_services": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.95,
+          19.18
+        ]
+      },
+      "properties": {
+        "id": "hosp-26",
+        "name": "M.T.Agarwal Mun.Gen.Hospital",
+        "address": "Near T Ward office,Mulund(W),Mumbai-400080.",
+        "ward": "T",
+        "type": "Peripheral Hospital",
+        "owner_dept": "Public Health Dept",
+        "open24x7": true,
+        "emergency_services": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.83,
+          18.93
+        ]
+      },
+      "properties": {
+        "id": "hosp-27",
+        "name": "Seth A.J.B.Municipal ENT Hospital",
+        "address": "NearSiddarth College,Maharshi Dadhichi Marg,Fort,Mumbai-400001",
+        "ward": "A",
+        "type": "Special Hospital",
+        "owner_dept": "Public Health Dept",
+        "open24x7": true,
+        "emergency_services": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.83,
+          18.96
+        ]
+      },
+      "properties": {
+        "id": "hosp-28",
+        "name": "Municipal Eye Hospital",
+        "address": "Maulana Shaukat Ali Marg,,Opp.Durga Devi Udyan,Mumbai-400008",
+        "ward": "E",
+        "type": "Special Hospital",
+        "owner_dept": "Public Health Dept",
+        "open24x7": true,
+        "emergency_services": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.83,
+          18.98
+        ]
+      },
+      "properties": {
+        "id": "hosp-29",
+        "name": "Kasturba Hospital (For Infectiou Diseases)",
+        "address": "Opp.Central Jail,Sane Guruji Marg (Arthur Road),Mumbai-400011",
+        "ward": "E",
+        "type": "Special Hospital",
+        "owner_dept": "Public Health Dept",
+        "open24x7": true,
+        "emergency_services": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.85,
+          19.01
+        ]
+      },
+      "properties": {
+        "id": "hosp-30",
+        "name": "Group Of T.B.Hospital",
+        "address": "Jerbai Wadia Road,Sewri,Mumbai-400015",
+        "ward": "FS",
+        "type": "Special Hospital",
+        "owner_dept": "Public Health Dept",
+        "open24x7": true,
+        "emergency_services": true
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.8586,
+          19.0197
+        ]
+      },
+      "properties": {
+        "id": "hosp-31",
+        "name": "Acworth Leprosy Hospital",
+        "address": "Major Parmeswaran Marg,Wadala,Mumbai-400031",
+        "ward": "FN",
+        "type": "Special Hospital",
+        "owner_dept": "Public Health Dept",
+        "open24x7": true,
+        "emergency_services": true
+      }
+    }
+  ]
+}

@@ -1,0 +1,217 @@
+{
+    "city_wide_risk_indicator": 50.0,
+    "risk_color": "#FACC15",
+    "risk_label": "Moderate Recorded Risk",
+    "total_cases_2022": 6156,
+    "total_cases_2023": 5913,
+    "trend_percentage": -3.95,
+    "categories": [
+        {
+            "Category": "Rape u/s 376 IPC (i) Minor",
+            "Registered_2023": 586,
+            "Detected_2023": 578,
+            "Detection_Rate_2023": 99,
+            "Registered_2022": 614,
+            "Detected_2022": 585,
+            "Detection_Rate_2022": 95
+        },
+        {
+            "Category": "(ii) Major",
+            "Registered_2023": 387,
+            "Detected_2023": 355,
+            "Detection_Rate_2023": 92,
+            "Registered_2022": 370,
+            "Detected_2022": 327,
+            "Detection_Rate_2022": 88
+        },
+        {
+            "Category": "Total Rape Cases",
+            "Registered_2023": 973,
+            "Detected_2023": 933,
+            "Detection_Rate_2023": 96,
+            "Registered_2022": 984,
+            "Detected_2022": 912,
+            "Detection_Rate_2022": 93
+        },
+        {
+            "Category": "Kidnapping of Women (i) Minor",
+            "Registered_2023": 1157,
+            "Detected_2023": 1087,
+            "Detection_Rate_2023": 94,
+            "Registered_2022": 1155,
+            "Detected_2022": 1039,
+            "Detection_Rate_2022": 90
+        },
+        {
+            "Category": "(ii) Major",
+            "Registered_2023": 10,
+            "Detected_2023": 9,
+            "Detection_Rate_2023": 90,
+            "Registered_2022": 9,
+            "Detected_2022": 8,
+            "Detection_Rate_2022": 89
+        },
+        {
+            "Category": "Total Kidnapping Cases",
+            "Registered_2023": 1167,
+            "Detected_2023": 1096,
+            "Detection_Rate_2023": 94,
+            "Registered_2022": 1164,
+            "Detected_2022": 1047,
+            "Detection_Rate_2022": 90
+        },
+        {
+            "Category": "Outraging Modesty of Women u/s 354 IPC",
+            "Registered_2023": 2163,
+            "Detected_2023": 2054,
+            "Detection_Rate_2023": 95,
+            "Registered_2022": 2347,
+            "Detected_2022": 1955,
+            "Detection_Rate_2022": 83
+        },
+        {
+            "Category": "Intended insult to Modesty of Women u/s 509 IPC.",
+            "Registered_2023": 626,
+            "Detected_2023": 563,
+            "Detection_Rate_2023": 90,
+            "Registered_2022": 675,
+            "Detected_2022": 472,
+            "Detection_Rate_2022": 70
+        },
+        {
+            "Category": "Dowry Prohibition Act.",
+            "Registered_2023": 0,
+            "Detected_2023": 0,
+            "Detection_Rate_2023": 0,
+            "Registered_2022": 0,
+            "Detected_2022": 0,
+            "Detection_Rate_2022": 0
+        },
+        {
+            "Category": "a) Dowry related murder u/s 302 IPC",
+            "Registered_2023": 0,
+            "Detected_2023": 0,
+            "Detection_Rate_2023": 0,
+            "Registered_2022": 0,
+            "Detected_2022": 0,
+            "Detection_Rate_2022": 0
+        },
+        {
+            "Category": "b) Dowry Death u/s 304-B IPC",
+            "Registered_2023": 7,
+            "Detected_2023": 6,
+            "Detection_Rate_2023": 86,
+            "Registered_2022": 6,
+            "Detected_2022": 6,
+            "Detection_Rate_2022": 100
+        },
+        {
+            "Category": "C) Dowry related suicides u/s 306 IPC",
+            "Registered_2023": 13,
+            "Detected_2023": 13,
+            "Detection_Rate_2023": 100,
+            "Registered_2022": 21,
+            "Detected_2022": 17,
+            "Detection_Rate_2022": 81
+        },
+        {
+            "Category": "D) Dowry related Mental/Physical Harrasment u/s 498-A IPC",
+            "Registered_2023": 746,
+            "Detected_2023": 701,
+            "Detection_Rate_2023": 94,
+            "Registered_2022": 868,
+            "Detected_2022": 517,
+            "Detection_Rate_2022": 60
+        },
+        {
+            "Category": "a) Murder due to other reasons u/s 302 IPC",
+            "Registered_2023": 20,
+            "Detected_2023": 19,
+            "Detection_Rate_2023": 95,
+            "Registered_2022": 18,
+            "Detected_2022": 18,
+            "Detection_Rate_2022": 100
+        },
+        {
+            "Category": "b) Suicides due to other reasons u/s 306 IPC",
+            "Registered_2023": 18,
+            "Detected_2023": 14,
+            "Detection_Rate_2023": 78,
+            "Registered_2022": 15,
+            "Detected_2022": 13,
+            "Detection_Rate_2022": 87
+        },
+        {
+            "Category": "c) Mental/Physical Harrasments due to other reasons u/s 498-A IPC",
+            "Registered_2023": 173,
+            "Detected_2023": 164,
+            "Detection_Rate_2023": 95,
+            "Registered_2022": 34,
+            "Detected_2022": 19,
+            "Detection_Rate_2022": 56
+        },
+        {
+            "Category": "Acid Attack (Section 326A IPC)",
+            "Registered_2023": 0,
+            "Detected_2023": 0,
+            "Detection_Rate_2023": 0,
+            "Registered_2022": 1,
+            "Detected_2022": 1,
+            "Detection_Rate_2022": 100
+        },
+        {
+            "Category": "No of cases registered Rape with POCSO",
+            "Registered_2023": 586,
+            "Detected_2023": 578,
+            "Detection_Rate_2023": 99,
+            "Registered_2022": 615,
+            "Detected_2022": 585,
+            "Detection_Rate_2022": 95
+        },
+        {
+            "Category": "No. of cases registered Molestation with POCSO",
+            "Registered_2023": 495,
+            "Detected_2023": 478,
+            "Detection_Rate_2023": 97,
+            "Registered_2022": 489,
+            "Detected_2022": 441,
+            "Detection_Rate_2022": 90
+        },
+        {
+            "Category": "No. of cases registered Eve-Teasing with POCSO",
+            "Registered_2023": 20,
+            "Detected_2023": 20,
+            "Detection_Rate_2023": 100,
+            "Registered_2022": 28,
+            "Detected_2022": 19,
+            "Detection_Rate_2022": 68
+        },
+        {
+            "Category": "Other IPC with POCSO",
+            "Registered_2023": 7,
+            "Detected_2023": 7,
+            "Detection_Rate_2023": 100,
+            "Registered_2022": 23,
+            "Detected_2022": 18,
+            "Detection_Rate_2022": 78
+        },
+        {
+            "Category": "PITA With POSCO (Excluding Rape)",
+            "Registered_2023": 0,
+            "Detected_2023": 0,
+            "Detection_Rate_2023": 0,
+            "Registered_2022": 2,
+            "Detected_2022": 1,
+            "Detection_Rate_2022": 50
+        },
+        {
+            "Category": "Total of Crime Against Women Cases (Excl. col.\n9)",
+            "Registered_2023": 5913,
+            "Detected_2023": 5570,
+            "Detection_Rate_2023": 94,
+            "Registered_2022": 6156,
+            "Detected_2022": 4995,
+            "Detection_Rate_2022": 81
+        }
+    ]
+}

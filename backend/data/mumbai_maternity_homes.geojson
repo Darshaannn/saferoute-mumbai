@@ -1,0 +1,545 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.82,
+          18.95
+        ]
+      },
+      "properties": {
+        "id": "mate-1",
+        "name": "Suryakant Vagal Maternity Home, Zaobawadi",
+        "address": "Suryakant Wagal Mun. Mat. Home, Zaobawadi, Thakurdwar, Girgaon  Mumbai \u2013 02",
+        "ward": "C",
+        "type": "Maternity Home",
+        "owner_dept": "Public Health Dept",
+        "open24x7": true,
+        "emergency_services": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.85,
+          19.01
+        ]
+      },
+      "properties": {
+        "id": "mate-2",
+        "name": "Naigaon Maternity Home",
+        "address": "Mun. Mat. Home, Naigaon, Mumbai \u2013 14.",
+        "ward": "FS",
+        "type": "Maternity Home",
+        "owner_dept": "Public Health Dept",
+        "open24x7": true,
+        "emergency_services": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.87,
+          19.04
+        ]
+      },
+      "properties": {
+        "id": "mate-3",
+        "name": "Raoli Camp Maternity Home",
+        "address": "Mun. Mat. Home, Rowli Camp, Mumbai \u2013 22",
+        "ward": "FN",
+        "type": "Maternity Home",
+        "owner_dept": "Public Health Dept",
+        "open24x7": true,
+        "emergency_services": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.83,
+          19.02
+        ]
+      },
+      "properties": {
+        "id": "mate-4",
+        "name": "Haji Mohammad Haji Sabu Siddik  Maternity Home, Prabhadevi",
+        "address": "Mohammad Haji Sabu Siddik Mun. Mat. Home, Swatryantveer Savarkar Road, Prabhadevi, Mumbai \u2013 25",
+        "ward": "GS",
+        "type": "Maternity Home",
+        "owner_dept": "Public Health Dept",
+        "open24x7": true,
+        "emergency_services": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.8402,
+          19.0328
+        ]
+      },
+      "properties": {
+        "id": "mate-5",
+        "name": "Mahim Maternity Home",
+        "address": "Mun. Mat. Home, Lt. Dilip Gupte Marg, Mahim, Mumbai \u2013 400 0016.",
+        "ward": "GN",
+        "type": "Maternity Home",
+        "owner_dept": "Public Health Dept",
+        "open24x7": true,
+        "emergency_services": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.85,
+          19.06
+        ]
+      },
+      "properties": {
+        "id": "mate-6",
+        "name": "Bal Gangadhar Kher Maternity Home, Kherwadi",
+        "address": "B. G. Kherwadi Mun. Mat. Home, Kherwadi, Bandra (East), Mumbai \u2013 52.",
+        "ward": "HE",
+        "type": "Maternity Home",
+        "owner_dept": "Public Health Dept",
+        "open24x7": true,
+        "emergency_services": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.85,
+          19.11
+        ]
+      },
+      "properties": {
+        "id": "mate-7",
+        "name": "Dr. V.N. Shirodkar Maternity Home",
+        "address": "Dr. V. N. Shirodkar Mun. Mat. Home, B-Paranjape Scheme, Hanuman Road, Vile-Parle (E), Mumbai \u2013 54.",
+        "ward": "KE",
+        "type": "Maternity Home",
+        "owner_dept": "Public Health Dept",
+        "open24x7": true,
+        "emergency_services": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.86,
+          19.14
+        ]
+      },
+      "properties": {
+        "id": "mate-8",
+        "name": "Squatters Colony Maternity Home",
+        "address": "Squatters Colony Mun. Mat. Home, Gumpha Road, Jogeshwari (East) Mumbai \u2013 60",
+        "ward": "KE",
+        "type": "Maternity Home",
+        "owner_dept": "Public Health Dept",
+        "open24x7": true,
+        "emergency_services": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.89,
+          19.05
+        ]
+      },
+      "properties": {
+        "id": "mate-9",
+        "name": "Mata Ramabai Ambedkar Maternity Home, Marol (Marol Maternity Home)",
+        "address": "Marol Mun. Mat. Home, Marol-Maroshi, Andheri (East), Mumbai \u2013 57.",
+        "ward": "KE",
+        "type": "Maternity Home",
+        "owner_dept": "Public Health Dept",
+        "open24x7": true,
+        "emergency_services": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.85,
+          19.15
+        ]
+      },
+      "properties": {
+        "id": "mate-10",
+        "name": "Oshiwara Maternity Home",
+        "address": "Oshiwara Mun. Mat. Home, Near Ajit Glass Factory, Oshiwara, Jogeshwari (West) Mumbai \u2013 400102.",
+        "ward": "KW",
+        "type": "Maternity Home",
+        "owner_dept": "Public Health Dept",
+        "open24x7": true,
+        "emergency_services": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.84,
+          19.16
+        ]
+      },
+      "properties": {
+        "id": "mate-11",
+        "name": "Topiwala Maternity Home Goregaon",
+        "address": "Topiwala Mun. Mat. Home, Station Road, Goregaon (West), Mumbai \u2013 62.",
+        "ward": "PS",
+        "type": "Maternity Home",
+        "owner_dept": "Public Health Dept",
+        "open24x7": true,
+        "emergency_services": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.84,
+          19.19
+        ]
+      },
+      "properties": {
+        "id": "mate-12",
+        "name": "Choksy Maternity Home",
+        "address": "Choksy Mun. Mat. Home, Marvey Road, Malad (West), Mumbai \u2013 64.",
+        "ward": "PN",
+        "type": "Maternity Home",
+        "owner_dept": "Public Health Dept",
+        "open24x7": true,
+        "emergency_services": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.82,
+          19.19
+        ]
+      },
+      "properties": {
+        "id": "mate-13",
+        "name": "Maulana Abul Kalam Azhad Malvani Maternity Home",
+        "address": "Malavani Mun. Mat. Home, Gate No.6, Malavani, Malad (West) Mumbai \u2013 95",
+        "ward": "PN",
+        "type": "Maternity Home",
+        "owner_dept": "Public Health Dept",
+        "open24x7": true,
+        "emergency_services": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.87,
+          19.18
+        ]
+      },
+      "properties": {
+        "id": "mate-14",
+        "name": "Savitribai Phule Mata Bal Hospital, Riddhi Garden",
+        "address": "Ridhi Garden Maternity Home, General Arunkumar Vaidya  Marg, Dindoshi , Goregaon ( E)",
+        "ward": "PN",
+        "type": "Maternity Home",
+        "owner_dept": "Public Health Dept",
+        "open24x7": true,
+        "emergency_services": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.85,
+          19.2
+        ]
+      },
+      "properties": {
+        "id": "mate-15",
+        "name": "Akurli  Maternity Home",
+        "address": "Akurli Road Mun. Mat. Home, Kandivali (East), Mumbai \u2013 101",
+        "ward": "RS",
+        "type": "Maternity Home",
+        "owner_dept": "Public Health Dept",
+        "open24x7": true,
+        "emergency_services": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.83,
+          19.22
+        ]
+      },
+      "properties": {
+        "id": "mate-16",
+        "name": "Charkop Maternity Home",
+        "address": "Charkop Mun. Mat. Home, Kandivali (West), Mumbai \u2013 97",
+        "ward": "RC",
+        "type": "Maternity Home",
+        "owner_dept": "Public Health Dept",
+        "open24x7": true,
+        "emergency_services": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.86,
+          19.23
+        ]
+      },
+      "properties": {
+        "id": "mate-17",
+        "name": "Smt.Kesarbai Chhabildas Lallubhai Bhansali Maternity Home, Borivali",
+        "address": "Smt. Bhansali Kesarbai Chhabildas Lallubhai Mun. Mat. Home, Borivali (West), Mumbai \u2013 92.",
+        "ward": "RC",
+        "type": "Maternity Home",
+        "owner_dept": "Public Health Dept",
+        "open24x7": true,
+        "emergency_services": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.87,
+          19.22
+        ]
+      },
+      "properties": {
+        "id": "mate-18",
+        "name": "Mother and Child Hospital, Magthane",
+        "address": "Mata Bal Rugnalay, Magathane, Borivali East Mumbai \u2013 66",
+        "ward": "RC",
+        "type": "Maternity Home",
+        "owner_dept": "Public Health Dept",
+        "open24x7": true,
+        "emergency_services": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.8846,
+          19.1315
+        ]
+      },
+      "properties": {
+        "id": "mate-19",
+        "name": "Maasaheb Meenatai Thackeray Maternity Home, Chunabhatti",
+        "address": "Maa Saheb Minatai Thakare Mun. Mat. Home, V. N. Purav Marg, Sion \u2013 Trombay Road, Chunabhatti Mumbai \u2013 22",
+        "ward": "L",
+        "type": "Maternity Home",
+        "owner_dept": "Public Health Dept",
+        "open24x7": true,
+        "emergency_services": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.88,
+          19.08
+        ]
+      },
+      "properties": {
+        "id": "mate-20",
+        "name": "Dr. Anandibai Joshi Maternity Home",
+        "address": "Bail Bazar, Kurla Andheri Rd. Kurla (W) Mumbai \u2013 70",
+        "ward": "L",
+        "type": "Maternity Home",
+        "owner_dept": "Public Health Dept",
+        "open24x7": true,
+        "emergency_services": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.95,
+          19.04
+        ]
+      },
+      "properties": {
+        "id": "mate-21",
+        "name": "Shahaji Nagar Maternity Home Cheeta Camp",
+        "address": "Shajaji Nagar Mun. Mat. Home, Near Trombay Police Station, Cheeta Camp Mumbai \u2013 88",
+        "ward": "ME",
+        "type": "Maternity Home",
+        "owner_dept": "Public Health Dept",
+        "open24x7": true,
+        "emergency_services": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.89,
+          19.05
+        ]
+      },
+      "properties": {
+        "id": "mate-23",
+        "name": "Matoshri Ramabai Ambedkar Maternity Home, Chembur Naka",
+        "address": "Dr. Ramabai Ambedkar Mun. Mat. Home, Chembur Naka, Mumbai 71.",
+        "ward": "MW",
+        "type": "Maternity Home",
+        "owner_dept": "Public Health Dept",
+        "open24x7": true,
+        "emergency_services": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.89,
+          19.05
+        ]
+      },
+      "properties": {
+        "id": "mate-24",
+        "name": "Matoshri Ramabai Thackeray  Maternity Home Ghatkopar",
+        "address": "Matoshree Ramabai Thakrey Mun. Mat. Home, Ganesh Maidan, Poddar Mill Compound, Ghatkopar (West), Mumbai - 86",
+        "ward": "N",
+        "type": "Maternity Home",
+        "owner_dept": "Public Health Dept",
+        "open24x7": true,
+        "emergency_services": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.94,
+          19.12
+        ]
+      },
+      "properties": {
+        "id": "mate-25",
+        "name": "Dr.Babasaheb Ambedkar Maternity Home, Tagore Nagar",
+        "address": "Dr. Babasaheb Ambedkar Mun. Mat. Home, Ground No.7, Tagore Nagar, Vikhroli (East) Mumbai \u2013 83",
+        "ward": "S",
+        "type": "Maternity Home",
+        "owner_dept": "Public Health Dept",
+        "open24x7": true,
+        "emergency_services": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.93,
+          19.15
+        ]
+      },
+      "properties": {
+        "id": "mate-26",
+        "name": "Savitribai Jyotiba Phule\u00a0Maternity Home, Bhandup",
+        "address": "Bhandup Mun. Mat. Home, Motichand Premises, Savitribai Phule Marg, LBS Road, Bhandup (W), Mumbai \u2013 78.",
+        "ward": "S",
+        "type": "Maternity Home",
+        "owner_dept": "Public Health Dept",
+        "open24x7": true,
+        "emergency_services": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.93,
+          19.15
+        ]
+      },
+      "properties": {
+        "id": "mate-27",
+        "name": "Lal Bahadur Shastri Marg Mat. Home",
+        "address": "Lal Bahadur Shastri Marg Mat. Home, Near S.G. International School, Besides Kockreja Complex, L.B.S. Road, Bhandup (W), Mumbai-78",
+        "ward": "S",
+        "type": "Maternity Home",
+        "owner_dept": "Public Health Dept",
+        "open24x7": true,
+        "emergency_services": false
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          72.95,
+          19.18
+        ]
+      },
+      "properties": {
+        "id": "mate-28",
+        "name": "Smt.Shyamkunwarbai Jatashankar Dosa Chanchani Mulund Maternity Home",
+        "address": "S. J. D. C. Mun. Mat. Home, Paanch Rasta, Mulund (W), Mumbai \u2013 80.",
+        "ward": "T",
+        "type": "Maternity Home",
+        "owner_dept": "Public Health Dept",
+        "open24x7": true,
+        "emergency_services": false
+      }
+    }
+  ]
+}

@@ -1,0 +1,1104 @@
+[
+  {
+    "id": "hosp-1",
+    "name": "Grant Med.College & J.J. Hospital",
+    "type": "hospital",
+    "category": "BMC Major Hospitals",
+    "area": "Ward E",
+    "address": "J.J.Marg Nagpada,Near Sandhurst Road station Mumbai-400008",
+    "coordinates": [
+      18.96,
+      72.83
+    ],
+    "open24x7": true,
+    "ward": "E",
+    "services": [
+      "24/7 Casualty & Emergency Ward",
+      "Govt Medical Aid",
+      "Trauma Unit"
+    ]
+  },
+  {
+    "id": "hosp-2",
+    "name": "NAIR HOSPITAL DENTAL COLLEGE",
+    "type": "hospital",
+    "category": "BMC Major Hospitals",
+    "area": "Ward E",
+    "address": "Dr. Anandrao L. Nair Road, Mumbai Central, Mumbai \u2013 400 008",
+    "coordinates": [
+      18.97,
+      72.82
+    ],
+    "open24x7": true,
+    "ward": "E",
+    "services": [
+      "24/7 Casualty & Emergency Ward",
+      "Govt Medical Aid",
+      "Trauma Unit"
+    ]
+  },
+  {
+    "id": "hosp-3",
+    "name": "B. Y. L. NAIR CHARITABLE HOSPITAL AND T. N. MEDICAL COLLEGE",
+    "type": "hospital",
+    "category": "BMC Major Hospitals",
+    "area": "Ward E",
+    "address": "Dr. Anandrao L. Nair Road, Mumbai Central, Mumbai \u2013 400 008.",
+    "coordinates": [
+      18.97,
+      72.82
+    ],
+    "open24x7": true,
+    "ward": "E",
+    "services": [
+      "24/7 Casualty & Emergency Ward",
+      "Govt Medical Aid",
+      "Trauma Unit"
+    ]
+  },
+  {
+    "id": "hosp-4",
+    "name": "Seth G.S.Medical college &KEM Hospital",
+    "type": "hospital",
+    "category": "BMC Major Hospitals",
+    "area": "Ward FS",
+    "address": "Acharya Donde Road,Parel,Mumbai-400012.",
+    "coordinates": [
+      19.0,
+      72.84
+    ],
+    "open24x7": true,
+    "ward": "FS",
+    "services": [
+      "24/7 Casualty & Emergency Ward",
+      "Govt Medical Aid",
+      "Trauma Unit"
+    ]
+  },
+  {
+    "id": "hosp-5",
+    "name": "LOKMANYA TILAK MUNICIPAL GENERAL HOSPITAL AND MEDICAL COLLEGE",
+    "type": "hospital",
+    "category": "BMC Major Hospitals",
+    "area": "Ward FN",
+    "address": "Laxmibai Kelkar Road,Sion,Mumbai-400022.",
+    "coordinates": [
+      19.04,
+      72.86
+    ],
+    "open24x7": true,
+    "ward": "FN",
+    "services": [
+      "24/7 Casualty & Emergency Ward",
+      "Govt Medical Aid",
+      "Trauma Unit"
+    ]
+  },
+  {
+    "id": "hosp-6",
+    "name": "Hinduhrudaysamrat Balasaheb Thackeray Med.College & Dr.R.N Cooper Hospital",
+    "type": "hospital",
+    "category": "BMC Major Hospitals",
+    "area": "Ward KW",
+    "address": "JVPD Sceme,Gulmohor Road,Juhu,Vile Paele()W,Mumbai-400056",
+    "coordinates": [
+      19.11,
+      72.84
+    ],
+    "open24x7": true,
+    "ward": "KW",
+    "services": [
+      "24/7 Casualty & Emergency Ward",
+      "Govt Medical Aid",
+      "Trauma Unit"
+    ]
+  },
+  {
+    "id": "hosp-7",
+    "name": "St George Hospital",
+    "type": "hospital",
+    "category": "BMC Peripheral Hospital",
+    "area": "Ward A",
+    "address": "St.Georges Road,C.S.T.,Mumbai-400001",
+    "coordinates": [
+      18.94,
+      72.84
+    ],
+    "open24x7": true,
+    "ward": "A",
+    "services": [
+      "24/7 Casualty & Emergency Ward",
+      "Govt Medical Aid",
+      "Trauma Unit"
+    ]
+  },
+  {
+    "id": "hosp-8",
+    "name": "Cama Albless Hospital",
+    "type": "hospital",
+    "category": "BMC Peripheral Hospital",
+    "area": "Ward A",
+    "address": "Mahapalika Marg,Dhobi Talao,Mumai-400001",
+    "coordinates": [
+      18.94,
+      72.83
+    ],
+    "open24x7": true,
+    "ward": "A",
+    "services": [
+      "24/7 Casualty & Emergency Ward",
+      "Govt Medical Aid",
+      "Trauma Unit"
+    ]
+  },
+  {
+    "id": "hosp-9",
+    "name": "G.T.Hospital",
+    "type": "hospital",
+    "category": "BMC Peripheral Hospital",
+    "area": "Ward A",
+    "address": "L.T.Road,Dhobi Talao,Near Crowford Market,Mumbai-400001.",
+    "coordinates": [
+      18.9411,
+      72.8336
+    ],
+    "open24x7": true,
+    "ward": "A",
+    "services": [
+      "24/7 Casualty & Emergency Ward",
+      "Govt Medical Aid",
+      "Trauma Unit"
+    ]
+  },
+  {
+    "id": "hosp-10",
+    "name": "V.N Desai Hospital",
+    "type": "hospital",
+    "category": "BMC Peripheral Hospital",
+    "area": "Ward HE",
+    "address": "Golibar Road,Santacrus (E),Mumbai-400055",
+    "coordinates": [
+      19.08,
+      72.85
+    ],
+    "open24x7": true,
+    "ward": "HE",
+    "services": [
+      "24/7 Casualty & Emergency Ward",
+      "Govt Medical Aid",
+      "Trauma Unit"
+    ]
+  },
+  {
+    "id": "hosp-11",
+    "name": "K.B  Bhabha Hospital",
+    "type": "hospital",
+    "category": "BMC Peripheral Hospital",
+    "area": "Ward HW",
+    "address": "R. K. Patkar Marg, Bandra(W),Mumbai-400050.",
+    "coordinates": [
+      19.06,
+      72.83
+    ],
+    "open24x7": true,
+    "ward": "HW",
+    "services": [
+      "24/7 Casualty & Emergency Ward",
+      "Govt Medical Aid",
+      "Trauma Unit"
+    ]
+  },
+  {
+    "id": "hosp-12",
+    "name": "Siddharth Municipal General Hospital",
+    "type": "hospital",
+    "category": "BMC Peripheral Hospital",
+    "area": "Ward PS",
+    "address": "Shrirang Shabde Road, Opp.Motilala Nagar Post Office,Goregaon (W),Mumbai-400053",
+    "coordinates": [
+      19.16,
+      72.84
+    ],
+    "open24x7": true,
+    "ward": "PS",
+    "services": [
+      "24/7 Casualty & Emergency Ward",
+      "Govt Medical Aid",
+      "Trauma Unit"
+    ]
+  },
+  {
+    "id": "hosp-13",
+    "name": "MW Desai Mun.Gen.Hospital",
+    "type": "hospital",
+    "category": "BMC Peripheral Hospital",
+    "area": "Ward PN",
+    "address": "Govind Nagar ,HB..P. Road,Malad (East),Mumbai-400097",
+    "coordinates": [
+      19.18,
+      72.85
+    ],
+    "open24x7": true,
+    "ward": "PN",
+    "services": [
+      "24/7 Casualty & Emergency Ward",
+      "Govt Medical Aid",
+      "Trauma Unit"
+    ]
+  },
+  {
+    "id": "hosp-14",
+    "name": "S.K.Patil Mun.Gen.Hospital",
+    "type": "hospital",
+    "category": "BMC Peripheral Hospital",
+    "area": "Ward PN",
+    "address": "Daftari Road,Malad (E),Mumbai-400097.",
+    "coordinates": [
+      19.19,
+      72.85
+    ],
+    "open24x7": true,
+    "ward": "PN",
+    "services": [
+      "24/7 Casualty & Emergency Ward",
+      "Govt Medical Aid",
+      "Trauma Unit"
+    ]
+  },
+  {
+    "id": "hosp-15",
+    "name": "Hinduhridaysamrat Balasaheb Thackeray Trauma Care Hospital",
+    "type": "hospital",
+    "category": "BMC Peripheral Hospital",
+    "area": "Ward KE",
+    "address": "Jogeshwari(E),Mumbai-400060.",
+    "coordinates": [
+      19.14,
+      72.85
+    ],
+    "open24x7": true,
+    "ward": "KE",
+    "services": [
+      "24/7 Casualty & Emergency Ward",
+      "Govt Medical Aid",
+      "Trauma Unit"
+    ]
+  },
+  {
+    "id": "hosp-16",
+    "name": "Bharat ratna Babasaheb Ambedkar Hospital",
+    "type": "hospital",
+    "category": "BMC Peripheral Hospital",
+    "area": "Ward RS",
+    "address": "S.V.Road Opp.Police Station, Kandivli (W),Mumbai-400067.",
+    "coordinates": [
+      19.21,
+      72.85
+    ],
+    "open24x7": true,
+    "ward": "RS",
+    "services": [
+      "24/7 Casualty & Emergency Ward",
+      "Govt Medical Aid",
+      "Trauma Unit"
+    ]
+  },
+  {
+    "id": "hosp-17",
+    "name": "Harilal Bhagwati Mun.Gen.Hosp",
+    "type": "hospital",
+    "category": "BMC Peripheral Hospital",
+    "area": "Ward RN",
+    "address": "S.V.Patel Road,Borivali,Mumbau-400068.",
+    "coordinates": [
+      19.24,
+      72.85
+    ],
+    "open24x7": true,
+    "ward": "RN",
+    "services": [
+      "24/7 Casualty & Emergency Ward",
+      "Govt Medical Aid",
+      "Trauma Unit"
+    ]
+  },
+  {
+    "id": "hosp-18",
+    "name": "Kasturba Cross Road Hospital",
+    "type": "hospital",
+    "category": "BMC Peripheral Hospital",
+    "area": "Ward RC",
+    "address": "Kasturba Cross Road No.2,Borivali (W),Mumbai-400066.",
+    "coordinates": [
+      19.24,
+      72.85
+    ],
+    "open24x7": true,
+    "ward": "RC",
+    "services": [
+      "24/7 Casualty & Emergency Ward",
+      "Govt Medical Aid",
+      "Trauma Unit"
+    ]
+  },
+  {
+    "id": "hosp-19",
+    "name": "Kurla Bhabha Hospital",
+    "type": "hospital",
+    "category": "BMC Peripheral Hospital",
+    "area": "Ward L",
+    "address": "Belgrami Road, Kurla (West), Mumbai - 400 070.",
+    "coordinates": [
+      19.07,
+      72.88
+    ],
+    "open24x7": true,
+    "ward": "L",
+    "services": [
+      "24/7 Casualty & Emergency Ward",
+      "Govt Medical Aid",
+      "Trauma Unit"
+    ]
+  },
+  {
+    "id": "hosp-20",
+    "name": "MAA Mun.Gen.Hospital",
+    "type": "hospital",
+    "category": "BMC Peripheral Hospital",
+    "area": "Ward MW",
+    "address": "Postal Colony Road,Chembur,Mumbai-400071",
+    "coordinates": [
+      19.06,
+      72.9
+    ],
+    "open24x7": true,
+    "ward": "MW",
+    "services": [
+      "24/7 Casualty & Emergency Ward",
+      "Govt Medical Aid",
+      "Trauma Unit"
+    ]
+  },
+  {
+    "id": "hosp-21",
+    "name": "Pt. MMM Centenery Hospital",
+    "type": "hospital",
+    "category": "BMC Peripheral Hospital",
+    "area": "Ward ME",
+    "address": "Waman Tukaram Patil Marg,Govandi (E),Mumbai-400088.",
+    "coordinates": [
+      19.05,
+      72.91
+    ],
+    "open24x7": true,
+    "ward": "ME",
+    "services": [
+      "24/7 Casualty & Emergency Ward",
+      "Govt Medical Aid",
+      "Trauma Unit"
+    ]
+  },
+  {
+    "id": "hosp-22",
+    "name": "Rajawadi Hospital",
+    "type": "hospital",
+    "category": "BMC Peripheral Hospital",
+    "area": "Ward N",
+    "address": "7,M.G.Road,Near Somaiya College, Ghatkopar (East), Mumbai \u2013 400 077.",
+    "coordinates": [
+      19.08,
+      72.9
+    ],
+    "open24x7": true,
+    "ward": "N",
+    "services": [
+      "24/7 Casualty & Emergency Ward",
+      "Govt Medical Aid",
+      "Trauma Unit"
+    ]
+  },
+  {
+    "id": "hosp-23",
+    "name": "KMJ Phule Mun.Gen.Hospital",
+    "type": "hospital",
+    "category": "BMC Peripheral Hospital",
+    "area": "Ward S",
+    "address": "Kannamwar Nagar-2,Vikhroli(E),Mumbai-400083.",
+    "coordinates": [
+      19.12,
+      72.94
+    ],
+    "open24x7": true,
+    "ward": "S",
+    "services": [
+      "24/7 Casualty & Emergency Ward",
+      "Govt Medical Aid",
+      "Trauma Unit"
+    ]
+  },
+  {
+    "id": "hosp-24",
+    "name": "Sant Muktabai Hospital",
+    "type": "hospital",
+    "category": "BMC Peripheral Hospital",
+    "area": "Ward N",
+    "address": "Barvenagar,Bhatwadi,Ghatkopar (W),Mumbai-400084",
+    "coordinates": [
+      19.1,
+      72.9
+    ],
+    "open24x7": true,
+    "ward": "N",
+    "services": [
+      "24/7 Casualty & Emergency Ward",
+      "Govt Medical Aid",
+      "Trauma Unit"
+    ]
+  },
+  {
+    "id": "hosp-25",
+    "name": "SVD Savarkar Hospital",
+    "type": "hospital",
+    "category": "BMC Peripheral Hospital",
+    "area": "Ward T",
+    "address": "Mahatma Phule Road,Opp.C.D.Deshmukh Road Mulund(East).Mumbai-400081",
+    "coordinates": [
+      19.17,
+      72.96
+    ],
+    "open24x7": true,
+    "ward": "T",
+    "services": [
+      "24/7 Casualty & Emergency Ward",
+      "Govt Medical Aid",
+      "Trauma Unit"
+    ]
+  },
+  {
+    "id": "hosp-26",
+    "name": "M.T.Agarwal Mun.Gen.Hospital",
+    "type": "hospital",
+    "category": "BMC Peripheral Hospital",
+    "area": "Ward T",
+    "address": "Near T Ward office,Mulund(W),Mumbai-400080.",
+    "coordinates": [
+      19.18,
+      72.95
+    ],
+    "open24x7": true,
+    "ward": "T",
+    "services": [
+      "24/7 Casualty & Emergency Ward",
+      "Govt Medical Aid",
+      "Trauma Unit"
+    ]
+  },
+  {
+    "id": "hosp-27",
+    "name": "Seth A.J.B.Municipal ENT Hospital",
+    "type": "hospital",
+    "category": "BMC Special Hospital",
+    "area": "Ward A",
+    "address": "NearSiddarth College,Maharshi Dadhichi Marg,Fort,Mumbai-400001",
+    "coordinates": [
+      18.93,
+      72.83
+    ],
+    "open24x7": true,
+    "ward": "A",
+    "services": [
+      "24/7 Casualty & Emergency Ward",
+      "Govt Medical Aid",
+      "Trauma Unit"
+    ]
+  },
+  {
+    "id": "hosp-28",
+    "name": "Municipal Eye Hospital",
+    "type": "hospital",
+    "category": "BMC Special Hospital",
+    "area": "Ward E",
+    "address": "Maulana Shaukat Ali Marg,,Opp.Durga Devi Udyan,Mumbai-400008",
+    "coordinates": [
+      18.96,
+      72.83
+    ],
+    "open24x7": true,
+    "ward": "E",
+    "services": [
+      "24/7 Casualty & Emergency Ward",
+      "Govt Medical Aid",
+      "Trauma Unit"
+    ]
+  },
+  {
+    "id": "hosp-29",
+    "name": "Kasturba Hospital (For Infectiou Diseases)",
+    "type": "hospital",
+    "category": "BMC Special Hospital",
+    "area": "Ward E",
+    "address": "Opp.Central Jail,Sane Guruji Marg (Arthur Road),Mumbai-400011",
+    "coordinates": [
+      18.98,
+      72.83
+    ],
+    "open24x7": true,
+    "ward": "E",
+    "services": [
+      "24/7 Casualty & Emergency Ward",
+      "Govt Medical Aid",
+      "Trauma Unit"
+    ]
+  },
+  {
+    "id": "hosp-30",
+    "name": "Group Of T.B.Hospital",
+    "type": "hospital",
+    "category": "BMC Special Hospital",
+    "area": "Ward FS",
+    "address": "Jerbai Wadia Road,Sewri,Mumbai-400015",
+    "coordinates": [
+      19.01,
+      72.85
+    ],
+    "open24x7": true,
+    "ward": "FS",
+    "services": [
+      "24/7 Casualty & Emergency Ward",
+      "Govt Medical Aid",
+      "Trauma Unit"
+    ]
+  },
+  {
+    "id": "hosp-31",
+    "name": "Acworth Leprosy Hospital",
+    "type": "hospital",
+    "category": "BMC Special Hospital",
+    "area": "Ward FN",
+    "address": "Major Parmeswaran Marg,Wadala,Mumbai-400031",
+    "coordinates": [
+      19.0197,
+      72.8586
+    ],
+    "open24x7": true,
+    "ward": "FN",
+    "services": [
+      "24/7 Casualty & Emergency Ward",
+      "Govt Medical Aid",
+      "Trauma Unit"
+    ]
+  },
+  {
+    "id": "mate-1",
+    "name": "Suryakant Vagal Maternity Home, Zaobawadi",
+    "type": "maternity_home",
+    "category": "BMC Municipal Maternity Home",
+    "area": "Ward C",
+    "address": "Suryakant Wagal Mun. Mat. Home, Zaobawadi, Thakurdwar, Girgaon  Mumbai \u2013 02",
+    "coordinates": [
+      18.95,
+      72.82
+    ],
+    "open24x7": true,
+    "ward": "C",
+    "services": [
+      "Maternal Care",
+      "Emergency Women Care",
+      "Public Health Dept"
+    ]
+  },
+  {
+    "id": "mate-2",
+    "name": "Naigaon Maternity Home",
+    "type": "maternity_home",
+    "category": "BMC Municipal Maternity Home",
+    "area": "Ward FS",
+    "address": "Mun. Mat. Home, Naigaon, Mumbai \u2013 14.",
+    "coordinates": [
+      19.01,
+      72.85
+    ],
+    "open24x7": true,
+    "ward": "FS",
+    "services": [
+      "Maternal Care",
+      "Emergency Women Care",
+      "Public Health Dept"
+    ]
+  },
+  {
+    "id": "mate-3",
+    "name": "Raoli Camp Maternity Home",
+    "type": "maternity_home",
+    "category": "BMC Municipal Maternity Home",
+    "area": "Ward FN",
+    "address": "Mun. Mat. Home, Rowli Camp, Mumbai \u2013 22",
+    "coordinates": [
+      19.04,
+      72.87
+    ],
+    "open24x7": true,
+    "ward": "FN",
+    "services": [
+      "Maternal Care",
+      "Emergency Women Care",
+      "Public Health Dept"
+    ]
+  },
+  {
+    "id": "mate-4",
+    "name": "Haji Mohammad Haji Sabu Siddik  Maternity Home, Prabhadevi",
+    "type": "maternity_home",
+    "category": "BMC Municipal Maternity Home",
+    "area": "Ward GS",
+    "address": "Mohammad Haji Sabu Siddik Mun. Mat. Home, Swatryantveer Savarkar Road, Prabhadevi, Mumbai \u2013 25",
+    "coordinates": [
+      19.02,
+      72.83
+    ],
+    "open24x7": true,
+    "ward": "GS",
+    "services": [
+      "Maternal Care",
+      "Emergency Women Care",
+      "Public Health Dept"
+    ]
+  },
+  {
+    "id": "mate-5",
+    "name": "Mahim Maternity Home",
+    "type": "maternity_home",
+    "category": "BMC Municipal Maternity Home",
+    "area": "Ward GN",
+    "address": "Mun. Mat. Home, Lt. Dilip Gupte Marg, Mahim, Mumbai \u2013 400 0016.",
+    "coordinates": [
+      19.0328,
+      72.8402
+    ],
+    "open24x7": true,
+    "ward": "GN",
+    "services": [
+      "Maternal Care",
+      "Emergency Women Care",
+      "Public Health Dept"
+    ]
+  },
+  {
+    "id": "mate-6",
+    "name": "Bal Gangadhar Kher Maternity Home, Kherwadi",
+    "type": "maternity_home",
+    "category": "BMC Municipal Maternity Home",
+    "area": "Ward HE",
+    "address": "B. G. Kherwadi Mun. Mat. Home, Kherwadi, Bandra (East), Mumbai \u2013 52.",
+    "coordinates": [
+      19.06,
+      72.85
+    ],
+    "open24x7": true,
+    "ward": "HE",
+    "services": [
+      "Maternal Care",
+      "Emergency Women Care",
+      "Public Health Dept"
+    ]
+  },
+  {
+    "id": "mate-7",
+    "name": "Dr. V.N. Shirodkar Maternity Home",
+    "type": "maternity_home",
+    "category": "BMC Municipal Maternity Home",
+    "area": "Ward KE",
+    "address": "Dr. V. N. Shirodkar Mun. Mat. Home, B-Paranjape Scheme, Hanuman Road, Vile-Parle (E), Mumbai \u2013 54.",
+    "coordinates": [
+      19.11,
+      72.85
+    ],
+    "open24x7": true,
+    "ward": "KE",
+    "services": [
+      "Maternal Care",
+      "Emergency Women Care",
+      "Public Health Dept"
+    ]
+  },
+  {
+    "id": "mate-8",
+    "name": "Squatters Colony Maternity Home",
+    "type": "maternity_home",
+    "category": "BMC Municipal Maternity Home",
+    "area": "Ward KE",
+    "address": "Squatters Colony Mun. Mat. Home, Gumpha Road, Jogeshwari (East) Mumbai \u2013 60",
+    "coordinates": [
+      19.14,
+      72.86
+    ],
+    "open24x7": true,
+    "ward": "KE",
+    "services": [
+      "Maternal Care",
+      "Emergency Women Care",
+      "Public Health Dept"
+    ]
+  },
+  {
+    "id": "mate-9",
+    "name": "Mata Ramabai Ambedkar Maternity Home, Marol (Marol Maternity Home)",
+    "type": "maternity_home",
+    "category": "BMC Municipal Maternity Home",
+    "area": "Ward KE",
+    "address": "Marol Mun. Mat. Home, Marol-Maroshi, Andheri (East), Mumbai \u2013 57.",
+    "coordinates": [
+      19.05,
+      72.89
+    ],
+    "open24x7": true,
+    "ward": "KE",
+    "services": [
+      "Maternal Care",
+      "Emergency Women Care",
+      "Public Health Dept"
+    ]
+  },
+  {
+    "id": "mate-10",
+    "name": "Oshiwara Maternity Home",
+    "type": "maternity_home",
+    "category": "BMC Municipal Maternity Home",
+    "area": "Ward KW",
+    "address": "Oshiwara Mun. Mat. Home, Near Ajit Glass Factory, Oshiwara, Jogeshwari (West) Mumbai \u2013 400102.",
+    "coordinates": [
+      19.15,
+      72.85
+    ],
+    "open24x7": true,
+    "ward": "KW",
+    "services": [
+      "Maternal Care",
+      "Emergency Women Care",
+      "Public Health Dept"
+    ]
+  },
+  {
+    "id": "mate-11",
+    "name": "Topiwala Maternity Home Goregaon",
+    "type": "maternity_home",
+    "category": "BMC Municipal Maternity Home",
+    "area": "Ward PS",
+    "address": "Topiwala Mun. Mat. Home, Station Road, Goregaon (West), Mumbai \u2013 62.",
+    "coordinates": [
+      19.16,
+      72.84
+    ],
+    "open24x7": true,
+    "ward": "PS",
+    "services": [
+      "Maternal Care",
+      "Emergency Women Care",
+      "Public Health Dept"
+    ]
+  },
+  {
+    "id": "mate-12",
+    "name": "Choksy Maternity Home",
+    "type": "maternity_home",
+    "category": "BMC Municipal Maternity Home",
+    "area": "Ward PN",
+    "address": "Choksy Mun. Mat. Home, Marvey Road, Malad (West), Mumbai \u2013 64.",
+    "coordinates": [
+      19.19,
+      72.84
+    ],
+    "open24x7": true,
+    "ward": "PN",
+    "services": [
+      "Maternal Care",
+      "Emergency Women Care",
+      "Public Health Dept"
+    ]
+  },
+  {
+    "id": "mate-13",
+    "name": "Maulana Abul Kalam Azhad Malvani Maternity Home",
+    "type": "maternity_home",
+    "category": "BMC Municipal Maternity Home",
+    "area": "Ward PN",
+    "address": "Malavani Mun. Mat. Home, Gate No.6, Malavani, Malad (West) Mumbai \u2013 95",
+    "coordinates": [
+      19.19,
+      72.82
+    ],
+    "open24x7": true,
+    "ward": "PN",
+    "services": [
+      "Maternal Care",
+      "Emergency Women Care",
+      "Public Health Dept"
+    ]
+  },
+  {
+    "id": "mate-14",
+    "name": "Savitribai Phule Mata Bal Hospital, Riddhi Garden",
+    "type": "maternity_home",
+    "category": "BMC Municipal Maternity Home",
+    "area": "Ward PN",
+    "address": "Ridhi Garden Maternity Home, General Arunkumar Vaidya  Marg, Dindoshi , Goregaon ( E)",
+    "coordinates": [
+      19.18,
+      72.87
+    ],
+    "open24x7": true,
+    "ward": "PN",
+    "services": [
+      "Maternal Care",
+      "Emergency Women Care",
+      "Public Health Dept"
+    ]
+  },
+  {
+    "id": "mate-15",
+    "name": "Akurli  Maternity Home",
+    "type": "maternity_home",
+    "category": "BMC Municipal Maternity Home",
+    "area": "Ward RS",
+    "address": "Akurli Road Mun. Mat. Home, Kandivali (East), Mumbai \u2013 101",
+    "coordinates": [
+      19.2,
+      72.85
+    ],
+    "open24x7": true,
+    "ward": "RS",
+    "services": [
+      "Maternal Care",
+      "Emergency Women Care",
+      "Public Health Dept"
+    ]
+  },
+  {
+    "id": "mate-16",
+    "name": "Charkop Maternity Home",
+    "type": "maternity_home",
+    "category": "BMC Municipal Maternity Home",
+    "area": "Ward RC",
+    "address": "Charkop Mun. Mat. Home, Kandivali (West), Mumbai \u2013 97",
+    "coordinates": [
+      19.22,
+      72.83
+    ],
+    "open24x7": true,
+    "ward": "RC",
+    "services": [
+      "Maternal Care",
+      "Emergency Women Care",
+      "Public Health Dept"
+    ]
+  },
+  {
+    "id": "mate-17",
+    "name": "Smt.Kesarbai Chhabildas Lallubhai Bhansali Maternity Home, Borivali",
+    "type": "maternity_home",
+    "category": "BMC Municipal Maternity Home",
+    "area": "Ward RC",
+    "address": "Smt. Bhansali Kesarbai Chhabildas Lallubhai Mun. Mat. Home, Borivali (West), Mumbai \u2013 92.",
+    "coordinates": [
+      19.23,
+      72.86
+    ],
+    "open24x7": true,
+    "ward": "RC",
+    "services": [
+      "Maternal Care",
+      "Emergency Women Care",
+      "Public Health Dept"
+    ]
+  },
+  {
+    "id": "mate-18",
+    "name": "Mother and Child Hospital, Magthane",
+    "type": "maternity_home",
+    "category": "BMC Municipal Maternity Home",
+    "area": "Ward RC",
+    "address": "Mata Bal Rugnalay, Magathane, Borivali East Mumbai \u2013 66",
+    "coordinates": [
+      19.22,
+      72.87
+    ],
+    "open24x7": true,
+    "ward": "RC",
+    "services": [
+      "Maternal Care",
+      "Emergency Women Care",
+      "Public Health Dept"
+    ]
+  },
+  {
+    "id": "mate-19",
+    "name": "Maasaheb Meenatai Thackeray Maternity Home, Chunabhatti",
+    "type": "maternity_home",
+    "category": "BMC Municipal Maternity Home",
+    "area": "Ward L",
+    "address": "Maa Saheb Minatai Thakare Mun. Mat. Home, V. N. Purav Marg, Sion \u2013 Trombay Road, Chunabhatti Mumbai \u2013 22",
+    "coordinates": [
+      19.1315,
+      72.8846
+    ],
+    "open24x7": true,
+    "ward": "L",
+    "services": [
+      "Maternal Care",
+      "Emergency Women Care",
+      "Public Health Dept"
+    ]
+  },
+  {
+    "id": "mate-20",
+    "name": "Dr. Anandibai Joshi Maternity Home",
+    "type": "maternity_home",
+    "category": "BMC Municipal Maternity Home",
+    "area": "Ward L",
+    "address": "Bail Bazar, Kurla Andheri Rd. Kurla (W) Mumbai \u2013 70",
+    "coordinates": [
+      19.08,
+      72.88
+    ],
+    "open24x7": true,
+    "ward": "L",
+    "services": [
+      "Maternal Care",
+      "Emergency Women Care",
+      "Public Health Dept"
+    ]
+  },
+  {
+    "id": "mate-21",
+    "name": "Shahaji Nagar Maternity Home Cheeta Camp",
+    "type": "maternity_home",
+    "category": "BMC Municipal Maternity Home",
+    "area": "Ward ME",
+    "address": "Shajaji Nagar Mun. Mat. Home, Near Trombay Police Station, Cheeta Camp Mumbai \u2013 88",
+    "coordinates": [
+      19.04,
+      72.95
+    ],
+    "open24x7": true,
+    "ward": "ME",
+    "services": [
+      "Maternal Care",
+      "Emergency Women Care",
+      "Public Health Dept"
+    ]
+  },
+  {
+    "id": "mate-23",
+    "name": "Matoshri Ramabai Ambedkar Maternity Home, Chembur Naka",
+    "type": "maternity_home",
+    "category": "BMC Municipal Maternity Home",
+    "area": "Ward MW",
+    "address": "Dr. Ramabai Ambedkar Mun. Mat. Home, Chembur Naka, Mumbai 71.",
+    "coordinates": [
+      19.05,
+      72.89
+    ],
+    "open24x7": true,
+    "ward": "MW",
+    "services": [
+      "Maternal Care",
+      "Emergency Women Care",
+      "Public Health Dept"
+    ]
+  },
+  {
+    "id": "mate-24",
+    "name": "Matoshri Ramabai Thackeray  Maternity Home Ghatkopar",
+    "type": "maternity_home",
+    "category": "BMC Municipal Maternity Home",
+    "area": "Ward N",
+    "address": "Matoshree Ramabai Thakrey Mun. Mat. Home, Ganesh Maidan, Poddar Mill Compound, Ghatkopar (West), Mumbai - 86",
+    "coordinates": [
+      19.05,
+      72.89
+    ],
+    "open24x7": true,
+    "ward": "N",
+    "services": [
+      "Maternal Care",
+      "Emergency Women Care",
+      "Public Health Dept"
+    ]
+  },
+  {
+    "id": "mate-25",
+    "name": "Dr.Babasaheb Ambedkar Maternity Home, Tagore Nagar",
+    "type": "maternity_home",
+    "category": "BMC Municipal Maternity Home",
+    "area": "Ward S",
+    "address": "Dr. Babasaheb Ambedkar Mun. Mat. Home, Ground No.7, Tagore Nagar, Vikhroli (East) Mumbai \u2013 83",
+    "coordinates": [
+      19.12,
+      72.94
+    ],
+    "open24x7": true,
+    "ward": "S",
+    "services": [
+      "Maternal Care",
+      "Emergency Women Care",
+      "Public Health Dept"
+    ]
+  },
+  {
+    "id": "mate-26",
+    "name": "Savitribai Jyotiba Phule\u00a0Maternity Home, Bhandup",
+    "type": "maternity_home",
+    "category": "BMC Municipal Maternity Home",
+    "area": "Ward S",
+    "address": "Bhandup Mun. Mat. Home, Motichand Premises, Savitribai Phule Marg, LBS Road, Bhandup (W), Mumbai \u2013 78.",
+    "coordinates": [
+      19.15,
+      72.93
+    ],
+    "open24x7": true,
+    "ward": "S",
+    "services": [
+      "Maternal Care",
+      "Emergency Women Care",
+      "Public Health Dept"
+    ]
+  },
+  {
+    "id": "mate-27",
+    "name": "Lal Bahadur Shastri Marg Mat. Home",
+    "type": "maternity_home",
+    "category": "BMC Municipal Maternity Home",
+    "area": "Ward S",
+    "address": "Lal Bahadur Shastri Marg Mat. Home, Near S.G. International School, Besides Kockreja Complex, L.B.S. Road, Bhandup (W), Mumbai-78",
+    "coordinates": [
+      19.15,
+      72.93
+    ],
+    "open24x7": true,
+    "ward": "S",
+    "services": [
+      "Maternal Care",
+      "Emergency Women Care",
+      "Public Health Dept"
+    ]
+  },
+  {
+    "id": "mate-28",
+    "name": "Smt.Shyamkunwarbai Jatashankar Dosa Chanchani Mulund Maternity Home",
+    "type": "maternity_home",
+    "category": "BMC Municipal Maternity Home",
+    "area": "Ward T",
+    "address": "S. J. D. C. Mun. Mat. Home, Paanch Rasta, Mulund (W), Mumbai \u2013 80.",
+    "coordinates": [
+      19.18,
+      72.95
+    ],
+    "open24x7": true,
+    "ward": "T",
+    "services": [
+      "Maternal Care",
+      "Emergency Women Care",
+      "Public Health Dept"
+    ]
+  }
+]
