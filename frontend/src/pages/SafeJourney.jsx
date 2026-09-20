@@ -8,6 +8,7 @@ import { MUMBAI_SAFE_HAVENS } from '../data/safeHavens';
 import { computeTransitOptions } from '../data/mumbaiTransitLines';
 import FakeCallModal from '../components/FakeCallModal';
 import TransitAndRightsModal from '../components/TransitAndRightsModal';
+import API_BASE_URL from '../config/api';
 
 // Leaflet custom marker icons
 const originIcon = new L.Icon({
@@ -317,7 +318,7 @@ export default function SafeJourney() {
       return;
     }
     try {
-      const res = await fetch(`http://localhost:5000/api/geocode?q=${encodeURIComponent(query)}`);
+      const res = await fetch(`${API_BASE_URL}/api/geocode?q=${encodeURIComponent(query)}`);
       const data = await res.json();
       setFn(data.results || []);
     } catch (e) {
@@ -336,7 +337,7 @@ export default function SafeJourney() {
         const lng = pos.coords.longitude;
         setLiveCoords({ lat, lng });
         try {
-          const res = await fetch(`http://localhost:5000/api/reverse-geocode?lat=${lat}&lng=${lng}`);
+          const res = await fetch(`${API_BASE_URL}/api/reverse-geocode?lat=${lat}&lng=${lng}`);
           const data = await res.json();
           setOrigin(data.name || `${lat.toFixed(4)}, ${lng.toFixed(4)}`);
         } catch {
@@ -351,7 +352,7 @@ export default function SafeJourney() {
 
   const handleMapPick = async (latlng) => {
     try {
-      const res = await fetch(`http://localhost:5000/api/reverse-geocode?lat=${latlng.lat}&lng=${latlng.lng}`);
+      const res = await fetch(`${API_BASE_URL}/api/reverse-geocode?lat=${latlng.lat}&lng=${latlng.lng}`);
       const data = await res.json();
       setDestination(data.name || `${latlng.lat.toFixed(4)}, ${latlng.lng.toFixed(4)}`);
     } catch {
@@ -368,7 +369,7 @@ export default function SafeJourney() {
     setAnalyzing(true);
     setErrorMsg('');
     try {
-      const res = await fetch('http://localhost:5000/api/journey/analyze', {
+      const res = await fetch(`${API_BASE_URL}/api/journey/analyze`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ origin, destination })

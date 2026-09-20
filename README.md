@@ -52,24 +52,59 @@ Ensure Python 3.x and Node.js are installed.
 # Ensure the provided CSV and KML files are in the root directory.
 ```
 
-## 12. Running Backend
+## 12. Running Backend Locally
 ```bash
 cd backend
 python -m venv venv
 # Activate virtual environment (Windows: .\venv\Scripts\activate, Linux/Mac: source venv/bin/activate)
-pip install -r requirements.txt # (Flask, pandas, geopandas, scikit-learn, flask-cors, xmltodict)
-python scripts/data_processor.py # Processes raw data
+pip install -r requirements.txt
 python app.py # Runs the Flask API on port 5000
 ```
 
-## 13. Running Frontend
+## 13. Running Frontend Locally
 ```bash
 cd frontend
 npm install
-npm run dev # Runs Vite dev server
+npm run dev # Runs Vite dev server on port 5173 with local /api proxy
 ```
 
-## 14. Environment Variables
+## 14. Production Deployment
+
+### Backend — Render (Web Service)
+- **Root Directory:** `backend`
+- **Environment:** `Python 3`
+- **Build Command:** `pip install -r requirements.txt`
+- **Start Command:** `gunicorn app:app`
+- **Required Environment Variables:**
+  - `ORS_API_KEY`: *(Optional but recommended)* Your OpenRouteService API key for genuine road network routing and geocoding.
+  - `PORT`: Automatically assigned by Render.
+  - `FLASK_DEBUG`: `false` (default)
+
+### Frontend — Vercel
+- **Root Directory:** `frontend`
+- **Framework Preset:** `Vite`
+- **Build Command:** `npm run build`
+- **Output Directory:** `dist`
+- **API Routing:**
+  - All frontend requests use relative paths (`/api/...`).
+  - Update `frontend/vercel.json` with your deployed Render backend URL:
+    ```json
+    {
+      "rewrites": [
+        {
+          "source": "/api/(.*)",
+          "destination": "https://<your-render-app-name>.onrender.com/api/$1"
+        },
+        {
+          "source": "/(.*)",
+          "destination": "/index.html"
+        }
+      ]
+    }
+    ```
+  - Alternatively, you can set the environment variable `VITE_API_BASE_URL=https://<your-render-app-name>.onrender.com` in your Vercel Project Settings.
+
+## 15. Environment Variables
 The application is pre-configured with OpenRouteService for real road network routing and geocoding.
 Create a `backend/.env` file:
 ```env
@@ -77,18 +112,18 @@ ORS_API_KEY=your_openrouteservice_api_key
 ```
 When configured, SafeRoute calculates genuine turn-by-turn road paths across Mumbai and identifies police stations located along that exact road corridor.
 
-## 15. Limitations
+## 16. Limitations
 - **No Crime Geodata**: The crime dataset is city-wide. Hotspot mapping is disabled to prevent data fabrication.
 - **Routing**: The journey planner uses a straight-line Haversine distance heuristic rather than a real street-routing engine.
 
-## 16. Privacy Considerations
+## 17. Privacy Considerations
 - Journey data and trusted contacts are designed to be stored locally or ephemerally.
 - Browser geolocation is used only with explicit permission (mocked in the current MVP UI).
 
-## 17. Screenshots
+## 18. Screenshots
 *(Add screenshots of Dashboard, Map, and SOS modes here)*
 
-## 18. Future Improvements
+## 19. Future Improvements
 - Integrate a real routing API (e.g., OSRM, Mapbox).
 - Use Ward-level crime datasets to provide granular geographic risk indicators.
 - Implement an LLM API for the conversational AI Assistant.

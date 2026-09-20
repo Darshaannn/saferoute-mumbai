@@ -26,6 +26,7 @@ import {
   ResponsiveContainer, 
   Legend 
 } from 'recharts';
+import API_BASE_URL from '../config/api';
 
 export default function Dashboard() {
   const [data, setData] = useState(null);
@@ -35,7 +36,7 @@ export default function Dashboard() {
   const [sortBy, setSortBy] = useState('registered_desc'); // 'registered_desc' | 'detected_desc' | 'rate_desc' | 'name'
 
   useEffect(() => {
-    fetch('http://localhost:5000/api/crimes/summary')
+    fetch(`${API_BASE_URL}/api/crimes/summary`)
       .then(res => res.json())
       .then(data => {
         setData(data);

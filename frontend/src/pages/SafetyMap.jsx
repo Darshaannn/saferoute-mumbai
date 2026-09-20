@@ -5,6 +5,7 @@ import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import { MUMBAI_SAFE_HAVENS } from '../data/safeHavens';
 import CommunityReportModal, { INITIAL_HAZARDS } from '../components/CommunityReportModal';
+import API_BASE_URL from '../config/api';
 
 export function getRiskTier(score) {
   if (score <= 20) return { color: '#16a34a', label: 'Very Safe / Low Risk', badge: 'Very Safe (0-20)', bg: 'bg-emerald-50', text: 'text-emerald-700', border: 'border-emerald-500' };
@@ -228,8 +229,8 @@ export default function SafetyMap() {
 
   useEffect(() => {
     Promise.all([
-      fetch('http://localhost:5000/api/zones').then(res => res.json()),
-      fetch('http://localhost:5000/api/police-stations').then(res => res.json())
+      fetch(`${API_BASE_URL}/api/zones`).then(res => res.json()),
+      fetch(`${API_BASE_URL}/api/police-stations`).then(res => res.json())
     ])
       .then(([zonesData, stationsData]) => {
         setZones(zonesData.features || []);
@@ -259,7 +260,7 @@ export default function SafetyMap() {
       return;
     }
     try {
-      const res = await fetch(`http://localhost:5000/api/geocode?q=${encodeURIComponent(val)}`);
+      const res = await fetch(`${API_BASE_URL}/api/geocode?q=${encodeURIComponent(val)}`);
       const data = await res.json();
       setSearchResults(data.results || []);
     } catch (e) {
@@ -303,7 +304,7 @@ export default function SafetyMap() {
 
   const handleMapClick = async (latlng) => {
     try {
-      const res = await fetch(`http://localhost:5000/api/reverse-geocode?lat=${latlng.lat}&lng=${latlng.lng}`);
+      const res = await fetch(`${API_BASE_URL}/api/reverse-geocode?lat=${latlng.lat}&lng=${latlng.lng}`);
       const data = await res.json();
       setSelectedPoint({
         lat: latlng.lat,

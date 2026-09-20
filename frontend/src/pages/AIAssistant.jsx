@@ -12,6 +12,7 @@ import {
   Train
 } from 'lucide-react';
 import { motion } from 'framer-motion';
+import API_BASE_URL from '../config/api';
 
 export default function AIAssistant() {
   const [messages, setMessages] = useState([
@@ -44,7 +45,7 @@ export default function AIAssistant() {
     setLoading(true);
 
     try {
-      const res = await fetch('http://localhost:5000/api/assistant', {
+      const res = await fetch(`${API_BASE_URL}/api/assistant`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: queryToSend })
