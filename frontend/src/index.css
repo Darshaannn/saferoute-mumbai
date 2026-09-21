@@ -384,6 +384,50 @@ p, li, label, input, textarea, select, button, td, th, span {
 }
 
 /* ============================================================
+   LIVE GPS USER LOCATION BEACON (Google-Maps-Style Civic Teal)
+   ============================================================ */
+
+.user-live-beacon {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.user-beacon-pulse {
+  position: absolute;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #1E6761;
+  opacity: 0.35;
+  animation: beacon-ping 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+  pointer-events: none;
+}
+
+.user-beacon-core {
+  position: relative;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: #123B3A;
+  border: 2.5px solid #ffffff;
+  box-shadow: 0 0 0 2px rgba(30, 103, 97, 0.5), 0 3px 8px rgba(0, 0, 0, 0.35);
+  z-index: 2;
+}
+
+@keyframes beacon-ping {
+  0% {
+    transform: scale(0.6);
+    opacity: 0.8;
+  }
+  75%, 100% {
+    transform: scale(2.2);
+    opacity: 0;
+  }
+}
+
+/* ============================================================
    REDUCED MOTION
    ============================================================ */
 
@@ -394,3 +438,4 @@ p, li, label, input, textarea, select, button, td, th, span {
     transition-duration: 0.01ms !important;
   }
 }
+

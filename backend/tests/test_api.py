@@ -7,7 +7,7 @@ from unittest.mock import patch, MagicMock
 # Ensure backend directory is in sys.path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from app import app, RATE_LIMIT_STORE, GEOCODE_CACHE
+from app import app, RATE_LIMIT_STORE, GEOCODE_CACHE, TTS_AUDIO_CACHE
 
 @pytest.fixture
 def client():
@@ -15,8 +15,10 @@ def client():
     # Clear rate limit and cache stores between tests
     RATE_LIMIT_STORE.clear()
     GEOCODE_CACHE.clear()
+    TTS_AUDIO_CACHE.clear()
     with app.test_client() as client:
         yield client
+
 
 def test_health_endpoint(client):
     res = client.get('/api/health')
@@ -206,3 +208,79 @@ def test_safety_assistant_emergency_helpline(client):
     assert "139" in reply
     assert "112" in reply
     assert "103" in reply
+
+
+def test_tts_status_endpoint(client):
+    res = client.get('/api/tts/status')
+    assert res.status_code == 200
+    data = res.get_json()
+    assert "provider_configured" in data
+    assert "model_id" in data
+    assert "cached_entries" in data
+
+
+def test_tts_synthesize_missing_text(client):
+    res = client.post('/api/tts/synthesize', json={'text': ''})
+    assert res.status_code == 400
+    data = res.get_json()
+    assert data.get('use_client_tts') is True
+
+
+def test_tts_synthesize_text_too_long(client):
+    res = client.post('/api/tts/synthesize', json={'text': 'A' * 350})
+    assert res.status_code == 400
+    data = res.get_json()
+    assert data.get('use_client_tts') is True
+
+
+def test_tts_synthesize_unconfigured_fallback(client):
+    with patch.dict(os.environ, {'ELEVENLABS_API_KEY': ''}, clear=False):
+        res = client.post('/api/tts/synthesize', json={'text': 'Beta, I am outside.', 'persona': 'mom'})
+        assert res.status_code == 200
+        data = res.get_json()
+        assert data.get('status') == 'fallback'
+        assert data.get('use_client_tts') is True
+
+
+def test_tts_synthesize_success_and_caching(client):
+    mock_audio = b"MOCK_MP3_AUDIO_BYTES_STREAM"
+    mock_resp = MagicMock()
+    mock_resp.status_code = 200
+    mock_resp.content = mock_audio
+
+    env_overrides = {
+        'ELEVENLABS_API_KEY': 'mock_elevenlabs_key_123',
+        'ELEVENLABS_MOM_VOICE_ID': 'mock_voice_id_mom'
+    }
+
+    with patch.dict(os.environ, env_overrides, clear=False), patch('requests.post', return_value=mock_resp) as mock_post:
+        # First call -> fetches and caches
+        res1 = client.post('/api/tts/synthesize', json={'text': 'Beta, please come out safely.', 'persona': 'mom'})
+        assert res1.status_code == 200
+        assert res1.data == mock_audio
+        assert res1.content_type.startswith('audio/mpeg')
+        assert mock_post.call_count == 1
+
+        # Second call with identical payload -> served from in-memory cache without hitting requests.post
+        res2 = client.post('/api/tts/synthesize', json={'text': 'Beta, please come out safely.', 'persona': 'mom'})
+        assert res2.status_code == 200
+        assert res2.data == mock_audio
+        assert mock_post.call_count == 1  # No second request to external provider!
+
+
+def test_tts_synthesize_external_failure_fallback(client):
+    mock_err_resp = MagicMock()
+    mock_err_resp.status_code = 429
+
+    env_overrides = {
+        'ELEVENLABS_API_KEY': 'mock_elevenlabs_key_123',
+        'ELEVENLABS_DAD_VOICE_ID': 'mock_voice_id_dad'
+    }
+
+    with patch.dict(os.environ, env_overrides, clear=False), patch('requests.post', return_value=mock_err_resp):
+        res = client.post('/api/tts/synthesize', json={'text': 'Beta, I am near the signal.', 'persona': 'dad'})
+        assert res.status_code == 200
+        data = res.get_json()
+        assert data.get('status') == 'fallback'
+        assert data.get('use_client_tts') is True
+

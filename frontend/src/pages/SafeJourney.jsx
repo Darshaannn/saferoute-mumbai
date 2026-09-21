@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Shield, Navigation, AlertCircle, Info, Phone, MapPin, Share2, Locate, Compass, Clock, CheckCircle2, Sparkles, X, Volume2, VolumeX, MessageSquare, ExternalLink, UserPlus, Users, Trash2, PhoneForwarded, Scale, Heart, Timer, Plus, Car, Train, ArrowRight, Zap, Check } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { MapContainer, TileLayer, Polyline, Marker, Popup, useMap, useMapEvents } from 'react-leaflet';
+import { MapContainer, TileLayer, Polyline, Marker, Popup, Circle, useMap, useMapEvents } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import { MUMBAI_SAFE_HAVENS } from '../data/safeHavens';
@@ -71,9 +71,20 @@ const policeStationIcon = new L.Icon({
 const hospitalIcon = new L.Icon({
   iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-violet.png',
   shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
-  iconSize: [20, 32],
-  iconAnchor: [10, 32],
-  popupAnchor: [1, -28]
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34]
+});
+
+const userLocationBeaconIcon = L.divIcon({
+  className: 'user-live-beacon',
+  html: `
+    <div class="user-beacon-pulse"></div>
+    <div class="user-beacon-core"></div>
+  `,
+  iconSize: [28, 28],
+  iconAnchor: [14, 14],
+  popupAnchor: [0, -14]
 });
 
 const hospitalHavenIcon = L.divIcon({
@@ -216,6 +227,7 @@ export default function SafeJourney() {
   // SOS & Emergency states
   const [sirenActive, setSirenActive] = useState(false);
   const [liveCoords, setLiveCoords] = useState(null); // Never default to fake coordinates
+  const [liveAccuracy, setLiveAccuracy] = useState(null);
   const [locationStatus, setLocationStatus] = useState('idle'); // idle | requesting | available | denied | unavailable
   const [trustedContacts, setTrustedContacts] = useState(() => {
     try {
@@ -270,6 +282,7 @@ export default function SafeJourney() {
           (pos) => {
             const coords = { lat: pos.coords.latitude, lng: pos.coords.longitude };
             setLiveCoords(coords);
+            setLiveAccuracy(pos.coords.accuracy);
             setLocationStatus('available');
           },
           (err) => {
@@ -1239,6 +1252,40 @@ export default function SafeJourney() {
                         </div>
                       </Popup>
                     </Marker>
+                  )}
+
+                  {/* Live User GPS Marker & Accuracy Circle */}
+                  {liveCoords && (
+                    <>
+                      {typeof liveAccuracy === 'number' && liveAccuracy > 0 && liveAccuracy <= 2000 && (
+                        <Circle
+                          center={[liveCoords.lat, liveCoords.lng]}
+                          radius={liveAccuracy}
+                          pathOptions={{
+                            color: '#1E6761',
+                            fillColor: '#1E6761',
+                            fillOpacity: 0.08,
+                            weight: 1.2,
+                            dashArray: '3, 4'
+                          }}
+                        />
+                      )}
+                      <Marker position={[liveCoords.lat, liveCoords.lng]} icon={userLocationBeaconIcon}>
+                        <Popup>
+                          <div className="p-2 text-xs font-body space-y-1">
+                            <strong className="text-[#123B3A] block">📍 Live GPS Position</strong>
+                            <span className="text-[11px] text-[#6E7772]">
+                              {liveCoords.lat.toFixed(4)}, {liveCoords.lng.toFixed(4)}
+                            </span>
+                            {typeof liveAccuracy === 'number' && (
+                              <span className="text-[10px] text-[#1E6761] block font-semibold">
+                                Accuracy: ±{Math.round(liveAccuracy)}m
+                              </span>
+                            )}
+                          </div>
+                        </Popup>
+                      </Marker>
+                    </>
                   )}
 
                   {/* Mapped Medical Facilities on Map */}

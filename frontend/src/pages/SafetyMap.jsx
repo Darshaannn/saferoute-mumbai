@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { MapContainer, TileLayer, Polygon, Marker, Popup, useMap, useMapEvents } from 'react-leaflet';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { MapContainer, TileLayer, Polygon, Marker, Popup, Circle, useMap, useMapEvents } from 'react-leaflet';
 import { Shield, Search, Locate, Info, Navigation as NavIcon, Layers, Heart, PlusCircle, AlertTriangle, LightbulbOff, Users, ShieldAlert, Phone, ExternalLink, X, ChevronUp, ChevronDown, SlidersHorizontal } from 'lucide-react';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
@@ -211,20 +211,14 @@ const hazardIcon = new L.Icon({
 });
 
 const userLocationBeaconIcon = L.divIcon({
-  className: 'user-location-beacon',
+  className: 'user-live-beacon',
   html: `
-    <div style="
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
-      background: #1E6761;
-      border: 3px solid #ffffff;
-      box-shadow: 0 0 0 6px rgba(30,103,97,0.35), 0 2px 6px rgba(0,0,0,0.35);
-    "></div>
+    <div class="user-beacon-pulse"></div>
+    <div class="user-beacon-core"></div>
   `,
-  iconSize: [20, 20],
-  iconAnchor: [10, 10],
-  popupAnchor: [0, -10]
+  iconSize: [28, 28],
+  iconAnchor: [14, 14],
+  popupAnchor: [0, -14]
 });
 
 function MapController({ center, zoom = 12 }) {
@@ -237,7 +231,7 @@ function MapController({ center, zoom = 12 }) {
   return null;
 }
 
-function MapEventsHandler({ onMapClick, onZoomChange }) {
+function MapEventsHandler({ onMapClick, onZoomChange, onUserPan }) {
   useMapEvents({
     click(e) {
       onMapClick(e.latlng);
@@ -245,6 +239,11 @@ function MapEventsHandler({ onMapClick, onZoomChange }) {
     zoomend(e) {
       if (onZoomChange) {
         onZoomChange(e.target.getZoom());
+      }
+    },
+    dragstart() {
+      if (onUserPan) {
+        onUserPan();
       }
     }
   });
@@ -282,8 +281,14 @@ export default function SafetyMap() {
   const [searchResults, setSearchResults] = useState([]);
   const [selectedPoint, setSelectedPoint] = useState(null);
   const [mapCenter, setMapCenter] = useState([19.1200, 72.8650]);
-  const [userLocation, setUserLocation] = useState(null);
-  const [locating, setLocating] = useState(false);
+  
+  // Live GPS User Tracking State
+  const [userLocation, setUserLocation] = useState(null); // [lat, lng]
+  const [userAccuracy, setUserAccuracy] = useState(null); // radius in meters
+  const [locationStatus, setLocationStatus] = useState('idle'); // 'idle' | 'locating' | 'active' | 'denied' | 'unavailable' | 'timeout'
+  const [locationError, setLocationError] = useState(null);
+  const [isFollowingUser, setIsFollowingUser] = useState(false);
+  const watchIdRef = useRef(null);
   const searchDebounceRef = useRef(null);
   const searchAbortRef = useRef(null);
 
@@ -378,28 +383,79 @@ export default function SafetyMap() {
     setSearchQuery(place.name);
   };
 
-  const handleLocateMe = () => {
+  // Clean up location watcher on component unmount
+  useEffect(() => {
+    return () => {
+      if (watchIdRef.current !== null && navigator.geolocation) {
+        navigator.geolocation.clearWatch(watchIdRef.current);
+        watchIdRef.current = null;
+      }
+    };
+  }, []);
+
+  // Continuous Live GPS Tracking Manager
+  const startLiveTracking = useCallback((shouldRecenter = true) => {
     if (!navigator.geolocation) {
-      alert("Geolocation is not supported by your browser");
+      setLocationStatus('unavailable');
+      setLocationError("Geolocation is not supported by your browser.");
       return;
     }
-    setLocating(true);
-    navigator.geolocation.getCurrentPosition(
+
+    setLocationStatus('locating');
+    setLocationError(null);
+
+    // Clear any prior active watcher to prevent duplicate listeners
+    if (watchIdRef.current !== null) {
+      navigator.geolocation.clearWatch(watchIdRef.current);
+      watchIdRef.current = null;
+    }
+
+    const id = navigator.geolocation.watchPosition(
       (pos) => {
         const lat = pos.coords.latitude;
         const lng = pos.coords.longitude;
+        const acc = pos.coords.accuracy;
+
         setUserLocation([lat, lng]);
-        setMapCenter([lat, lng]);
-        setLocating(false);
+        setUserAccuracy(acc);
+        setLocationStatus('active');
+        setLocationError(null);
+
+        if (shouldRecenter || isFollowingUser) {
+          setMapCenter([lat, lng]);
+        }
       },
       (err) => {
-        console.warn("GPS failed", err);
-        setUserLocation(null);
-        setLocating(false);
-        alert("Location unavailable. You can still browse the map and access emergency resources.");
+        console.warn("Live GPS position error:", err);
+        if (err.code === 1) {
+          setLocationStatus('denied');
+          setLocationError("Location permission was denied. You can continue exploring the map manually.");
+        } else if (err.code === 2) {
+          setLocationStatus('unavailable');
+          setLocationError("GPS location temporarily unavailable on your device.");
+        } else if (err.code === 3) {
+          setLocationStatus('timeout');
+          setLocationError("Location request timed out. Please tap 'My Location' to retry.");
+        } else {
+          setLocationStatus('unavailable');
+          setLocationError("Unable to acquire live GPS location.");
+        }
       },
-      { enableHighAccuracy: true, timeout: 8000, maximumAge: 10000 }
+      {
+        enableHighAccuracy: true,
+        timeout: 10000,
+        maximumAge: 3000
+      }
     );
+    watchIdRef.current = id;
+  }, [isFollowingUser]);
+
+  const handleLocateMe = () => {
+    setIsFollowingUser(true);
+    if (userLocation) {
+      setMapCenter([...userLocation]);
+    }
+    startLiveTracking(true);
   };
 
   const handleMapClick = async (latlng) => {
@@ -493,12 +549,15 @@ export default function SafetyMap() {
             {/* GPS Locate Me Button */}
             <button
               onClick={handleLocateMe}
-              title="Find my location"
-              className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center shrink-0 cursor-pointer transition active:scale-95"
-              style={{ background: 'var(--color-teal-soft)', color: 'var(--color-accent)' }}
+              title={locationStatus === 'active' ? "Live GPS Active (Click to center on me)" : "Locate My Position"}
+              className={`w-9 h-9 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center shrink-0 cursor-pointer transition active:scale-95 border ${
+                locationStatus === 'active'
+                  ? 'bg-[#123B3A] text-white border-[#123B3A] shadow-xs'
+                  : 'bg-[#E6EFEB] text-[#1E6761] border-[#1E6761]/20 hover:bg-[#d8e6e0]'
+              }`}
               aria-label="Find GPS Location"
             >
-              <Locate className={`w-4 h-4 ${locating ? 'animate-spin' : ''}`} />
+              <Locate className={`w-4 h-4 ${locationStatus === 'locating' ? 'animate-spin' : ''}`} />
             </button>
 
             {/* Open Filter Drawer Button */}
@@ -637,10 +696,14 @@ export default function SafetyMap() {
         <button
           onClick={handleLocateMe}
           title="Center on my location"
-          className="w-11 h-11 rounded-full bg-white text-[#123B3A] shadow-lg border border-[#D8D3C9] flex items-center justify-center active:scale-95 transition cursor-pointer"
+          className={`w-11 h-11 rounded-full shadow-lg border flex items-center justify-center active:scale-95 transition cursor-pointer ${
+            locationStatus === 'active'
+              ? 'bg-[#123B3A] text-white border-[#123B3A]'
+              : 'bg-white text-[#123B3A] border-[#D8D3C9]'
+          }`}
           aria-label="Locate Me"
         >
-          <Locate className={`w-5 h-5 ${locating ? 'animate-spin text-[#1E6761]' : ''}`} />
+          <Locate className={`w-5 h-5 ${locationStatus === 'locating' ? 'animate-spin text-[#1E6761]' : ''}`} />
         </button>
 
         {/* Legend & Filter Sheet FAB */}
@@ -719,7 +782,10 @@ export default function SafetyMap() {
         zoomControl={false}
       >
         <MapController center={mapCenter} />
-        <MapEventsHandler onMapClick={handleMapClick} />
+        <MapEventsHandler 
+          onMapClick={handleMapClick} 
+          onUserPan={() => setIsFollowingUser(false)}
+        />
         
         <TileLayer
           key={mapStyle}
@@ -930,13 +996,52 @@ export default function SafetyMap() {
           </Marker>
         ))}
 
-        {/* User GPS Location Marker */}
+        {/* User GPS Live Location Marker & Accuracy Radius */}
         {userLocation && (
-          <Marker position={userLocation} icon={userLocationBeaconIcon}>
-            <Popup>
-              <div className="p-2 text-xs font-bold text-emerald-700">📍 Detected GPS Location</div>
-            </Popup>
-          </Marker>
+          <>
+            {typeof userAccuracy === 'number' && userAccuracy > 0 && userAccuracy <= 2000 && (
+              <Circle
+                center={userLocation}
+                radius={userAccuracy}
+                pathOptions={{
+                  color: '#1E6761',
+                  fillColor: '#1E6761',
+                  fillOpacity: 0.08,
+                  weight: 1.2,
+                  dashArray: '3, 4'
+                }}
+              />
+            )}
+            <Marker position={userLocation} icon={userLocationBeaconIcon}>
+              <Popup>
+                <div className="p-3 font-body min-w-[210px] space-y-2">
+                  <div className="flex items-center gap-1.5 text-[#123B3A]">
+                    <span className="w-2.5 h-2.5 rounded-full bg-[#1E6761] animate-pulse"></span>
+                    <strong className="text-[13px]">Your Live GPS Position</strong>
+                  </div>
+                  <div className="p-2 bg-[#F4F0E8] border border-[#D8D3C9] rounded-xl text-[11px] space-y-1 text-[#17201F]">
+                    <div className="flex justify-between">
+                      <span className="text-[#6E7772]">Coordinates:</span>
+                      <span className="font-mono font-medium">{userLocation[0].toFixed(5)}, {userLocation[1].toFixed(5)}</span>
+                    </div>
+                    {typeof userAccuracy === 'number' && (
+                      <div className="flex justify-between">
+                        <span className="text-[#6E7772]">Accuracy:</span>
+                        <span className="font-semibold text-[#1E6761]">±{Math.round(userAccuracy)} meters</span>
+                      </div>
+                    )}
+                    <div className="flex justify-between">
+                      <span className="text-[#6E7772]">Mode:</span>
+                      <span className="text-[#123B3A] font-semibold">Continuous Live Tracking</span>
+                    </div>
+                  </div>
+                  <p className="text-[10px] text-[#6E7772] italic">
+                    Coordinates are processed strictly on your device for privacy.
+                  </p>
+                </div>
+              </Popup>
+            </Marker>
+          </>
         )}
 
         {/* Selected Search / Clicked Point Marker */}

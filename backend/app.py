@@ -1,12 +1,14 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, Response
 from flask_cors import CORS
 import json
 import os
 import math
 import time
+import hashlib
 import requests
 from collections import defaultdict
 from functools import wraps
+# pyrefly: ignore [missing-import]
 from dotenv import load_dotenv
 
 # Load environment variables
@@ -21,6 +23,11 @@ ORS_API_KEY = os.getenv('ORS_API_KEY', '')
 # --- In-Memory TTL Geocoding Cache (Short TTL: 10 mins, no user GPS stored) ---
 GEOCODE_CACHE = {}
 GEOCODE_CACHE_TTL_SECS = 600  # 10 minutes
+
+# --- In-Memory TTL TTS Audio Cache (24 hours, keyed by sha256 of voice+text) ---
+TTS_AUDIO_CACHE = {}
+TTS_AUDIO_CACHE_TTL_SECS = 86400  # 24 hours
+
 
 def get_cached_geocode(key):
     now = time.time()
@@ -1140,6 +1147,106 @@ def safety_assistant():
         "city_wide_risk_indicator": crime_stats.get('city_wide_risk_indicator', 50.0)
     })
 
+@app.route('/api/tts/status', methods=['GET'])
+def tts_status():
+    """
+    Returns TTS provider configuration status and cache metrics without exposing API keys.
+    """
+    api_key_set = bool(os.getenv('ELEVENLABS_API_KEY', ''))
+    return jsonify({
+        "provider_configured": api_key_set,
+        "model_id": os.getenv('ELEVENLABS_MODEL_ID', 'eleven_multilingual_v2'),
+        "cached_entries": len(TTS_AUDIO_CACHE)
+    })
+
+@app.route('/api/tts/synthesize', methods=['POST'])
+@rate_limit(max_requests=30, window_secs=60)
+def tts_synthesize():
+    """
+    Synthesizes realistic Indian voice audio via backend TTS proxy (ElevenLabs or fallback).
+    Secures API credentials strictly server-side, with in-memory TTL caching to prevent
+    duplicate quota consumption.
+    """
+    req_data = request.json or {}
+    text = str(req_data.get('text') or '').strip()
+    persona = str(req_data.get('persona') or 'mom').strip().lower()
+    voice_id = str(req_data.get('voice_id') or '').strip()
+
+    if not text:
+        return jsonify({"error": "text is required", "use_client_tts": True}), 400
+
+    if len(text) > 300:
+        return jsonify({"error": "text exceeds maximum length of 300 characters", "use_client_tts": True}), 400
+
+    api_key = os.getenv('ELEVENLABS_API_KEY', '')
+    if not api_key:
+        return jsonify({
+            "status": "fallback",
+            "message": "External TTS key not configured; use client speech synthesis",
+            "use_client_tts": True
+        }), 200
+
+    persona_voice_map = {
+        'mom': os.getenv('ELEVENLABS_MOM_VOICE_ID', ''),
+        'dad': os.getenv('ELEVENLABS_DAD_VOICE_ID', ''),
+        'inspector': os.getenv('ELEVENLABS_POLICE_VOICE_ID', ''),
+        'support': os.getenv('ELEVENLABS_SUPPORT_VOICE_ID', '')
+    }
+
+    target_voice_id = voice_id or persona_voice_map.get(persona) or os.getenv('ELEVENLABS_DEFAULT_VOICE_ID', '')
+    if not target_voice_id:
+        return jsonify({
+            "status": "fallback",
+            "message": f"No voice ID configured for persona '{persona}'; use client speech synthesis",
+            "use_client_tts": True
+        }), 200
+
+    cache_key = hashlib.sha256(f"{target_voice_id}:{text}".encode('utf-8')).hexdigest()
+    now = time.time()
+
+    # Check cache
+    if cache_key in TTS_AUDIO_CACHE:
+        audio_bytes, exp = TTS_AUDIO_CACHE[cache_key]
+        if exp > now:
+            return Response(audio_bytes, mimetype="audio/mpeg")
+        else:
+            del TTS_AUDIO_CACHE[cache_key]
+
+    # Query ElevenLabs TTS API
+    try:
+        model_id = os.getenv('ELEVENLABS_MODEL_ID', 'eleven_multilingual_v2')
+        url = f"https://api.elevenlabs.io/v1/text-to-speech/{target_voice_id}"
+        headers = {
+            "xi-api-key": api_key,
+            "Content-Type": "application/json",
+            "Accept": "audio/mpeg"
+        }
+        payload = {
+            "text": text,
+            "model_id": model_id,
+            "voice_settings": {
+                "stability": 0.5,
+                "similarity_boost": 0.85
+            }
+        }
+        resp = requests.post(url, json=payload, headers=headers, timeout=8)
+        if resp.status_code == 200:
+            audio_data = resp.content
+            TTS_AUDIO_CACHE[cache_key] = (audio_data, now + TTS_AUDIO_CACHE_TTL_SECS)
+            return Response(audio_data, mimetype="audio/mpeg")
+        else:
+            return jsonify({
+                "status": "fallback",
+                "message": f"TTS provider returned status {resp.status_code}",
+                "use_client_tts": True
+            }), 200
+    except Exception as e:
+        return jsonify({
+            "status": "fallback",
+            "message": "TTS provider connection timed out or failed",
+            "use_client_tts": True
+        }), 200
+
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
@@ -1149,3 +1256,4 @@ if __name__ == '__main__':
         port=port,
         debug=debug_mode
     )
+

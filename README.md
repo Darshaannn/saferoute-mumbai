@@ -12,7 +12,8 @@ SafeRoute Mumbai is an empirical public safety web platform engineered to empowe
   - Zero synthetic risk scores — 100% deterministic, evidence-based metrics with CSV export.
 - **Civic Safety & Infrastructure Map**:
   - Interactive OpenStreetMap (Standard & Humanitarian/HOT) visualizing 118+ verified Mumbai Police Stations, municipal hospitals, and transit hubs.
-  - Administrative ward boundaries and distance calculations from any selected landmark or real user GPS.
+  - Real-time continuous user location tracking with pulsing beacon marker, accuracy radius visualization, and recenter control.
+  - Administrative ward boundaries and distance calculations from any selected landmark or live user GPS.
 - **Safe Journey Planner**:
   - Turn-by-turn road network routing via **OpenRouteService (ORS)**.
   - Multi-modal corridor evaluations (road cabs, Western/Central suburban trains, Metro lines).
@@ -21,6 +22,10 @@ SafeRoute Mumbai is an empirical public safety web platform engineered to empowe
   - Real-time continuous GPS tracking via `navigator.geolocation.watchPosition`.
   - Configurable safety check-in countdown timer.
   - Emergency SOS interface with direct one-tap dialing to **112** (National Emergency), **103** (Mumbai Women Police Cell), **139** (RailMadad Railway Assistance), and **100** (Control Room).
+- **Realistic Indian Voice Escape Simulator**:
+  - Discreet incoming call simulator for uncomfortable situations.
+  - Authentic Mom, Dad, Police (Nirbhaya Cell), and Trip Support personas with natural dialogues in Indian English and Hindi.
+  - Multi-tier speech engine: Secure server-side ElevenLabs TTS proxy with in-memory caching and seamless browser Indian SpeechSynthesis (`en-IN` / `hi-IN`) fallback, plus interactive audio sample preview.
 - **Mumbai Safety Guide**:
   - Rule-based safety information assistant answering queries on legal rights (Zero FIR under BNSS Sec. 173, sunset arrest safeguards under BNSS Sec. 43(5), free legal aid under Legal Services Authorities Act Sec. 12), transit protocols, and emergency numbers.
 
@@ -37,7 +42,7 @@ SafeRoute Mumbai is an empirical public safety web platform engineered to empowe
 │  TailwindCSS (Vanilla CSS) │   OpenRouteService Engine  │
 │  React-Leaflet + OSM Tiles │   Photon + OSM Geocoding   │
 │  Recharts Analytics        │   Sliding Rate Limiter     │
-│  Framer Motion             │   TTL Geocoding Cache      │
+│  Framer Motion             │   TTL Geocoding & TTS Cache│
 └────────────────────────────┴────────────────────────────┘
 ```
 
@@ -65,6 +70,8 @@ Detailed information on data provenance and mathematics is available in:
 | `/api/reverse-geocode` | `GET` | 60/min/IP | Coordinate reverse lookup bounded to Mumbai MMR |
 | `/api/journey/analyze` | `POST` | 30/min/IP | Real road routing and corridor resource coverage calculation |
 | `/api/assistant` | `POST` | 60/min/IP | Rule-based legal rights, helpline, and transit safety guide |
+| `/api/tts/synthesize` | `POST` | 30/min/IP | Secure backend TTS synthesis proxy with in-memory audio caching |
+| `/api/tts/status` | `GET` | — | TTS proxy status and cache metrics |
 
 ---
 
@@ -106,6 +113,9 @@ npm run dev
 - **Start Command**: `gunicorn app:app`
 - **Environment Variables**:
   - `ORS_API_KEY`: *(Optional)* OpenRouteService API key for road routing.
+  - `ELEVENLABS_API_KEY`: *(Optional)* ElevenLabs API key for ultra-realistic voice synthesis proxy.
+  - `ELEVENLABS_MODEL_ID`: *(Optional, default: `eleven_multilingual_v2`)* Model ID.
+  - `ELEVENLABS_MOM_VOICE_ID`, `ELEVENLABS_DAD_VOICE_ID`, `ELEVENLABS_POLICE_VOICE_ID`, `ELEVENLABS_SUPPORT_VOICE_ID`: *(Optional)* Custom persona voice IDs.
   - `FLASK_DEBUG`: `false`
   - `PORT`: Automatically set by Render.
 
