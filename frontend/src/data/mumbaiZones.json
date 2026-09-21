@@ -1,0 +1,899 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "dahisar",
+        "name": "Dahisar",
+        "score": 28,
+        "color": "#84CC16",
+        "label": "21\u201340 (Moderate-Low)",
+        "center": [
+          19.255,
+          72.86
+        ],
+        "ward": "R/N"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              72.835,
+              19.245
+            ],
+            [
+              72.875,
+              19.245
+            ],
+            [
+              72.89,
+              19.26
+            ],
+            [
+              72.88,
+              19.28
+            ],
+            [
+              72.845,
+              19.275
+            ],
+            [
+              72.835,
+              19.245
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "borivali",
+        "name": "Borivali",
+        "score": 32,
+        "color": "#84CC16",
+        "label": "21\u201340 (Moderate-Low)",
+        "center": [
+          19.23,
+          72.855
+        ],
+        "ward": "R/C"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              72.825,
+              19.215
+            ],
+            [
+              72.885,
+              19.215
+            ],
+            [
+              72.875,
+              19.245
+            ],
+            [
+              72.835,
+              19.245
+            ],
+            [
+              72.825,
+              19.215
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "kandivali",
+        "name": "Kandivali",
+        "score": 45,
+        "color": "#FACC15",
+        "label": "41\u201360 (Moderate)",
+        "center": [
+          19.205,
+          72.84
+        ],
+        "ward": "R/S"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              72.815,
+              19.195
+            ],
+            [
+              72.87,
+              19.195
+            ],
+            [
+              72.885,
+              19.215
+            ],
+            [
+              72.825,
+              19.215
+            ],
+            [
+              72.815,
+              19.195
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "malad",
+        "name": "Malad",
+        "score": 78,
+        "color": "#F97316",
+        "label": "61\u201380 (Elevated)",
+        "center": [
+          19.185,
+          72.835
+        ],
+        "ward": "P/N"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              72.805,
+              19.17
+            ],
+            [
+              72.855,
+              19.17
+            ],
+            [
+              72.87,
+              19.195
+            ],
+            [
+              72.815,
+              19.195
+            ],
+            [
+              72.805,
+              19.17
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "goregaon",
+        "name": "Goregaon",
+        "score": 52,
+        "color": "#FACC15",
+        "label": "41\u201360 (Moderate)",
+        "center": [
+          19.162,
+          72.86
+        ],
+        "ward": "P/S"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              72.825,
+              19.15
+            ],
+            [
+              72.885,
+              19.15
+            ],
+            [
+              72.89,
+              19.18
+            ],
+            [
+              72.855,
+              19.17
+            ],
+            [
+              72.825,
+              19.15
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "aarey",
+        "name": "Aarey",
+        "score": 26,
+        "color": "#84CC16",
+        "label": "21\u201340 (Moderate-Low)",
+        "center": [
+          19.155,
+          72.895
+        ],
+        "ward": "P/S Green"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              72.885,
+              19.135
+            ],
+            [
+              72.92,
+              19.135
+            ],
+            [
+              72.93,
+              19.175
+            ],
+            [
+              72.89,
+              19.18
+            ],
+            [
+              72.885,
+              19.15
+            ],
+            [
+              72.885,
+              19.135
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "andheri",
+        "name": "Andheri",
+        "score": 67,
+        "color": "#F97316",
+        "label": "61\u201380 (Elevated)",
+        "center": [
+          19.118,
+          72.855
+        ],
+        "ward": "K/E & K/W"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              72.81,
+              19.105
+            ],
+            [
+              72.88,
+              19.105
+            ],
+            [
+              72.885,
+              19.145
+            ],
+            [
+              72.825,
+              19.15
+            ],
+            [
+              72.805,
+              19.125
+            ],
+            [
+              72.81,
+              19.105
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "powai",
+        "name": "Powai",
+        "score": 33,
+        "color": "#84CC16",
+        "label": "21\u201340 (Moderate-Low)",
+        "center": [
+          19.12,
+          72.905
+        ],
+        "ward": "S Ward"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              72.88,
+              19.105
+            ],
+            [
+              72.935,
+              19.105
+            ],
+            [
+              72.935,
+              19.135
+            ],
+            [
+              72.885,
+              19.135
+            ],
+            [
+              72.88,
+              19.105
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "juhu",
+        "name": "Juhu",
+        "score": 38,
+        "color": "#84CC16",
+        "label": "21\u201340 (Moderate-Low)",
+        "center": [
+          19.098,
+          72.825
+        ],
+        "ward": "K/W Coast"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              72.815,
+              19.08
+            ],
+            [
+              72.835,
+              19.08
+            ],
+            [
+              72.84,
+              19.11
+            ],
+            [
+              72.815,
+              19.11
+            ],
+            [
+              72.815,
+              19.08
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "vile_parle",
+        "name": "Vile Parle",
+        "score": 46,
+        "color": "#FACC15",
+        "label": "41\u201360 (Moderate)",
+        "center": [
+          19.098,
+          72.85
+        ],
+        "ward": "K/E Suburb"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              72.835,
+              19.08
+            ],
+            [
+              72.875,
+              19.08
+            ],
+            [
+              72.88,
+              19.105
+            ],
+            [
+              72.84,
+              19.11
+            ],
+            [
+              72.835,
+              19.08
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "ghatkopar",
+        "name": "Ghatkopar",
+        "score": 59,
+        "color": "#FACC15",
+        "label": "41\u201360 (Moderate)",
+        "center": [
+          19.085,
+          72.91
+        ],
+        "ward": "N Ward"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              72.88,
+              19.07
+            ],
+            [
+              72.935,
+              19.07
+            ],
+            [
+              72.935,
+              19.105
+            ],
+            [
+              72.88,
+              19.105
+            ],
+            [
+              72.88,
+              19.07
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "bandra",
+        "name": "Bandra",
+        "score": 73,
+        "color": "#F97316",
+        "label": "61\u201380 (Elevated)",
+        "center": [
+          19.058,
+          72.835
+        ],
+        "ward": "H/W & H/E"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              72.815,
+              19.04
+            ],
+            [
+              72.865,
+              19.04
+            ],
+            [
+              72.875,
+              19.08
+            ],
+            [
+              72.835,
+              19.08
+            ],
+            [
+              72.815,
+              19.04
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "kurla",
+        "name": "Kurla",
+        "score": 75,
+        "color": "#F97316",
+        "label": "61\u201380 (Elevated)",
+        "center": [
+          19.068,
+          72.885
+        ],
+        "ward": "L Ward"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              72.865,
+              19.045
+            ],
+            [
+              72.91,
+              19.045
+            ],
+            [
+              72.915,
+              19.075
+            ],
+            [
+              72.875,
+              19.08
+            ],
+            [
+              72.865,
+              19.045
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "chembur",
+        "name": "Chembur",
+        "score": 48,
+        "color": "#FACC15",
+        "label": "41\u201360 (Moderate)",
+        "center": [
+          19.055,
+          72.91
+        ],
+        "ward": "M/W"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              72.89,
+              19.03
+            ],
+            [
+              72.935,
+              19.03
+            ],
+            [
+              72.935,
+              19.07
+            ],
+            [
+              72.89,
+              19.065
+            ],
+            [
+              72.89,
+              19.03
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "dadar",
+        "name": "Dadar",
+        "score": 54,
+        "color": "#FACC15",
+        "label": "41\u201360 (Moderate)",
+        "center": [
+          19.02,
+          72.845
+        ],
+        "ward": "G/N & F/N"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              72.825,
+              19.005
+            ],
+            [
+              72.865,
+              19.005
+            ],
+            [
+              72.865,
+              19.04
+            ],
+            [
+              72.825,
+              19.04
+            ],
+            [
+              72.825,
+              19.005
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "worli",
+        "name": "Worli",
+        "score": 36,
+        "color": "#84CC16",
+        "label": "21\u201340 (Moderate-Low)",
+        "center": [
+          19.005,
+          72.82
+        ],
+        "ward": "G/S"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              72.81,
+              18.985
+            ],
+            [
+              72.835,
+              18.985
+            ],
+            [
+              72.835,
+              19.025
+            ],
+            [
+              72.81,
+              19.025
+            ],
+            [
+              72.81,
+              18.985
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "byculla",
+        "name": "Byculla",
+        "score": 63,
+        "color": "#F97316",
+        "label": "61\u201380 (Elevated)",
+        "center": [
+          18.975,
+          72.835
+        ],
+        "ward": "E Ward"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              72.82,
+              18.96
+            ],
+            [
+              72.855,
+              18.96
+            ],
+            [
+              72.855,
+              18.995
+            ],
+            [
+              72.82,
+              18.995
+            ],
+            [
+              72.82,
+              18.96
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "colaba",
+        "name": "Colaba / Fort",
+        "score": 22,
+        "color": "#84CC16",
+        "label": "21\u201340 (Moderate-Low)",
+        "center": [
+          18.92,
+          72.83
+        ],
+        "ward": "A Ward"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              72.81,
+              18.895
+            ],
+            [
+              72.845,
+              18.895
+            ],
+            [
+              72.845,
+              18.95
+            ],
+            [
+              72.815,
+              18.95
+            ],
+            [
+              72.81,
+              18.895
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "mankhurd",
+        "name": "Govandi / Mankhurd",
+        "score": 85,
+        "color": "#EF4444",
+        "label": "81\u2013100 (Higher Recorded Risk)",
+        "center": [
+          19.045,
+          72.935
+        ],
+        "ward": "M/E"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              72.915,
+              19.025
+            ],
+            [
+              72.955,
+              19.025
+            ],
+            [
+              72.955,
+              19.065
+            ],
+            [
+              72.915,
+              19.065
+            ],
+            [
+              72.915,
+              19.025
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "thane",
+        "name": "Thane MMR",
+        "score": 42,
+        "color": "#FACC15",
+        "label": "41\u201360 (Moderate)",
+        "center": [
+          19.2,
+          72.975
+        ],
+        "ward": "TMC"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              72.94,
+              19.165
+            ],
+            [
+              73.01,
+              19.165
+            ],
+            [
+              73.01,
+              19.235
+            ],
+            [
+              72.94,
+              19.235
+            ],
+            [
+              72.94,
+              19.165
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "vashi",
+        "name": "Vashi (Navi Mumbai)",
+        "score": 30,
+        "color": "#84CC16",
+        "label": "21\u201340 (Moderate-Low)",
+        "center": [
+          19.075,
+          72.998
+        ],
+        "ward": "NMMC"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              72.97,
+              19.04
+            ],
+            [
+              73.03,
+              19.04
+            ],
+            [
+              73.03,
+              19.11
+            ],
+            [
+              72.97,
+              19.11
+            ],
+            [
+              72.97,
+              19.04
+            ]
+          ]
+        ]
+      }
+    }
+  ]
+}

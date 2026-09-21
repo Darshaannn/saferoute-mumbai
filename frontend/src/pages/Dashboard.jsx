@@ -30,10 +30,11 @@ import {
   Legend 
 } from 'recharts';
 import { apiRequest } from '../services/apiClient';
+import fallbackCrimeStats from '../data/crimeStats.json';
 
 export default function Dashboard() {
-  const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [data, setData] = useState(fallbackCrimeStats || null);
+  const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedLawFilter, setSelectedLawFilter] = useState('all'); // 'all' | 'ipc' | 'pocso' | 'dowry'
   const [sortBy, setSortBy] = useState('registered_desc'); // 'registered_desc' | 'detected_desc' | 'rate_desc' | 'name'
@@ -42,11 +43,14 @@ export default function Dashboard() {
   useEffect(() => {
     apiRequest('/api/crimes/summary')
       .then(statsData => {
-        setData(statsData);
+        if (statsData && statsData.total_cases_2023) {
+          setData(statsData);
+        }
         setLoading(false);
       })
       .catch(err => {
-        console.error("Error fetching data", err);
+        console.warn("Using fallback crime statistics:", err);
+        setData(fallbackCrimeStats);
         setLoading(false);
       });
   }, []);

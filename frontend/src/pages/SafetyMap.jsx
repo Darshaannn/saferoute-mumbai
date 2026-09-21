@@ -4,8 +4,9 @@ import { Shield, Search, Locate, Info, Navigation as NavIcon, Layers, Heart, Plu
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import { MUMBAI_SAFE_HAVENS } from '../data/safeHavens';
+import fallbackZones from '../data/mumbaiZones.json';
+import fallbackStations from '../data/policeStations.json';
 import CommunityReportModal, { INITIAL_HAZARDS, formatRelativeTime } from '../components/CommunityReportModal';
-import API_BASE_URL from '../config/api';
 import { apiRequest } from '../services/apiClient';
 
 export function getRiskTier(score) {
@@ -251,8 +252,8 @@ function MapEventsHandler({ onMapClick, onZoomChange }) {
 }
 
 export default function SafetyMap() {
-  const [zones, setZones] = useState([]);
-  const [stations, setStations] = useState(null);
+  const [zones, setZones] = useState(fallbackZones?.features || []);
+  const [stations, setStations] = useState(fallbackStations || { type: 'FeatureCollection', features: [] });
   const [loading, setLoading] = useState(false);
   const [activeZone, setActiveZone] = useState(null);
   const [activeStation, setActiveStation] = useState(null);
@@ -288,18 +289,27 @@ export default function SafetyMap() {
 
   useEffect(() => {
     Promise.all([
-      apiRequest('/api/zones'),
-      apiRequest('/api/police-stations')
+      apiRequest('/api/zones').catch(() => null),
+      apiRequest('/api/police-stations').catch(() => null)
     ])
       .then(([zonesData, stationsData]) => {
-        setZones(zonesData?.features || []);
-        setStations(stationsData || { type: 'FeatureCollection', features: [] });
+        if (zonesData && Array.isArray(zonesData.features) && zonesData.features.length > 0) {
+          setZones(zonesData.features);
+        } else if ((!zones || zones.length === 0) && fallbackZones?.features) {
+          setZones(fallbackZones.features);
+        }
+        
+        if (stationsData && Array.isArray(stationsData.features) && stationsData.features.length > 0) {
+          setStations(stationsData);
+        } else if (!stations?.features?.length && fallbackStations) {
+          setStations(fallbackStations);
+        }
         setLoading(false);
       })
       .catch(err => {
-        console.error("Error fetching map datasets", err);
-        setZones([]);
-        setStations({ type: 'FeatureCollection', features: [] });
+        console.warn("Using verified fallback map datasets:", err);
+        setZones(fallbackZones?.features || []);
+        setStations(fallbackStations || { type: 'FeatureCollection', features: [] });
         setLoading(false);
       });
   }, []);
