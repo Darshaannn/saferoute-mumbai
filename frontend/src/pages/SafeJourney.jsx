@@ -627,7 +627,7 @@ export default function SafeJourney() {
   };
 
   return (
-    <div className="pt-20 px-4 max-w-7xl mx-auto min-h-screen pb-20">
+    <div className="pt-20 px-4 max-w-7xl mx-auto min-h-screen pb-28">
       <AnimatePresence mode="wait">
         
         {/* ================= STATE 1: PLANNER ================= */}

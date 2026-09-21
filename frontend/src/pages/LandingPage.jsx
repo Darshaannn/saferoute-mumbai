@@ -23,13 +23,9 @@ export default function LandingPage() {
       {/* HERO SECTION */}
       {/* ================================================================ */}
       <section
-        className="relative overflow-hidden"
+        className="relative overflow-hidden flex items-center pt-6 pb-10 sm:pt-12 sm:pb-16 lg:py-20 xl:py-24"
         style={{
-          minHeight: 'calc(100vh - 74px)',
-          display: 'flex',
-          alignItems: 'center',
-          paddingTop: '80px',
-          paddingBottom: '64px',
+          minHeight: 'auto',
         }}
       >
         {/* Subtle Civic Teal glow hint */}
@@ -42,23 +38,21 @@ export default function LandingPage() {
           }}
         />
 
-        <div className="relative w-full max-w-[1440px] mx-auto px-6 lg:px-12">
-          <div className="grid lg:grid-cols-12 gap-10 lg:gap-14 items-center">
+        <div className="relative w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-12">
+          <div className="grid lg:grid-cols-12 gap-8 sm:gap-10 lg:gap-14 items-center">
 
             {/* LEFT COLUMN: 46-48% width (5.5 cols on 12-grid) */}
-            <div className="lg:col-span-6 flex flex-col gap-6">
+            <div className="lg:col-span-6 flex flex-col gap-5 sm:gap-6">
 
               {/* Eyebrow */}
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2.5 sm:gap-3">
                 <div
                   className="rounded-full"
                   style={{ width: '7px', height: '7px', background: '#1E6761', flexShrink: 0 }}
                 />
                 <span
-                  className="font-body"
+                  className="font-body text-[12px] sm:text-[13px] italic tracking-wide"
                   style={{
-                    fontSize: '13px',
-                    fontStyle: 'italic',
                     color: '#6E7772',
                     letterSpacing: '0.06em',
                   }}
@@ -69,23 +63,21 @@ export default function LandingPage() {
 
               {/* H1 — Bebas Neue */}
               <h1
-                className="font-display"
+                className="font-display text-[42px] leading-[0.96] sm:text-[60px] md:text-[72px] lg:text-[78px] xl:text-[88px]"
                 style={{
-                  fontSize: 'clamp(54px, 6.5vw, 92px)',
-                  lineHeight: '0.94',
                   letterSpacing: '0.01em',
                   color: '#123B3A',
                 }}
               >
                 Know more<br />
-                <span style={{ color: '#123B3A' }}>before you</span><br />
+                <span style={{ color: '#123B3A' }}>before you </span>
                 <span style={{ color: '#1E6761' }}>move.</span>
               </h1>
 
               {/* Body copy — Instrument Serif */}
               <p
-                className="font-body leading-relaxed"
-                style={{ fontSize: '19px', maxWidth: '480px', color: '#6E7772' }}
+                className="font-body leading-relaxed text-[15px] sm:text-[18px] md:text-[19px] max-w-[480px]"
+                style={{ color: '#6E7772' }}
               >
                 Compare routes by nearby police and medical resources,
                 explore Mumbai&apos;s safety infrastructure, and reach
@@ -93,14 +85,11 @@ export default function LandingPage() {
               </p>
 
               {/* Action Buttons */}
-              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 pt-2">
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 pt-1 sm:pt-2">
                 <Link
                   to="/journey"
-                  className="group flex items-center justify-center gap-2.5 font-body font-semibold text-white transition-all active:scale-[0.98]"
+                  className="group flex items-center justify-center gap-2.5 font-body font-semibold text-white transition-all active:scale-[0.98] py-3.5 px-6 sm:py-3.5 sm:px-7 rounded-[11px] text-[16px] sm:text-[17px]"
                   style={{
-                    padding: '14px 30px',
-                    borderRadius: '11px',
-                    fontSize: '17px',
                     background: '#123B3A',
                     boxShadow: '0 4px 18px rgba(18,59,58,0.16)',
                     textDecoration: 'none',
@@ -115,11 +104,8 @@ export default function LandingPage() {
 
                 <Link
                   to="/map"
-                  className="flex items-center justify-center gap-2 font-body font-semibold transition-all active:scale-[0.98]"
+                  className="flex items-center justify-center gap-2 font-body font-semibold transition-all active:scale-[0.98] py-3.5 px-6 sm:py-3 sm:px-7 rounded-[11px] text-[16px] sm:text-[17px]"
                   style={{
-                    padding: '13px 28px',
-                    borderRadius: '11px',
-                    fontSize: '17px',
                     background: 'transparent',
                     color: '#123B3A',
                     border: '1px solid #D8D3C9',
@@ -139,31 +125,28 @@ export default function LandingPage() {
                 </Link>
               </div>
 
-              {/* Minimal Hero Proof Bar */}
+              {/* Responsive Hero Proof Bar */}
               <div
-                className="flex items-center flex-wrap gap-x-8 gap-y-2 pt-6"
-                style={{ borderTop: '1px solid #D8D3C9' }}
+                className="grid grid-cols-3 gap-2 sm:gap-4 pt-5 sm:pt-6 border-t border-[#D8D3C9]"
               >
-                <div className="flex flex-col">
-                  <span className="font-display" style={{ fontSize: '26px', color: '#123B3A', lineHeight: 1 }}>118</span>
-                  <span className="font-body" style={{ fontSize: '13px', color: '#6E7772' }}>police stations</span>
+                <div className="flex flex-col pr-2 border-r border-[#D8D3C9]/80">
+                  <span className="font-display text-[22px] sm:text-[26px] leading-tight" style={{ color: '#123B3A' }}>118</span>
+                  <span className="font-body text-[11px] sm:text-[13px] leading-tight" style={{ color: '#6E7772' }}>police stations</span>
                 </div>
-                <div style={{ width: '1px', height: '28px', background: '#D8D3C9' }} />
-                <div className="flex flex-col">
-                  <span className="font-display" style={{ fontSize: '26px', color: '#1E6761', lineHeight: 1 }}>58</span>
-                  <span className="font-body" style={{ fontSize: '13px', color: '#6E7772' }}>civic medical units</span>
+                <div className="flex flex-col px-1 sm:px-2 border-r border-[#D8D3C9]/80">
+                  <span className="font-display text-[22px] sm:text-[26px] leading-tight" style={{ color: '#1E6761' }}>58</span>
+                  <span className="font-body text-[11px] sm:text-[13px] leading-tight" style={{ color: '#6E7772' }}>civic medical units</span>
                 </div>
-                <div style={{ width: '1px', height: '28px', background: '#D8D3C9' }} />
-                <div className="flex flex-col">
-                  <span className="font-display" style={{ fontSize: '26px', color: '#D84C45', lineHeight: 1 }}>112 / 103</span>
-                  <span className="font-body" style={{ fontSize: '13px', color: '#6E7772' }}>emergency lines</span>
+                <div className="flex flex-col pl-1 sm:pl-2">
+                  <span className="font-display text-[19px] sm:text-[26px] leading-tight" style={{ color: '#D84C45' }}>112 / 103</span>
+                  <span className="font-body text-[11px] sm:text-[13px] leading-tight" style={{ color: '#6E7772' }}>emergency lines</span>
                 </div>
               </div>
 
             </div>
 
-            {/* RIGHT COLUMN: 52-54% Product Canvas */}
-            <div className="lg:col-span-6 flex items-center justify-center">
+            {/* RIGHT COLUMN: Product Canvas */}
+            <div className="lg:col-span-6 flex items-center justify-center w-full mt-2 lg:mt-0">
               <HeroJourneyPreview />
             </div>
 
@@ -943,7 +926,7 @@ export default function LandingPage() {
               SafeRoute <span className="font-body" style={{ fontSize: '15px', color: '#6E7772', fontStyle: 'italic' }}>Mumbai</span>
             </div>
             <div className="font-body" style={{ fontSize: '13px', color: '#6E7772' }}>
-              Civic mobility &amp; emergency resource infrastructure · CODEX 2026
+              Civic mobility &amp; emergency resource infrastructure
             </div>
           </div>
 

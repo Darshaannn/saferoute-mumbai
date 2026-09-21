@@ -209,12 +209,21 @@ const hazardIcon = new L.Icon({
   popupAnchor: [1, -34]
 });
 
-const userPinIcon = new L.Icon({
-  iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png',
-  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
-  iconSize: [25, 41],
-  iconAnchor: [12, 41],
-  popupAnchor: [1, -34]
+const userLocationBeaconIcon = L.divIcon({
+  className: 'user-location-beacon',
+  html: `
+    <div style="
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #1E6761;
+      border: 3px solid #ffffff;
+      box-shadow: 0 0 0 6px rgba(30,103,97,0.35), 0 2px 6px rgba(0,0,0,0.35);
+    "></div>
+  `,
+  iconSize: [20, 20],
+  iconAnchor: [10, 10],
+  popupAnchor: [0, -10]
 });
 
 function MapController({ center, zoom = 12 }) {
@@ -254,6 +263,7 @@ export default function SafetyMap() {
   const [showZones, setShowZones] = useState(true);
   const [scoreFilter, setScoreFilter] = useState('ALL');
   const [isControlsOpen, setIsControlsOpen] = useState(true);
+  const [isFilterSheetOpen, setIsFilterSheetOpen] = useState(false);
   
   // Community Hazard reports state
   const [hazards, setHazards] = useState(() => {
@@ -432,191 +442,220 @@ export default function SafetyMap() {
   );
 
   return (
-    <div className="pt-16 h-screen flex flex-col relative overflow-hidden">
+    <div className="pt-14 md:pt-16 h-screen flex flex-col relative overflow-hidden font-body" style={{ background: 'var(--color-bg)' }}>
       
-      {/* Top Floating Master Control Card with Close & Re-open toggle */}
-      <div className="absolute top-20 left-4 z-[1000]">
-        {isControlsOpen ? (
-          <div className="w-[92vw] sm:w-[480px] md:w-[500px] backdrop-blur-md p-3.5 space-y-3 transition-all" style={{ background: 'rgba(244,240,232,0.97)', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-card-lg)', boxShadow: 'var(--shadow-modal)' }}>
-            
-            {/* Search & Action Row */}
-            <div className="flex items-center gap-2">
-              <div className="relative flex-1 flex items-center">
-                <Search className="absolute left-3 w-4 h-4 text-slate-400" />
-                <input
-                  type="text"
-                  placeholder="Search places, stations, hospitals..."
-                  value={searchQuery}
-                  onChange={(e) => handleSearch(e.target.value)}
-                  className="sr-input w-full pl-9 pr-8 py-2" style={{ fontSize: '14px' }}
-                />
-                {searchQuery && (
-                  <button 
-                    onClick={() => { setSearchQuery(''); setSearchResults([]); }}
-                    className="absolute right-2.5 text-xs text-slate-400 hover:text-slate-600 p-1"
-                  >
-                    ✕
-                  </button>
-                )}
-              </div>
-
-              {/* Find Location GPS Button */}
-              <button
-                onClick={handleLocateMe}
-                title="Find my location"
-                className="p-2 rounded-xl transition flex items-center justify-center shrink-0 cursor-pointer" style={{ background: 'var(--color-teal-soft)', color: 'var(--color-accent)' }}
-                aria-label="Find GPS Location"
-              >
-                <Locate className={`w-4 h-4 ${locating ? 'animate-spin' : ''}`} />
-              </button>
-
-              {/* Close Panel Button */}
-              <button
-                onClick={() => setIsControlsOpen(false)}
-                className="p-2 rounded-xl transition flex items-center justify-center shrink-0 cursor-pointer" style={{ background: 'rgba(18,59,58,0.06)', color: 'var(--color-muted)' }}
-                title="Hide map controls & filters"
-                aria-label="Hide Map Controls"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            </div>
-
-            {/* Search Results Dropdown */}
-            {searchResults.length > 0 && (
-              <div className="max-h-56 overflow-y-auto" style={{ background: 'var(--color-surface)', border: '1px solid var(--color-border)', borderRadius: '12px', boxShadow: 'var(--shadow-sm)' }}>
-                {searchResults.map((r, i) => (
-                  <div
-                    key={i}
-                    onClick={() => selectPlace(r)}
-                    className="p-2.5 cursor-pointer flex items-center justify-between transition"
-                    style={{ borderBottom: i < searchResults.length - 1 ? '1px solid var(--color-border)' : 'none' }}
-                    onMouseEnter={e => e.currentTarget.style.background = 'var(--color-teal-soft)'}
-                    onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
-                  >
-                    <div className="truncate mr-2">
-                      <span className="font-body font-semibold block truncate" style={{ fontSize: '13px', color: 'var(--color-ink)' }}>{r.name}</span>
-                      <span className="font-body" style={{ fontSize: '11px', color: 'var(--color-muted)' }}>{r.source}</span>
-                    </div>
-                    <NavIcon className="w-3.5 h-3.5 shrink-0" style={{ color: 'var(--color-accent)' }} />
-                  </div>
-                ))}
-              </div>
-            )}
-
-            {/* Risk Filter Pills (Neat Segments) */}
-            <div className="space-y-1">
-              <div className="flex items-center justify-between text-[11px]">
-                <span className="font-body font-semibold" style={{ fontSize: '12px', color: 'var(--color-muted)' }}>Risk Filter:</span>
-                {scoreFilter !== 'ALL' && (
-                  <button 
-                    onClick={() => setScoreFilter('ALL')} 
-                    className="font-body font-semibold cursor-pointer" style={{ fontSize: '11px', color: 'var(--color-accent)', background: 'none', border: 'none' }}
-                  >
-                    Reset Filter
-                  </button>
-                )}
-              </div>
-              <div className="flex items-center gap-1.5 overflow-x-auto pb-1 text-xs">
-                <button
-                  onClick={() => setScoreFilter('ALL')}
-                  className="font-body px-2.5 py-1 rounded-lg shrink-0 transition cursor-pointer"
-                  style={{
-                    fontSize: '12px',
-                    background: scoreFilter === 'ALL' ? 'var(--color-primary)' : 'rgba(18,59,58,0.06)',
-                    color: scoreFilter === 'ALL' ? '#fff' : 'var(--color-primary)',
-                    border: 'none',
-                  }}
+      {/* ─────────────────────────────────────────────────────────────
+          TOP FLOATING SEARCH & FILTER BAR (Mobile & Desktop Responsive)
+          ───────────────────────────────────────────────────────────── */}
+      <div className="absolute top-[62px] md:top-20 left-3 right-3 md:left-6 md:right-auto md:w-[480px] z-[1000]">
+        <div 
+          className="backdrop-blur-md p-2 sm:p-2.5 space-y-2 transition-all"
+          style={{
+            background: 'rgba(244,240,232,0.96)',
+            border: '1px solid var(--color-border)',
+            borderRadius: '16px',
+            boxShadow: '0 8px 30px rgba(18,59,58,0.12)',
+          }}
+        >
+          {/* Main Search & Quick Action Row */}
+          <div className="flex items-center gap-1.5 sm:gap-2">
+            {/* Search Input Box */}
+            <div className="relative flex-1 flex items-center">
+              <Search className="absolute left-3 w-4 h-4 text-[#8E9690] pointer-events-none" />
+              <input
+                type="text"
+                placeholder="Search Mumbai places, wards, hospitals..."
+                value={searchQuery}
+                onChange={(e) => handleSearch(e.target.value)}
+                className="w-full pl-9 pr-7 py-2 text-[14px] bg-white border border-[#D8D3C9] rounded-xl text-[#17201F] placeholder:text-[#8E9690] focus:outline-none focus:border-[#1E6761] focus:ring-1 focus:ring-[#1E6761] transition"
+              />
+              {searchQuery && (
+                <button 
+                  onClick={() => { setSearchQuery(''); setSearchResults([]); }}
+                  className="absolute right-2 text-xs text-slate-400 hover:text-slate-700 p-1 cursor-pointer"
+                  aria-label="Clear search"
                 >
-                  All ({zones.length})
+                  ✕
                 </button>
-                
-                {[
-                  { key: '0-20', label: 'Very Safe', dot: '#16a34a' },
-                  { key: '21-40', label: 'Safe', dot: '#65a30d' },
-                  { key: '41-60', label: 'Moderate', dot: '#d97706' },
-                  { key: '61-80', label: 'Vigilance', dot: '#ea580c' },
-                  { key: '81-100', label: 'Caution', dot: '#dc2626' },
-                ].map(f => (
-                  <button
-                    key={f.key}
-                    onClick={() => setScoreFilter(f.key)}
-                    className="font-body px-2.5 py-1 rounded-lg shrink-0 flex items-center gap-1.5 transition cursor-pointer"
-                    style={{
-                      fontSize: '12px',
-                      background: scoreFilter === f.key ? 'var(--color-primary)' : 'rgba(18,59,58,0.06)',
-                      color: scoreFilter === f.key ? '#fff' : 'var(--color-primary)',
-                      border: 'none',
-                    }}
-                  >
-                    <span className="rounded-full" style={{ width: '6px', height: '6px', background: f.dot, flexShrink: 0, display: 'inline-block' }} />
-                    {f.label}
-                  </button>
-                ))}
-              </div>
+              )}
             </div>
 
-            {/* Map Layer Toggles & Action Buttons */}
-            <div className="pt-2 flex items-center justify-between gap-2" style={{ borderTop: '1px solid var(--color-border)' }}>
-              <div className="flex items-center gap-1 flex-wrap">
-                {[
-                  { key: 'zones', label: 'Zones', icon: Layers, active: showZones, toggle: () => setShowZones(!showZones), title: 'Toggle Safety Zones' },
-                  { key: 'police', label: 'Police', icon: Shield, active: showStations, toggle: () => setShowStations(!showStations), title: 'Toggle Police Stations' },
-                  { key: 'medical', label: `Medical (${MUMBAI_SAFE_HAVENS.length})`, icon: Heart, active: showHavens, toggle: () => setShowHavens(!showHavens), title: 'Toggle Medical Facilities' },
-                  { key: 'notes', label: `Notes (${hazards.length})`, icon: AlertTriangle, active: showHazards, toggle: () => setShowHazards(!showHazards), title: 'Toggle Safety Notes' },
-                ].map(item => {
-                  const Icon = item.icon;
-                  return (
-                    <button
-                      key={item.key}
-                      onClick={item.toggle}
-                      className="font-body px-2 py-1 rounded-lg flex items-center gap-1 transition cursor-pointer"
-                      style={{
-                        fontSize: '12px',
-                        background: item.active ? 'var(--color-teal-soft)' : 'transparent',
-                        color: item.active ? 'var(--color-primary)' : 'var(--color-muted)',
-                        border: item.active ? '1px solid rgba(30,103,97,0.25)' : '1px solid transparent',
-                        fontWeight: item.active ? '600' : '400',
-                      }}
-                      title={item.title}
-                    >
-                      <Icon className="w-3.5 h-3.5" /> {item.label}
-                    </button>
-                  );
-                })}
-              </div>
+            {/* GPS Locate Me Button */}
+            <button
+              onClick={handleLocateMe}
+              title="Find my location"
+              className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center shrink-0 cursor-pointer transition active:scale-95"
+              style={{ background: 'var(--color-teal-soft)', color: 'var(--color-accent)' }}
+              aria-label="Find GPS Location"
+            >
+              <Locate className={`w-4 h-4 ${locating ? 'animate-spin' : ''}`} />
+            </button>
 
-              {/* Add Safety Note Button */}
-              <button
-                onClick={() => setShowReportModal(true)}
-                className="font-body font-semibold px-2.5 py-1 flex items-center gap-1 transition shrink-0 cursor-pointer"
-                style={{ fontSize: '12px', background: 'var(--color-primary)', color: '#fff', borderRadius: '10px', border: 'none' }}
-              >
-                <PlusCircle className="w-3.5 h-3.5" /> Add Note
-              </button>
-            </div>
-
+            {/* Open Filter Drawer Button */}
+            <button
+              onClick={() => setIsFilterSheetOpen(true)}
+              title="Filters & Map Legend"
+              className="relative w-9 h-9 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center shrink-0 cursor-pointer transition active:scale-95"
+              style={{ background: 'var(--color-primary)', color: '#ffffff' }}
+              aria-label="Open Filters and Layers"
+            >
+              <SlidersHorizontal className="w-4 h-4" />
+              {(scoreFilter !== 'ALL' || !showStations || !showHavens || !showZones || !showHazards) && (
+                <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-[#D84C45] rounded-full border-2 border-[#F4F0E8]" />
+              )}
+            </button>
           </div>
-        ) : (
-          /* Re-open Button when panel is closed */
-          <button
-            onClick={() => setIsControlsOpen(true)}
-            className="flex items-center gap-2 px-3.5 py-2.5 backdrop-blur-md transition-all active:scale-95 cursor-pointer"
-            style={{ background: 'rgba(244,240,232,0.97)', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-card-lg)', boxShadow: 'var(--shadow-modal)', color: 'var(--color-ink)', fontFamily: 'var(--font-body)', fontSize: '13px', fontWeight: '500' }}
-            title="Open map controls & safety filters"
-          >
-            <div className="w-6 h-6 rounded-lg flex items-center justify-center" style={{ background: 'var(--color-primary)', color: '#fff' }}>
-              <SlidersHorizontal className="w-3.5 h-3.5" />
+
+          {/* Geocoding Search Results Dropdown */}
+          {searchResults.length > 0 && (
+            <div 
+              className="max-h-52 overflow-y-auto bg-white border border-[#D8D3C9] rounded-xl shadow-lg divide-y divide-[#D8D3C9]/60"
+            >
+              {searchResults.map((r, i) => (
+                <div
+                  key={i}
+                  onClick={() => selectPlace(r)}
+                  className="p-2.5 cursor-pointer flex items-center justify-between hover:bg-[#E6EFEB] transition"
+                >
+                  <div className="truncate mr-2">
+                    <span className="font-body font-semibold block truncate text-[13px] text-[#17201F]">{r.name}</span>
+                    <span className="font-body text-[11px] text-[#6E7772]">{r.source}</span>
+                  </div>
+                  <NavIcon className="w-3.5 h-3.5 shrink-0 text-[#1E6761]" />
+                </div>
+              ))}
             </div>
-            <span>Search &amp; Safety Filters</span>
+          )}
+
+          {/* Quick Horizontal Scrollable Layer & Filter Chips */}
+          <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar pt-0.5 pb-0.5 text-xs">
+            {/* Police Toggle */}
+            <button
+              onClick={() => setShowStations(!showStations)}
+              className="px-2.5 py-1 rounded-lg shrink-0 flex items-center gap-1.5 font-medium transition cursor-pointer text-[12px]"
+              style={{
+                background: showStations ? '#123B3A' : 'rgba(255,255,255,0.85)',
+                color: showStations ? '#ffffff' : '#6E7772',
+                border: showStations ? '1px solid #123B3A' : '1px solid #D8D3C9',
+              }}
+            >
+              <Shield className="w-3.5 h-3.5" />
+              Police ({stations?.features?.length || 118})
+            </button>
+
+            {/* Medical Toggle */}
+            <button
+              onClick={() => setShowHavens(!showHavens)}
+              className="px-2.5 py-1 rounded-lg shrink-0 flex items-center gap-1.5 font-medium transition cursor-pointer text-[12px]"
+              style={{
+                background: showHavens ? '#1E6761' : 'rgba(255,255,255,0.85)',
+                color: showHavens ? '#ffffff' : '#6E7772',
+                border: showHavens ? '1px solid #1E6761' : '1px solid #D8D3C9',
+              }}
+            >
+              <Heart className="w-3.5 h-3.5" />
+              Medical ({MUMBAI_SAFE_HAVENS.length})
+            </button>
+
+            {/* Zones Toggle */}
+            <button
+              onClick={() => setShowZones(!showZones)}
+              className="px-2.5 py-1 rounded-lg shrink-0 flex items-center gap-1.5 font-medium transition cursor-pointer text-[12px]"
+              style={{
+                background: showZones ? '#123B3A' : 'rgba(255,255,255,0.85)',
+                color: showZones ? '#ffffff' : '#6E7772',
+                border: showZones ? '1px solid #123B3A' : '1px solid #D8D3C9',
+              }}
+            >
+              <Layers className="w-3.5 h-3.5" />
+              Zones
+            </button>
+
+            {/* Notes Toggle */}
+            <button
+              onClick={() => setShowHazards(!showHazards)}
+              className="px-2.5 py-1 rounded-lg shrink-0 flex items-center gap-1.5 font-medium transition cursor-pointer text-[12px]"
+              style={{
+                background: showHazards ? '#d97706' : 'rgba(255,255,255,0.85)',
+                color: showHazards ? '#ffffff' : '#6E7772',
+                border: showHazards ? '1px solid #d97706' : '1px solid #D8D3C9',
+              }}
+            >
+              <AlertTriangle className="w-3.5 h-3.5" />
+              Notes ({hazards.length})
+            </button>
+
+            {/* Quick Add Note Button */}
+            <button
+              onClick={() => setShowReportModal(true)}
+              className="px-2.5 py-1 rounded-lg shrink-0 flex items-center gap-1 font-semibold transition cursor-pointer text-[12px]"
+              style={{
+                background: 'var(--color-teal-soft)',
+                color: 'var(--color-accent)',
+                border: '1px solid rgba(30,103,97,0.3)',
+              }}
+            >
+              <PlusCircle className="w-3.5 h-3.5" />
+              + Note
+            </button>
+
+            {/* Active Risk Filter Pill */}
             {scoreFilter !== 'ALL' && (
-              <span className="w-2 h-2 rounded-full" style={{ background: 'var(--color-accent)', display: 'inline-block' }}></span>
+              <button
+                onClick={() => setScoreFilter('ALL')}
+                className="px-2.5 py-1 rounded-lg shrink-0 flex items-center gap-1 font-semibold transition cursor-pointer text-[12px]"
+                style={{
+                  background: '#D84C45',
+                  color: '#ffffff',
+                  border: '1px solid #D84C45',
+                }}
+                title="Click to clear filter"
+              >
+                <span>Filter: {scoreFilter}</span>
+                <span className="ml-1 opacity-80">✕</span>
+              </button>
             )}
-          </button>
-        )}
+          </div>
+        </div>
       </div>
 
-      {/* Sleek Area Safety Guide Card (Bottom Left) */}
-      <div className="absolute bottom-6 left-4 z-[1000] backdrop-blur-md px-3.5 py-3 w-[310px] space-y-2.5 transition-all" style={{ background: 'rgba(244,240,232,0.97)', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-card-lg)', boxShadow: 'var(--shadow-modal)' }}>
+      {/* ─────────────────────────────────────────────────────────────
+          MOBILE FLOATING ACTION BUTTONS (Bottom Right)
+          ───────────────────────────────────────────────────────────── */}
+      <div className="md:hidden absolute bottom-24 right-3.5 z-[1000] flex flex-col gap-2.5">
+        {/* GPS Locate Me FAB */}
+        <button
+          onClick={handleLocateMe}
+          title="Center on my location"
+          className="w-11 h-11 rounded-full bg-white text-[#123B3A] shadow-lg border border-[#D8D3C9] flex items-center justify-center active:scale-95 transition cursor-pointer"
+          aria-label="Locate Me"
+        >
+          <Locate className={`w-5 h-5 ${locating ? 'animate-spin text-[#1E6761]' : ''}`} />
+        </button>
+
+        {/* Legend & Filter Sheet FAB */}
+        <button
+          onClick={() => setIsFilterSheetOpen(true)}
+          title="Area Safety Guide & Filter"
+          className="w-11 h-11 rounded-full bg-[#123B3A] text-white shadow-lg flex items-center justify-center active:scale-95 transition cursor-pointer"
+          aria-label="Area Safety Guide"
+        >
+          <Info className="w-5 h-5" />
+        </button>
+      </div>
+
+      {/* ─────────────────────────────────────────────────────────────
+          DESKTOP AREA SAFETY GUIDE CARD (Bottom Left - Hidden on Mobile)
+          ───────────────────────────────────────────────────────────── */}
+      <div 
+        className="hidden md:block absolute bottom-6 left-6 z-[1000] backdrop-blur-md px-3.5 py-3 w-[310px] space-y-2.5 transition-all" 
+        style={{ 
+          background: 'rgba(244,240,232,0.97)', 
+          border: '1px solid var(--color-border)', 
+          borderRadius: 'var(--radius-card-lg)', 
+          boxShadow: 'var(--shadow-modal)' 
+        }}
+      >
         {/* Header */}
         <div className="flex items-baseline justify-between gap-2 pb-1.5" style={{ borderBottom: '1px solid var(--color-border)' }}>
           <span className="font-display" style={{ fontSize: '16px', color: 'var(--color-primary)', lineHeight: 1 }}>Area Safety Guide</span>
@@ -856,7 +895,7 @@ export default function SafetyMap() {
 
         {/* User GPS Location Marker */}
         {userLocation && (
-          <Marker position={userLocation} icon={userLocationIcon}>
+          <Marker position={userLocation} icon={userLocationBeaconIcon}>
             <Popup>
               <div className="text-xs font-bold text-emerald-700">📍 Detected GPS Location</div>
             </Popup>
@@ -880,6 +919,187 @@ export default function SafetyMap() {
         )}
 
       </MapContainer>
+
+      {/* ─────────────────────────────────────────────────────────────
+          MOBILE SLIDE-UP BOTTOM SHEET / DESKTOP FILTER MODAL
+          ───────────────────────────────────────────────────────────── */}
+      {isFilterSheetOpen && (
+        <div className="fixed inset-0 z-[1050] flex items-end md:items-center justify-center">
+          {/* Backdrop */}
+          <div 
+            className="fixed inset-0 bg-black/45 backdrop-blur-xs transition-opacity cursor-pointer"
+            onClick={() => setIsFilterSheetOpen(false)}
+          />
+
+          {/* Sheet Box */}
+          <div 
+            className="relative w-full md:w-[500px] max-h-[85vh] overflow-y-auto bg-[#F4F0E8] rounded-t-3xl md:rounded-2xl border-t md:border border-[#D8D3C9] shadow-2xl p-5 z-10 space-y-4 pb-20 md:pb-6"
+            style={{
+              boxShadow: '0 -10px 40px rgba(18,59,58,0.2)',
+            }}
+          >
+            {/* Mobile Drag Indicator */}
+            <div className="md:hidden flex justify-center pb-1">
+              <div className="w-12 h-1.5 bg-[#D8D3C9] rounded-full" />
+            </div>
+
+            {/* Header */}
+            <div className="flex items-center justify-between border-b border-[#D8D3C9] pb-3">
+              <div className="flex items-center gap-2">
+                <div className="w-7 h-7 rounded-lg bg-[#123B3A] text-white flex items-center justify-center">
+                  <SlidersHorizontal className="w-4 h-4" />
+                </div>
+                <h3 className="font-display text-[20px] text-[#123B3A] leading-tight">
+                  Map Filters &amp; Guide
+                </h3>
+              </div>
+              <button
+                onClick={() => setIsFilterSheetOpen(false)}
+                className="w-8 h-8 rounded-full bg-black/5 hover:bg-black/10 flex items-center justify-center text-[#6E7772] transition cursor-pointer"
+                aria-label="Close sheet"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            {/* Section 1: Risk Filter */}
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="font-body font-semibold text-[13px] text-[#123B3A]">Risk Level Filter:</span>
+                {scoreFilter !== 'ALL' && (
+                  <button
+                    onClick={() => setScoreFilter('ALL')}
+                    className="font-body text-[11px] font-semibold text-[#1E6761] hover:underline cursor-pointer"
+                  >
+                    Reset to All
+                  </button>
+                )}
+              </div>
+              <div className="grid grid-cols-3 sm:grid-cols-3 gap-2">
+                <button
+                  onClick={() => setScoreFilter('ALL')}
+                  className={`py-2 px-3 rounded-xl font-body text-[13px] font-medium transition cursor-pointer text-center ${
+                    scoreFilter === 'ALL'
+                      ? 'bg-[#123B3A] text-white shadow-xs'
+                      : 'bg-white text-[#17201F] border border-[#D8D3C9]'
+                  }`}
+                >
+                  All ({zones.length})
+                </button>
+
+                {[
+                  { key: '0-20', label: 'Very Safe', dot: '#16a34a', sub: '0-20' },
+                  { key: '21-40', label: 'Safe', dot: '#65a30d', sub: '21-40' },
+                  { key: '41-60', label: 'Moderate', dot: '#d97706', sub: '41-60' },
+                  { key: '61-80', label: 'Vigilance', dot: '#ea580c', sub: '61-80' },
+                  { key: '81-100', label: 'Caution', dot: '#dc2626', sub: '81-100' },
+                ].map(f => (
+                  <button
+                    key={f.key}
+                    onClick={() => setScoreFilter(f.key)}
+                    className={`py-2 px-2.5 rounded-xl font-body text-[12px] font-medium transition cursor-pointer flex items-center justify-center gap-1.5 ${
+                      scoreFilter === f.key
+                        ? 'bg-[#123B3A] text-white shadow-xs'
+                        : 'bg-white text-[#17201F] border border-[#D8D3C9]'
+                    }`}
+                  >
+                    <span className="w-2 h-2 rounded-full shrink-0" style={{ background: f.dot }} />
+                    <span>{f.label}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Section 2: Overlays & Layers */}
+            <div className="space-y-2 pt-2 border-t border-[#D8D3C9]">
+              <span className="font-body font-semibold text-[13px] text-[#123B3A] block">Layer Toggles:</span>
+              <div className="grid grid-cols-2 gap-2">
+                {[
+                  { key: 'police', label: `Police Stations (${stations?.features?.length || 118})`, icon: Shield, active: showStations, toggle: () => setShowStations(!showStations) },
+                  { key: 'medical', label: `Medical Units (${MUMBAI_SAFE_HAVENS.length})`, icon: Heart, active: showHavens, toggle: () => setShowHavens(!showHavens) },
+                  { key: 'zones', label: 'Safety Zones', icon: Layers, active: showZones, toggle: () => setShowZones(!showZones) },
+                  { key: 'notes', label: `Local Notes (${hazards.length})`, icon: AlertTriangle, active: showHazards, toggle: () => setShowHazards(!showHazards) },
+                ].map(item => {
+                  const Icon = item.icon;
+                  return (
+                    <button
+                      key={item.key}
+                      onClick={item.toggle}
+                      className={`p-2.5 rounded-xl flex items-center gap-2 font-body text-[13px] transition cursor-pointer text-left ${
+                        item.active 
+                          ? 'bg-[#E6EFEB] border border-[#1E6761]/40 text-[#123B3A] font-semibold' 
+                          : 'bg-white border border-[#D8D3C9] text-[#6E7772]'
+                      }`}
+                    >
+                      <Icon className="w-4 h-4 shrink-0" style={{ color: item.active ? '#1E6761' : '#6E7772' }} />
+                      <span className="truncate">{item.label}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Section 3: Area Safety Guide Scale */}
+            <div className="space-y-2 pt-2 border-t border-[#D8D3C9]">
+              <div className="flex items-baseline justify-between">
+                <span className="font-body font-semibold text-[13px] text-[#123B3A]">Area Safety Risk Scale:</span>
+                <span className="font-body text-[11px] text-[#6E7772] italic">0 Safest · 100 Caution</span>
+              </div>
+              <div className="space-y-1.5 bg-white p-3 rounded-xl border border-[#D8D3C9]">
+                <div className="h-2.5 w-full rounded-full" style={{ background: 'linear-gradient(to right, #16a34a, #d97706, #dc2626)' }} />
+                <div className="grid grid-cols-5 text-center pt-1">
+                  {[
+                    { range: '0–20', label: 'Safe', color: '#16a34a' },
+                    { range: '21–40', label: 'Low', color: '#65a30d' },
+                    { range: '41–60', label: 'Mod', color: '#d97706' },
+                    { range: '61–80', label: 'Vigilant', color: '#ea580c' },
+                    { range: '81–100', label: 'Caution', color: '#dc2626' },
+                  ].map(t => (
+                    <div key={t.range}>
+                      <span className="font-body font-bold block text-[10px]" style={{ color: t.color }}>{t.range}</span>
+                      <span className="font-body block text-[9px] text-[#6E7772]">{t.label}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Section 4: Map Tile Style */}
+            <div className="flex items-center justify-between pt-2 border-t border-[#D8D3C9] text-[13px]">
+              <span className="font-body font-semibold text-[#123B3A]">Basemap Style:</span>
+              <div className="flex items-center gap-1 bg-white p-1 rounded-xl border border-[#D8D3C9]">
+                <button
+                  onClick={() => setMapStyle('osm')}
+                  className={`px-3 py-1 rounded-lg text-xs font-medium cursor-pointer transition ${
+                    mapStyle === 'osm' ? 'bg-[#123B3A] text-white' : 'text-[#6E7772]'
+                  }`}
+                >
+                  Standard
+                </button>
+                <button
+                  onClick={() => setMapStyle('osm-hot')}
+                  className={`px-3 py-1 rounded-lg text-xs font-medium cursor-pointer transition ${
+                    mapStyle === 'osm-hot' ? 'bg-[#123B3A] text-white' : 'text-[#6E7772]'
+                  }`}
+                >
+                  Humanitarian
+                </button>
+              </div>
+            </div>
+
+            {/* Done Action Button */}
+            <div className="pt-2">
+              <button
+                onClick={() => setIsFilterSheetOpen(false)}
+                className="w-full py-3 bg-[#123B3A] hover:bg-[#0E302F] active:scale-[0.98] text-white font-body font-semibold text-[15px] rounded-xl transition cursor-pointer shadow-md"
+              >
+                Apply &amp; View Map
+              </button>
+            </div>
+
+          </div>
+        </div>
+      )}
 
       {/* Community Hazard Report Modal */}
       <CommunityReportModal

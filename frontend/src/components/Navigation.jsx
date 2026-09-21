@@ -237,27 +237,32 @@ export default function Navigation() {
           MOBILE BOTTOM NAVIGATION
           ───────────────────────────────────────── */}
       <nav
-        className="md:hidden fixed bottom-0 left-0 right-0 z-50"
+        className="md:hidden fixed bottom-0 left-0 right-0 z-50 transition-all shadow-[0_-4px_20px_rgba(18,59,58,0.08)]"
         style={{
-          background: 'rgba(244, 240, 232, 0.97)',
-          backdropFilter: 'blur(16px)',
-          WebkitBackdropFilter: 'blur(16px)',
+          background: 'rgba(244, 240, 232, 0.98)',
+          backdropFilter: 'blur(20px)',
+          WebkitBackdropFilter: 'blur(20px)',
           borderTop: '1px solid var(--color-border)',
-          padding: '6px 8px',
+          paddingTop: '8px',
+          paddingBottom: 'calc(18px + env(safe-area-inset-bottom, 0px))',
+          paddingLeft: '10px',
+          paddingRight: '10px',
         }}
       >
-        <div className="flex justify-around items-center">
+        <div className="flex justify-around items-center max-w-md mx-auto">
           <Link
             to="/"
-            className="flex flex-col items-center justify-center py-1 px-2 rounded-lg transition"
+            className="flex flex-col items-center justify-center py-1 px-2.5 rounded-xl transition active:scale-95"
             style={{
               textDecoration: 'none',
               color: location.pathname === '/' ? 'var(--color-primary)' : 'var(--color-muted)',
+              background: location.pathname === '/' ? 'rgba(18,59,58,0.08)' : 'transparent',
               fontFamily: 'var(--font-body)',
+              minWidth: '52px',
             }}
           >
             <Shield className="w-4 h-4" />
-            <span style={{ fontSize: '10px', marginTop: '2px', fontWeight: location.pathname === '/' ? '600' : '400' }}>
+            <span style={{ fontSize: '11px', marginTop: '2px', fontWeight: location.pathname === '/' ? '700' : '500' }}>
               Home
             </span>
           </Link>
@@ -269,15 +274,17 @@ export default function Navigation() {
               <Link
                 key={link.name}
                 to={link.path}
-                className="flex flex-col items-center justify-center py-1 px-2 rounded-lg transition"
+                className="flex flex-col items-center justify-center py-1 px-2.5 rounded-xl transition active:scale-95"
                 style={{
                   textDecoration: 'none',
                   color: isActive ? 'var(--color-primary)' : 'var(--color-muted)',
+                  background: isActive ? 'rgba(18,59,58,0.08)' : 'transparent',
                   fontFamily: 'var(--font-body)',
+                  minWidth: '52px',
                 }}
               >
                 <Icon className="w-4 h-4" />
-                <span style={{ fontSize: '10px', marginTop: '2px', fontWeight: isActive ? '600' : '400' }}>
+                <span style={{ fontSize: '11px', marginTop: '2px', fontWeight: isActive ? '700' : '500' }}>
                   {link.name}
                 </span>
               </Link>
