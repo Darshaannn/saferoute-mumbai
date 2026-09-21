@@ -18,11 +18,27 @@ export default function FakeCallModal({ isOpen, onClose }) {
   const [isMuted, setIsMuted] = useState(false);
   const [isSpeaker, setIsSpeaker] = useState(true);
 
+  const audioPlayerRef = useRef(null);
   const audioCtxRef = useRef(null);
   const ringIntervalRef = useRef(null);
+  const vibrateIntervalRef = useRef(null);
 
-  // Play realistic synthesized ringtone
-  const startRingtone = () => {
+  // Pre-instantiate audio element
+  useEffect(() => {
+    const audio = new Audio('/audio/ringtone.mp4');
+    audio.loop = true;
+    audio.preload = 'auto';
+    audioPlayerRef.current = audio;
+
+    return () => {
+      audio.pause();
+      audio.currentTime = 0;
+      if (vibrateIntervalRef.current) clearInterval(vibrateIntervalRef.current);
+    };
+  }, []);
+
+  // Web Audio chime fallback if media cannot autoplay
+  const startSynthChime = () => {
     try {
       const AudioCtx = window.AudioContext || window.webkitAudioContext;
       if (!audioCtxRef.current) audioCtxRef.current = new AudioCtx();
@@ -59,12 +75,70 @@ export default function FakeCallModal({ isOpen, onClose }) {
     }
   };
 
+  // Play realistic ringtone audio file (with vibration & fallback)
+  const startRingtone = () => {
+    stopRingtone();
+
+    // Trigger mobile vibration pattern if supported
+    if (typeof navigator !== 'undefined' && navigator.vibrate) {
+      try {
+        navigator.vibrate([600, 300, 600, 300, 1000]);
+        vibrateIntervalRef.current = setInterval(() => {
+          navigator.vibrate([600, 300, 600, 300, 1000]);
+        }, 2800);
+      } catch (e) {
+        // ignore
+      }
+    }
+
+    if (audioPlayerRef.current) {
+      audioPlayerRef.current.currentTime = 0;
+      const playPromise = audioPlayerRef.current.play();
+      if (playPromise !== undefined) {
+        playPromise.catch((err) => {
+          console.warn('Audio element playback blocked or failed, using synth fallback:', err);
+          startSynthChime();
+        });
+      }
+    } else {
+      startSynthChime();
+    }
+  };
+
   const stopRingtone = () => {
+    if (audioPlayerRef.current) {
+      try {
+        audioPlayerRef.current.pause();
+        audioPlayerRef.current.currentTime = 0;
+      } catch (e) {
+        console.error(e);
+      }
+    }
     if (ringIntervalRef.current) {
       clearInterval(ringIntervalRef.current);
       ringIntervalRef.current = null;
     }
+    if (vibrateIntervalRef.current) {
+      clearInterval(vibrateIntervalRef.current);
+      vibrateIntervalRef.current = null;
+    }
+    if (typeof navigator !== 'undefined' && navigator.vibrate) {
+      try {
+        navigator.vibrate(0);
+      } catch (e) {
+        // ignore
+      }
+    }
   };
+
+  // Cleanup on modal close
+  useEffect(() => {
+    if (!isOpen) {
+      stopRingtone();
+      if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+      setStep('config');
+    }
+  }, [isOpen]);
 
   // Play simulated speech on answered call
   const playSimulatedVoice = () => {
