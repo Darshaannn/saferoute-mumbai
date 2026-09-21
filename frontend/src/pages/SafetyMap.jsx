@@ -752,27 +752,27 @@ export default function SafetyMap() {
                 }}
               >
                 <Popup>
-                  <div className="min-w-[220px] p-1">
-                    <div className="flex justify-between items-center mb-1">
-                      <span className="text-xs font-black text-slate-900">{props.name}</span>
+                  <div className="p-3.5 space-y-2.5 font-body min-w-[230px] max-w-[280px]">
+                    <div className="flex justify-between items-start gap-2">
+                      <span className="font-semibold text-[14px] text-[#123B3A] leading-tight">{props.name}</span>
                       {typeof props.score === 'number' && (
                         <span 
                           style={{ backgroundColor: `${color}20`, color: color, borderColor: `${color}50` }}
-                          className="text-[10px] font-extrabold px-2 py-0.5 rounded-full border"
+                          className="text-[11px] font-bold px-2 py-0.5 rounded-full border shrink-0"
                         >
                           Risk: {props.score}/100
                         </span>
                       )}
                     </div>
-                    <p className="text-[11px] text-slate-500 mb-2 font-medium">BMC Ward: {props.ward || 'Mumbai Metropolitan'}</p>
-                    <div className="p-2.5 bg-slate-50 rounded-xl text-[11px] text-slate-700 border border-slate-100 space-y-1.5">
+                    <p className="text-[11px] text-[#6E7772]">BMC Ward: <strong>{props.ward || 'Mumbai Metropolitan'}</strong></p>
+                    <div className="p-2.5 bg-[#F4F0E8] rounded-xl text-[11px] text-[#17201F] border border-[#D8D3C9] space-y-1.5">
                       <div className="flex justify-between items-center">
-                        <span className="text-slate-500 text-[10px]">Safety Level:</span>
-                        <strong style={{ color: color }} className="font-extrabold">{tier.label}</strong>
+                        <span className="text-[#6E7772]">Safety Level:</span>
+                        <strong style={{ color: color }}>{tier.label}</strong>
                       </div>
-                      <div className="flex justify-between items-center pt-1 border-t border-slate-200/60 text-[10px]">
-                        <span className="text-slate-500">Emergency Police:</span>
-                        <a href="tel:112" className="text-blue-600 font-bold hover:underline">Dial 112 / 103</a>
+                      <div className="flex justify-between items-center pt-1 border-t border-[#D8D3C9]/60">
+                        <span className="text-[#6E7772]">Emergency Police:</span>
+                        <a href="tel:112" className="text-[#D84C45] font-bold hover:underline">Dial 112 / 103</a>
                       </div>
                     </div>
                   </div>
@@ -805,21 +805,45 @@ export default function SafetyMap() {
               }}
             >
               <Popup>
-                <div className="min-w-[210px] p-3">
-                  <div className="flex items-center gap-1.5 font-display mb-2" style={{ fontSize: '16px', color: 'var(--color-primary)' }}>
-                    <Shield className="w-4 h-4" style={{ color: 'var(--color-primary)' }} />
-                    <h4>{station.properties.name}</h4>
+                <div className="p-3.5 space-y-2.5 font-body min-w-[240px] max-w-[280px]">
+                  <div className="flex items-start gap-2">
+                    <div className="w-7 h-7 rounded-lg bg-[#E6EFEB] flex items-center justify-center shrink-0 mt-0.5">
+                      <Shield className="w-4 h-4 text-[#123B3A]" />
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-[14px] leading-snug text-[#123B3A]">{station.properties.name}</h4>
+                      <p className="text-[11px] text-[#6E7772]">Ward: <strong className="text-[#17201F]">{station.properties.ward || 'Mumbai Police'}</strong></p>
+                    </div>
                   </div>
-                  <p className="font-body mb-2" style={{ fontSize: '12px', color: 'var(--color-muted)' }}>Ward: <strong style={{ color: 'var(--color-ink)' }}>{station.properties.ward || 'Mumbai Police'}</strong></p>
-                  <div className="p-2 space-y-1" style={{ background: 'var(--color-bg)', border: '1px solid var(--color-border)', borderRadius: '10px' }}>
-                    <div className="flex justify-between font-body" style={{ fontSize: '11px', color: 'var(--color-muted)' }}>
+                  <div className="p-2 space-y-1 bg-[#F4F0E8] border border-[#D8D3C9] rounded-xl text-[11px]">
+                    <div className="flex justify-between text-[#6E7772]">
                       <span>Helpline:</span>
-                      <strong style={{ color: 'var(--color-primary)' }}>112 / 100 / 103</strong>
+                      <strong className="text-[#123B3A]">112 / 100 / 103</strong>
                     </div>
-                    <div className="flex justify-between font-body" style={{ fontSize: '11px', color: 'var(--color-muted)' }}>
+                    <div className="flex justify-between text-[#6E7772]">
                       <span>Status:</span>
-                      <strong style={{ color: 'var(--color-accent)' }}>Active 24/7</strong>
+                      <strong className="text-[#1E6761]">Active 24/7</strong>
                     </div>
+                  </div>
+                  <div className="flex items-center gap-2 pt-0.5">
+                    <a
+                      href={`https://www.google.com/maps/dir/?api=1&destination=${coords[1]},${coords[0]}`}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="sr-popup-primary-btn flex-1"
+                    >
+                      <ExternalLink className="w-3.5 h-3.5 text-white" />
+                      <span className="text-white">Directions</span>
+                    </a>
+                    <a
+                      href="tel:112"
+                      className="py-2 px-3 rounded-xl flex items-center justify-center gap-1 font-semibold text-white transition active:scale-95 shadow-xs shrink-0"
+                      style={{ background: 'var(--color-danger)', fontSize: '12px', textDecoration: 'none' }}
+                      title="Dial 112"
+                    >
+                      <Phone className="w-3.5 h-3.5 text-white" />
+                      <span className="text-white font-bold">112</span>
+                    </a>
                   </div>
                 </div>
               </Popup>
@@ -839,28 +863,31 @@ export default function SafetyMap() {
               icon={icon}
             >
               <Popup>
-                <div className="min-w-[220px] p-1">
-                  <div className="flex items-center gap-1.5 font-bold text-xs mb-1">
-                    <Heart className="w-4 h-4 text-rose-600" />
-                    <h4 className="text-slate-900">{facility.name}</h4>
+                <div className="p-3.5 space-y-2.5 font-body min-w-[240px] max-w-[280px]">
+                  <div className="flex items-start gap-2">
+                    <div className="w-7 h-7 rounded-lg bg-[#E6EFEB] flex items-center justify-center shrink-0 mt-0.5">
+                      <Heart className="w-4 h-4 text-[#1E6761]" />
+                    </div>
+                    <div className="space-y-0.5">
+                      <h4 className="font-semibold text-[14px] leading-snug text-[#123B3A]">{facility.name}</h4>
+                      <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-[#E6EFEB] text-[#1E6761] border border-[#1E6761]/30 inline-block">
+                        {facility.category || 'Government Medical Facility'}
+                      </span>
+                    </div>
                   </div>
-                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-rose-50 text-rose-700 border border-rose-200 block w-fit mb-2">
-                    {facility.category || 'Government Medical Facility'}
-                  </span>
-                  <p className="text-[11px] text-slate-600 mb-2">{facility.address}</p>
-                  <div className="bg-slate-50 p-2 rounded-lg text-[10px] text-slate-700 border border-slate-100 space-y-1 mb-2">
-                    <div><strong>Department:</strong> {facility.owner_dept || 'Public Health Dept'}</div>
+                  <p className="text-[11px] text-[#6E7772] leading-tight">{facility.address}</p>
+                  <div className="bg-[#F4F0E8] p-2 rounded-xl text-[11px] text-[#17201F] border border-[#D8D3C9] space-y-1">
+                    <div><strong>Dept:</strong> {facility.owner_dept || 'Public Health Dept'}</div>
                     <div><strong>Ward:</strong> BMC Ward {facility.ward || 'Mumbai'}</div>
-                    <div className="text-slate-500 italic">Operating hours not verified</div>
                   </div>
                   <a
                     href={`https://www.google.com/maps/dir/?api=1&destination=${facility.coordinates[0]},${facility.coordinates[1]}`}
                     target="_blank"
                     rel="noreferrer"
-                    className="w-full py-1.5 font-body font-semibold text-white flex items-center justify-center gap-1"
-                    style={{ background: 'var(--color-accent)', borderRadius: '10px', fontSize: '12px', textDecoration: 'none' }}
+                    className="sr-popup-primary-btn"
                   >
-                    <ExternalLink className="w-3 h-3" /> Navigate to Facility
+                    <ExternalLink className="w-3.5 h-3.5 text-white" />
+                    <span className="text-white font-semibold">Navigate in Google Maps</span>
                   </a>
                 </div>
               </Popup>
@@ -876,27 +903,27 @@ export default function SafetyMap() {
             icon={hazardPinIcon}
           >
             <Popup>
-              <div className="min-w-[210px] p-1">
-                <div className="flex items-center justify-between text-orange-600 font-bold text-xs mb-1">
+              <div className="p-3 space-y-2 font-body min-w-[210px] max-w-[260px]">
+                <div className="flex items-center justify-between text-orange-600 font-bold text-xs">
                   <div className="flex items-center gap-1">
                     <AlertTriangle className="w-4 h-4" />
                     <h4>Local Safety Note</h4>
                   </div>
                   <button 
                     onClick={() => handleDeleteHazard(haz.id)}
-                    className="text-slate-400 hover:text-rose-600 text-[10px] font-normal cursor-pointer"
+                    className="text-slate-400 hover:text-rose-600 text-[11px] font-normal cursor-pointer"
                     title="Delete local note"
                   >
                     Delete
                   </button>
                 </div>
-                <p className="text-xs font-extrabold text-slate-900 mb-1">{haz.title}</p>
-                <p className="text-[11px] text-slate-500 mb-2">
+                <p className="text-[13px] font-extrabold text-[#123B3A]">{haz.title}</p>
+                <p className="text-[11px] text-[#6E7772]">
                   Area: <strong>{haz.area}</strong> • {formatRelativeTime(haz.createdAt || haz.reportedAt)}
                 </p>
-                <div className="bg-slate-50 p-2 rounded-lg text-[10px] text-slate-600 border border-slate-200 flex items-center justify-between">
+                <div className="bg-[#F4F0E8] p-2 rounded-lg text-[10px] text-[#17201F] border border-[#D8D3C9] flex items-center justify-between">
                   <span>Device Storage Only</span>
-                  <span className="font-medium text-slate-400">Personal Note</span>
+                  <span className="font-medium text-[#6E7772]">Personal Note</span>
                 </div>
               </div>
             </Popup>
@@ -907,7 +934,7 @@ export default function SafetyMap() {
         {userLocation && (
           <Marker position={userLocation} icon={userLocationBeaconIcon}>
             <Popup>
-              <div className="text-xs font-bold text-emerald-700">📍 Detected GPS Location</div>
+              <div className="p-2 text-xs font-bold text-emerald-700">📍 Detected GPS Location</div>
             </Popup>
           </Marker>
         )}
@@ -916,10 +943,10 @@ export default function SafetyMap() {
         {selectedPoint && (
           <Marker position={[selectedPoint.lat, selectedPoint.lng]} icon={searchPinIcon}>
             <Popup>
-              <div className="min-w-[180px]">
-                <strong className="text-xs text-rose-600 block mb-1">Selected Location</strong>
-                <p className="text-xs font-semibold text-slate-900">{selectedPoint.name}</p>
-                <div className="mt-2 pt-2 border-t border-slate-100 flex justify-between items-center text-[10px] text-slate-500">
+              <div className="p-3 space-y-1.5 font-body min-w-[200px]">
+                <strong className="text-[11px] text-[#D84C45] block uppercase tracking-wide">Selected Location</strong>
+                <p className="text-[13px] font-semibold text-[#123B3A]">{selectedPoint.name}</p>
+                <div className="mt-2 pt-1.5 border-t border-[#D8D3C9] flex justify-between items-center text-[10px] text-[#6E7772]">
                   <span>Coordinates:</span>
                   <span>{selectedPoint.lat.toFixed(4)}, {selectedPoint.lng.toFixed(4)}</span>
                 </div>
