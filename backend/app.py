@@ -2,6 +2,8 @@ from flask import Flask, jsonify, request, Response
 from flask_cors import CORS
 import json
 import os
+import io
+import asyncio
 import math
 import time
 import hashlib
@@ -10,6 +12,16 @@ from collections import defaultdict
 from functools import wraps
 # pyrefly: ignore [missing-import]
 from dotenv import load_dotenv
+
+try:
+    import edge_tts
+except ImportError:
+    edge_tts = None
+
+try:
+    from gtts import gTTS
+except ImportError:
+    gTTS = None
 
 # Load environment variables
 load_dotenv()
@@ -85,36 +97,63 @@ def rate_limit(max_requests=60, window_secs=60):
 MUMBAI_LANDMARKS = {
     "andheri": {"name": "Andheri West, Mumbai", "lat": 19.1136, "lng": 72.8697},
     "andheri station": {"name": "Andheri Railway Station", "lat": 19.1197, "lng": 72.8464},
+    "andheri railway station": {"name": "Andheri Railway Station, Mumbai", "lat": 19.1197, "lng": 72.8464},
     "andheri east": {"name": "Andheri East, Mumbai", "lat": 19.1158, "lng": 72.8722},
+    "andheri west": {"name": "Andheri West, Mumbai", "lat": 19.1136, "lng": 72.8697},
     "bandra": {"name": "Bandra West, Mumbai", "lat": 19.0596, "lng": 72.8295},
+    "bandra west": {"name": "Bandra West / Bandstand, Mumbai", "lat": 19.0596, "lng": 72.8295},
+    "bandra bandstand": {"name": "Bandra Bandstand, Mumbai", "lat": 19.0520, "lng": 72.8190},
     "bandra terminus": {"name": "Bandra Terminus", "lat": 19.0628, "lng": 72.8407},
+    "bandra station": {"name": "Bandra Railway Station", "lat": 19.0544, "lng": 72.8403},
     "bkc": {"name": "Bandra Kurla Complex (BKC), Mumbai", "lat": 19.0657, "lng": 72.8687},
+    "bandra kurla complex": {"name": "Bandra Kurla Complex (BKC), Mumbai", "lat": 19.0657, "lng": 72.8687},
     "dadar": {"name": "Dadar West, Mumbai", "lat": 19.0178, "lng": 72.8478},
     "dadar station": {"name": "Dadar Railway Station", "lat": 19.0182, "lng": 72.8434},
+    "dadar railway station": {"name": "Dadar Railway Station, Mumbai", "lat": 19.0182, "lng": 72.8434},
     "colaba": {"name": "Colaba, Mumbai", "lat": 18.9067, "lng": 72.8147},
+    "colaba / gateway of india": {"name": "Colaba / Gateway of India, Mumbai", "lat": 18.9220, "lng": 72.8347},
+    "colaba gateway": {"name": "Colaba / Gateway of India, Mumbai", "lat": 18.9220, "lng": 72.8347},
     "gateway of india": {"name": "Gateway of India, Colaba", "lat": 18.9220, "lng": 72.8347},
+    "gateway of india, colaba": {"name": "Gateway of India, Colaba, Mumbai", "lat": 18.9220, "lng": 72.8347},
     "csmt": {"name": "Chhatrapati Shivaji Maharaj Terminus (CSMT)", "lat": 18.9401, "lng": 72.8354},
+    "csmt station": {"name": "Chhatrapati Shivaji Maharaj Terminus (CSMT)", "lat": 18.9401, "lng": 72.8354},
+    "csmt railway terminus": {"name": "CSMT Railway Terminus, Mumbai", "lat": 18.9401, "lng": 72.8354},
     "churchgate": {"name": "Churchgate Railway Station, Mumbai", "lat": 18.9322, "lng": 72.8264},
+    "churchgate station": {"name": "Churchgate Railway Station, Mumbai", "lat": 18.9322, "lng": 72.8264},
     "kurla": {"name": "Kurla West, Mumbai", "lat": 19.0726, "lng": 72.8845},
+    "kurla station": {"name": "Kurla Railway Station", "lat": 19.0653, "lng": 72.8793},
     "lokmanya tilak terminus": {"name": "Lokmanya Tilak Terminus (LTT), Kurla", "lat": 19.0688, "lng": 72.8911},
     "ghatkopar": {"name": "Ghatkopar East, Mumbai", "lat": 19.0860, "lng": 72.9090},
+    "ghatkopar east": {"name": "Ghatkopar East, Mumbai", "lat": 19.0860, "lng": 72.9090},
+    "ghatkopar station": {"name": "Ghatkopar Railway & Metro Station", "lat": 19.0865, "lng": 72.9080},
     "powai": {"name": "Powai (Hiranandani), Mumbai", "lat": 19.1176, "lng": 72.9060},
+    "powai hiranandani": {"name": "Powai (Hiranandani), Mumbai", "lat": 19.1176, "lng": 72.9060},
     "iit bombay": {"name": "IIT Bombay, Powai", "lat": 19.1334, "lng": 72.9133},
     "borivali": {"name": "Borivali West, Mumbai", "lat": 19.2307, "lng": 72.8567},
+    "borivali west": {"name": "Borivali West, Mumbai", "lat": 19.2307, "lng": 72.8567},
     "borivali station": {"name": "Borivali Railway Station", "lat": 19.2294, "lng": 72.8576},
     "malad": {"name": "Malad West, Mumbai", "lat": 19.1874, "lng": 72.8484},
+    "malad west": {"name": "Malad West, Mumbai", "lat": 19.1874, "lng": 72.8484},
     "kandivali": {"name": "Kandivali West, Mumbai", "lat": 19.2062, "lng": 72.8398},
+    "kandivali west": {"name": "Kandivali West, Mumbai", "lat": 19.2062, "lng": 72.8398},
     "goregaon": {"name": "Goregaon West, Mumbai", "lat": 19.1663, "lng": 72.8478},
+    "goregaon west": {"name": "Goregaon West, Mumbai", "lat": 19.1663, "lng": 72.8478},
     "juhu": {"name": "Juhu Beach, Mumbai", "lat": 19.0988, "lng": 72.8264},
+    "juhu beach": {"name": "Juhu Beach, Mumbai", "lat": 19.0988, "lng": 72.8264},
     "chembur": {"name": "Chembur, Mumbai", "lat": 19.0522, "lng": 72.9005},
     "worli": {"name": "Worli Sea Face, Mumbai", "lat": 19.0166, "lng": 72.8185},
+    "worli sea face": {"name": "Worli Sea Face, Mumbai", "lat": 19.0166, "lng": 72.8185},
     "lower parel": {"name": "Lower Parel / High Street Phoenix, Mumbai", "lat": 18.9953, "lng": 72.8302},
+    "lower parel / high street phoenix": {"name": "Lower Parel / High Street Phoenix, Mumbai", "lat": 18.9953, "lng": 72.8302},
     "marine drive": {"name": "Marine Drive Promenade, Mumbai", "lat": 18.9432, "lng": 72.8230},
+    "marine drive promenade": {"name": "Marine Drive Promenade, Mumbai", "lat": 18.9432, "lng": 72.8230},
     "nariman point": {"name": "Nariman Point, Mumbai", "lat": 18.9256, "lng": 72.8242},
     "sion": {"name": "Sion Circle, Mumbai", "lat": 19.0390, "lng": 72.8619},
     "thane": {"name": "Thane Railway Station, Mumbai MMR", "lat": 19.1860, "lng": 72.9759},
+    "thane station": {"name": "Thane Railway Station, Mumbai MMR", "lat": 19.1860, "lng": 72.9759},
     "vashi": {"name": "Vashi, Navi Mumbai", "lat": 19.0771, "lng": 72.9986},
     "mumbai airport": {"name": "Chhatrapati Shivaji Maharaj Int'l Airport (BOM T2)", "lat": 19.0896, "lng": 72.8656},
+    "mumbai int'l airport (t2)": {"name": "Mumbai Int'l Airport (T2)", "lat": 19.0896, "lng": 72.8656},
     "domestic airport": {"name": "Mumbai Domestic Airport (T1)", "lat": 19.0950, "lng": 72.8528},
 }
 
@@ -387,18 +426,38 @@ def analyze_journey():
         if not name:
             return None
         n_clean = name.strip().lower()
-        for k, v in MUMBAI_LANDMARKS.items():
-            if k in n_clean or n_clean in k:
-                return {"lat": v["lat"], "lng": v["lng"]}
         
-        # 1. Try Photon Komoot geocoder
+        # Check cache
+        cached = get_cached_geocode(f"coord:{n_clean}")
+        if cached:
+            return cached
+            
+        # 1. Direct or substring match in MUMBAI_LANDMARKS
+        for k, v in MUMBAI_LANDMARKS.items():
+            if k == n_clean or k in n_clean or n_clean in k:
+                res = {"lat": v["lat"], "lng": v["lng"]}
+                set_cached_geocode(f"coord:{n_clean}", res)
+                return res
+                
+        # 2. Token / keyword matching across landmarks
+        # Remove common filler words
+        clean_tokens = set([t for t in n_clean.replace(',', ' ').replace('/', ' ').split() if t not in ('mumbai', 'station', 'the', 'near', 'in', 'at', 'and', 'railway', 'terminal', 'terminus')])
+        if clean_tokens:
+            for k, v in MUMBAI_LANDMARKS.items():
+                k_tokens = set([t for t in k.replace(',', ' ').replace('/', ' ').split() if t not in ('mumbai', 'station', 'the', 'near', 'in', 'at', 'and', 'railway', 'terminal', 'terminus')])
+                if clean_tokens & k_tokens:
+                    res = {"lat": v["lat"], "lng": v["lng"]}
+                    set_cached_geocode(f"coord:{n_clean}", res)
+                    return res
+        
+        # 3. Try Photon Komoot geocoder (fast timeout 2.5s)
         try:
             search_q = f"{name} Mumbai" if "mumbai" not in n_clean else name
             r = requests.get(
                 "https://photon.komoot.io/api/",
                 params={"q": search_q, "lat": 19.0760, "lon": 72.8777, "limit": 1},
                 headers={"User-Agent": "SafeRouteMumbaiApp/1.0"},
-                timeout=3
+                timeout=2.5
             )
             if r.status_code == 200:
                 feats = r.json().get('features', [])
@@ -406,11 +465,13 @@ def analyze_journey():
                     c = feats[0]['geometry']['coordinates']
                     lat, lon = c[1], c[0]
                     if 18.80 <= lat <= 19.38 and 72.73 <= lon <= 73.20:
-                        return {"lat": lat, "lng": lon}
+                        res = {"lat": lat, "lng": lon}
+                        set_cached_geocode(f"coord:{n_clean}", res)
+                        return res
         except Exception:
             pass
             
-        # 2. Try Nominatim geocoder
+        # 4. Try Nominatim geocoder (fast timeout 2.5s)
         try:
             nom_url = "https://nominatim.openstreetmap.org/search"
             nom_params = {
@@ -421,17 +482,18 @@ def analyze_journey():
                 "bounded": 1
             }
             nom_headers = {"User-Agent": "SafeRouteMumbaiApp/1.0"}
-            nom_res = requests.get(nom_url, params=nom_params, headers=nom_headers, timeout=3)
+            nom_res = requests.get(nom_url, params=nom_params, headers=nom_headers, timeout=2.5)
             if nom_res.status_code == 200:
                 nom_items = nom_res.json()
                 if nom_items:
                     lat, lon = float(nom_items[0]['lat']), float(nom_items[0]['lon'])
                     if 18.80 <= lat <= 19.38 and 72.73 <= lon <= 73.20:
-                        return {"lat": lat, "lng": lon}
+                        res = {"lat": lat, "lng": lon}
+                        set_cached_geocode(f"coord:{n_clean}", res)
+                        return res
         except Exception:
             pass
 
-        # Return None if location is unknown (DO NOT use hardcoded fake coordinates)
         return None
 
     valid_start = validate_coord(start)
@@ -548,7 +610,6 @@ def analyze_journey():
                 medical_in_corridor += 1
 
         # 4. Transparent Deterministic Resource Coverage Calculation (0 to 100)
-        # Police Proximity: max 40 pts (<1km: 40, <2km: 30, <3.5km: 20, <5km: 10, else 5)
         if min_police_dist <= 1.0:
             police_prox_pts = 40
         elif min_police_dist <= 2.0:
@@ -560,7 +621,6 @@ def analyze_journey():
         else:
             police_prox_pts = 5
 
-        # Police Corridor Count: max 25 pts (5+ stations: 25, 3-4: 20, 1-2: 12, 0: 0)
         if police_in_corridor >= 5:
             police_count_pts = 25
         elif police_in_corridor >= 3:
@@ -570,7 +630,6 @@ def analyze_journey():
         else:
             police_count_pts = 0
 
-        # Medical Proximity: max 20 pts (<1.5km: 20, <3km: 15, <4.5km: 10, else 5)
         if min_medical_dist <= 1.5:
             med_prox_pts = 20
         elif min_medical_dist <= 3.0:
@@ -580,7 +639,6 @@ def analyze_journey():
         else:
             med_prox_pts = 5
 
-        # Medical Corridor Count: max 15 pts (3+ hospitals: 15, 1-2: 10, 0: 0)
         if medical_in_corridor >= 3:
             med_count_pts = 15
         elif medical_in_corridor >= 1:
@@ -624,7 +682,7 @@ def analyze_journey():
                 "coordinates": [[start_lng, start_lat], [end_lng, end_lat]],
                 "alternative_routes": {"target_count": 2}
             }
-            ors_resp = requests.post(url, headers=headers, json=body, timeout=6)
+            ors_resp = requests.post(url, headers=headers, json=body, timeout=4)
             if ors_resp.status_code == 200:
                 ors_json = ors_resp.json()
                 features = ors_json.get('features', [])
@@ -656,7 +714,7 @@ def analyze_journey():
         try:
             osrm_mode = "walking" if "walk" in travel_mode else "driving"
             osrm_url = f"https://router.project-osrm.org/route/v1/{osrm_mode}/{start_lng},{start_lat};{end_lng},{end_lat}?overview=full&geometries=geojson&alternatives=true"
-            osrm_resp = requests.get(osrm_url, headers={"User-Agent": "SafeRouteMumbaiApp/1.0"}, timeout=6)
+            osrm_resp = requests.get(osrm_url, headers={"User-Agent": "SafeRouteMumbaiApp/1.0"}, timeout=3.5)
             if osrm_resp.status_code == 200:
                 osrm_json = osrm_resp.json()
                 osrm_routes = osrm_json.get('routes', [])
@@ -1160,17 +1218,18 @@ def tts_status():
     })
 
 @app.route('/api/tts/synthesize', methods=['POST'])
-@rate_limit(max_requests=30, window_secs=60)
+@rate_limit(max_requests=60, window_secs=60)
 def tts_synthesize():
     """
-    Synthesizes realistic Indian voice audio via backend TTS proxy (ElevenLabs or fallback).
-    Secures API credentials strictly server-side, with in-memory TTL caching to prevent
-    duplicate quota consumption.
+    Synthesizes realistic Indian voice audio via backend TTS proxy (ElevenLabs or Edge-TTS/gTTS neural fallback).
+    Secures API credentials strictly server-side, with in-memory TTL caching.
     """
     req_data = request.json or {}
     text = str(req_data.get('text') or '').strip()
     persona = str(req_data.get('persona') or 'mom').strip().lower()
     voice_id = str(req_data.get('voice_id') or '').strip()
+    language = str(req_data.get('language') or 'en-IN').strip()
+    engine = str(req_data.get('engine') or '').strip().lower()
 
     if not text:
         return jsonify({"error": "text is required", "use_client_tts": True}), 400
@@ -1179,29 +1238,8 @@ def tts_synthesize():
         return jsonify({"error": "text exceeds maximum length of 300 characters", "use_client_tts": True}), 400
 
     api_key = os.getenv('ELEVENLABS_API_KEY', '')
-    if not api_key:
-        return jsonify({
-            "status": "fallback",
-            "message": "External TTS key not configured; use client speech synthesis",
-            "use_client_tts": True
-        }), 200
 
-    persona_voice_map = {
-        'mom': os.getenv('ELEVENLABS_MOM_VOICE_ID', ''),
-        'dad': os.getenv('ELEVENLABS_DAD_VOICE_ID', ''),
-        'inspector': os.getenv('ELEVENLABS_POLICE_VOICE_ID', ''),
-        'support': os.getenv('ELEVENLABS_SUPPORT_VOICE_ID', '')
-    }
-
-    target_voice_id = voice_id or persona_voice_map.get(persona) or os.getenv('ELEVENLABS_DEFAULT_VOICE_ID', '')
-    if not target_voice_id:
-        return jsonify({
-            "status": "fallback",
-            "message": f"No voice ID configured for persona '{persona}'; use client speech synthesis",
-            "use_client_tts": True
-        }), 200
-
-    cache_key = hashlib.sha256(f"{target_voice_id}:{text}".encode('utf-8')).hexdigest()
+    cache_key = hashlib.sha256(f"{persona}:{language}:{voice_id}:{engine}:{text}".encode('utf-8')).hexdigest()
     now = time.time()
 
     # Check cache
@@ -1212,40 +1250,101 @@ def tts_synthesize():
         else:
             del TTS_AUDIO_CACHE[cache_key]
 
-    # Query ElevenLabs TTS API
-    try:
-        model_id = os.getenv('ELEVENLABS_MODEL_ID', 'eleven_multilingual_v2')
-        url = f"https://api.elevenlabs.io/v1/text-to-speech/{target_voice_id}"
-        headers = {
-            "xi-api-key": api_key,
-            "Content-Type": "application/json",
-            "Accept": "audio/mpeg"
+    # 1. ElevenLabs API if key is present
+    if api_key:
+        persona_voice_map = {
+            'mom': os.getenv('ELEVENLABS_MOM_VOICE_ID', ''),
+            'dad': os.getenv('ELEVENLABS_DAD_VOICE_ID', ''),
+            'inspector': os.getenv('ELEVENLABS_POLICE_VOICE_ID', ''),
+            'support': os.getenv('ELEVENLABS_SUPPORT_VOICE_ID', '')
         }
-        payload = {
-            "text": text,
-            "model_id": model_id,
-            "voice_settings": {
-                "stability": 0.5,
-                "similarity_boost": 0.85
-            }
-        }
-        resp = requests.post(url, json=payload, headers=headers, timeout=8)
-        if resp.status_code == 200:
-            audio_data = resp.content
-            TTS_AUDIO_CACHE[cache_key] = (audio_data, now + TTS_AUDIO_CACHE_TTL_SECS)
-            return Response(audio_data, mimetype="audio/mpeg")
-        else:
-            return jsonify({
-                "status": "fallback",
-                "message": f"TTS provider returned status {resp.status_code}",
-                "use_client_tts": True
-            }), 200
-    except Exception as e:
-        return jsonify({
-            "status": "fallback",
-            "message": "TTS provider connection timed out or failed",
-            "use_client_tts": True
-        }), 200
+        target_voice_id = voice_id or persona_voice_map.get(persona) or os.getenv('ELEVENLABS_DEFAULT_VOICE_ID', '')
+        if target_voice_id:
+            try:
+                model_id = os.getenv('ELEVENLABS_MODEL_ID', 'eleven_multilingual_v2')
+                url = f"https://api.elevenlabs.io/v1/text-to-speech/{target_voice_id}"
+                headers = {
+                    "xi-api-key": api_key,
+                    "Content-Type": "application/json",
+                    "Accept": "audio/mpeg"
+                }
+                payload = {
+                    "text": text,
+                    "model_id": model_id,
+                    "voice_settings": {"stability": 0.5, "similarity_boost": 0.85}
+                }
+                resp = requests.post(url, json=payload, headers=headers, timeout=8)
+                if resp.status_code == 200:
+                    audio_data = resp.content
+                    TTS_AUDIO_CACHE[cache_key] = (audio_data, now + TTS_AUDIO_CACHE_TTL_SECS)
+                    return Response(audio_data, mimetype="audio/mpeg")
+                else:
+                    return jsonify({
+                        "status": "fallback",
+                        "message": f"TTS provider returned status {resp.status_code}",
+                        "use_client_tts": True
+                    }), 200
+            except Exception as e:
+                return jsonify({
+                    "status": "fallback",
+                    "message": "TTS provider connection timed out or failed",
+                    "use_client_tts": True
+                }), 200
+
+    # 2. Edge Neural Indian TTS / gTTS if engine is 'neural' or 'edge' or if neural fallback requested
+    if engine in ('neural', 'edge', 'auto') and (edge_tts is not None or gTTS is not None):
+        is_hindi = 'hi' in language.lower() or any(0x0900 <= ord(c) <= 0x097F for c in text)
+        
+        # Try Edge-TTS first (crystal-clear neural voices)
+        if edge_tts is not None:
+            try:
+                if is_hindi:
+                    voice_name = 'hi-IN-MadhurNeural' if persona in ('dad', 'inspector') else 'hi-IN-SwaraNeural'
+                else:
+                    voice_name = 'en-IN-PrabhatNeural' if persona in ('dad', 'inspector') else 'en-IN-NeerjaNeural'
+
+                async def _synth():
+                    comm = edge_tts.Communicate(text, voice_name)
+                    buf = bytearray()
+                    async for chunk in comm.stream():
+                        if chunk["type"] == "audio":
+                            buf.extend(chunk["data"])
+                    return bytes(buf)
+
+                loop = asyncio.new_event_loop()
+                asyncio.set_event_loop(loop)
+                try:
+                    audio_data = loop.run_until_complete(_synth())
+                finally:
+                    loop.close()
+
+                if audio_data and len(audio_data) > 100:
+                    TTS_AUDIO_CACHE[cache_key] = (audio_data, now + TTS_AUDIO_CACHE_TTL_SECS)
+                    return Response(audio_data, mimetype="audio/mpeg")
+            except Exception as e:
+                print(f"Edge TTS synthesis error: {e}")
+
+        # Try gTTS next
+        if gTTS is not None:
+            try:
+                tts_lang = 'hi' if is_hindi else 'en'
+                tts_obj = gTTS(text=text, lang=tts_lang, tld='co.in')
+                fp = io.BytesIO()
+                tts_obj.write_to_fp(fp)
+                fp.seek(0)
+                audio_data = fp.read()
+                if audio_data and len(audio_data) > 100:
+                    TTS_AUDIO_CACHE[cache_key] = (audio_data, now + TTS_AUDIO_CACHE_TTL_SECS)
+                    return Response(audio_data, mimetype="audio/mpeg")
+            except Exception as e:
+                print(f"gTTS synthesis error: {e}")
+
+    # 3. Default fallback response for client-side speech synthesis
+    return jsonify({
+        "status": "fallback",
+        "message": "External TTS key not configured; use client speech synthesis",
+        "use_client_tts": True
+    }), 200
 
 
 if __name__ == '__main__':

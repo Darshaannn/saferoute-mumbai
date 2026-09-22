@@ -383,16 +383,6 @@ export default function SafetyMap() {
     setSearchQuery(place.name);
   };
 
-  // Clean up location watcher on component unmount
-  useEffect(() => {
-    return () => {
-      if (watchIdRef.current !== null && navigator.geolocation) {
-        navigator.geolocation.clearWatch(watchIdRef.current);
-        watchIdRef.current = null;
-      }
-    };
-  }, []);
-
   // Continuous Live GPS Tracking Manager
   const startLiveTracking = useCallback((shouldRecenter = true) => {
     if (!navigator.geolocation) {
@@ -449,6 +439,47 @@ export default function SafetyMap() {
     );
     watchIdRef.current = id;
   }, [isFollowingUser]);
+
+  // Automatically acquire GPS location immediately when opening the Maps page
+  useEffect(() => {
+    if (typeof navigator !== 'undefined' && navigator.geolocation) {
+      setLocationStatus('locating');
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          const lat = pos.coords.latitude;
+          const lng = pos.coords.longitude;
+          const acc = pos.coords.accuracy;
+          setUserLocation([lat, lng]);
+          setUserAccuracy(acc);
+          setLocationStatus('active');
+          setLocationError(null);
+          setMapCenter([lat, lng]);
+          setIsFollowingUser(true);
+        },
+        (err) => {
+          console.warn("Auto-locate initial GPS acquisition:", err.message);
+          if (err.code === 1) {
+            setLocationStatus('denied');
+            setLocationError("Location access denied. Exploring map with default Mumbai views.");
+          } else {
+            setLocationStatus('unavailable');
+          }
+        },
+        { enableHighAccuracy: true, timeout: 8000, maximumAge: 10000 }
+      );
+      // Initiate live watcher
+      startLiveTracking(true);
+    } else {
+      setLocationStatus('unavailable');
+    }
+
+    return () => {
+      if (watchIdRef.current !== null && navigator.geolocation) {
+        navigator.geolocation.clearWatch(watchIdRef.current);
+        watchIdRef.current = null;
+      }
+    };
+  }, [startLiveTracking]);
 
   const handleLocateMe = () => {
     setIsFollowingUser(true);

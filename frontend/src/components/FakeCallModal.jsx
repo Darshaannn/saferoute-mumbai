@@ -15,6 +15,13 @@ const CALLER_PRESETS = [
       'en-IN': "Beta, where are you right now? I'm waiting near the gate. I called because it's getting late. Don't worry, tell the driver I am standing right outside for you.",
       'hi-IN': "बेटा, कहाँ पहुँची? मैं बाहर ही खड़ी हूँ। जल्दी आ जाओ, कोई दिक्कत तो नहीं है?"
     },
+    phoneticFallback: {
+      'hi-IN': "Beta, kahan pahunchi? Main bahar hi khadi hoon. Jaldi aa jao, koi dikkat toh nahi hai?"
+    },
+    audioFiles: {
+      'en-IN': '/audio/mom_en.mp3',
+      'hi-IN': '/audio/mom_hi.mp3'
+    },
     dialogueHint: "“Yes Mom, I see you standing near the gate. I'm stepping out right now.”",
     voiceRate: 0.92,
     voicePitch: 1.08
@@ -29,6 +36,13 @@ const CALLER_PRESETS = [
     scripts: {
       'en-IN': "Beta, I have reached the corner junction in the car. I'm parked right next to the traffic booth. Come straight out, I'm watching the road.",
       'hi-IN': "हाँ बेटा, मैं सिग्नल के पास खड़ा हूँ। गाड़ी का नंबर देख के सीधे बाहर आ जाओ, मैं यहीं हूँ।"
+    },
+    phoneticFallback: {
+      'hi-IN': "Haan beta, main signal ke paas khada hoon. Gaadi ka number dekh ke seedhe bahar aa jao, main yahin hoon."
+    },
+    audioFiles: {
+      'en-IN': '/audio/dad_en.mp3',
+      'hi-IN': '/audio/dad_hi.mp3'
     },
     dialogueHint: "“Yes Papa, I see the car right across the road. Stepping out in ten seconds.”",
     voiceRate: 0.90,
@@ -45,6 +59,13 @@ const CALLER_PRESETS = [
       'en-IN': "Hello, this is Inspector Sharma from Mumbai Police Nirbhaya Cell. We are monitoring your route corridor on the dispatch grid. Confirm if you have arrived safely.",
       'hi-IN': "नमस्ते, मुंबई पुलिस निर्भया सेल से इंस्पेक्टर शर्मा। हम आपके रूट कॉरिडोर को ट्रैक कर रहे हैं। क्या आप सुरक्षित हैं?"
     },
+    phoneticFallback: {
+      'hi-IN': "Namaste, Mumbai Police Nirbhaya Cell se Inspector Sharma. Hum aapke route corridor ko track kar rahe hain. Kya aap surakshit hain?"
+    },
+    audioFiles: {
+      'en-IN': '/audio/inspector_en.mp3',
+      'hi-IN': '/audio/inspector_hi.mp3'
+    },
     dialogueHint: "“Yes Inspector, I am at the drop point now. All clear, thank you for tracking.”",
     voiceRate: 0.95,
     voicePitch: 0.95
@@ -59,6 +80,13 @@ const CALLER_PRESETS = [
     scripts: {
       'en-IN': "Namaste, this is SafeRoute Trip Support. We have your live route on our monitor. Please confirm if you need us to hold the line until your drop point.",
       'hi-IN': "नमस्ते, सेफरूट ट्रिप सपोर्ट डेस्क। आपकी यात्रा मॉनिटर हो रही है। क्या आपको किसी सहायता की आवश्यकता है?"
+    },
+    phoneticFallback: {
+      'hi-IN': "Namaste, SafeRoute Trip Support Desk. Aapki yaatra monitor ho rahi hai. Kya aapko kisi sahayata ki aavashyakta hai?"
+    },
+    audioFiles: {
+      'en-IN': '/audio/support_en.mp3',
+      'hi-IN': '/audio/support_hi.mp3'
     },
     dialogueHint: "“I am on the call with safety support now. Dropping off right here.”",
     voiceRate: 0.96,
@@ -286,14 +314,53 @@ export default function FakeCallModal({ isOpen, onClose }) {
     return voices[0] || null;
   };
 
-  // Play realistic voice with backend ElevenLabs TTS proxy + browser SpeechSynthesis fallback
+  // Play realistic voice with Multi-Tier Engine:
+  // Tier 1: Static high-fidelity neural audio assets (/audio/mom_hi.mp3, dad_hi.mp3, etc.)
+  // Tier 2: Backend dynamic Neural TTS proxy (/api/tts/synthesize with Edge-TTS / gTTS)
+  // Tier 3: Browser SpeechSynthesis with Indian accent heuristics & phonetic Romanized Hindi fallback
   const playVoiceAudio = async (caller, langCode, isPreview = false) => {
     stopAnyVoicePlayback();
     if (isPreview) setIsPreviewPlaying(true);
 
     const scriptText = caller.scripts[langCode] || caller.scripts['en-IN'];
+    const staticFile = caller.audioFiles?.[langCode] || `/audio/${caller.id}_${langCode === 'hi-IN' ? 'hi' : 'en'}.mp3`;
 
-    // 1. Attempt server-side high-quality TTS proxy
+    // 1. Tier 1: High-Fidelity Static Neural Audio Asset (Instant zero-latency load)
+    try {
+      const staticAudio = new Audio(staticFile);
+      activeVoiceAudioRef.current = staticAudio;
+
+      let staticPlaybackSucceeded = false;
+
+      staticAudio.onended = () => {
+        setIsPreviewPlaying(false);
+        activeVoiceAudioRef.current = null;
+      };
+
+      staticAudio.onerror = () => {
+        // Fallback to Tier 2/3 if static asset fails to load
+        if (!staticPlaybackSucceeded) {
+          activeVoiceAudioRef.current = null;
+          tryDynamicTtsOrSpeech(caller, scriptText, langCode, isPreview);
+        }
+      };
+
+      const playPromise = staticAudio.play();
+      if (playPromise !== undefined) {
+        await playPromise;
+        staticPlaybackSucceeded = true;
+        return;
+      }
+    } catch (e) {
+      console.warn("Static audio playback skipped, falling back to dynamic TTS:", e);
+    }
+
+    // If static playback couldn't start, move to Tier 2
+    tryDynamicTtsOrSpeech(caller, scriptText, langCode, isPreview);
+  };
+
+  const tryDynamicTtsOrSpeech = async (caller, scriptText, langCode, isPreview) => {
+    // 2. Tier 2: Backend dynamic Neural TTS proxy (Edge TTS / ElevenLabs / gTTS)
     try {
       const response = await fetch(`${API_BASE_URL}/api/tts/synthesize`, {
         method: 'POST',
@@ -303,7 +370,8 @@ export default function FakeCallModal({ isOpen, onClose }) {
         body: JSON.stringify({
           text: scriptText,
           persona: caller.id,
-          language: langCode
+          language: langCode,
+          engine: 'neural'
         })
       });
 
@@ -331,10 +399,10 @@ export default function FakeCallModal({ isOpen, onClose }) {
         return;
       }
     } catch (e) {
-      // Backend TTS proxy offline or unconfigured -> proceed to browser SpeechSynthesis
+      // Backend TTS proxy offline -> proceed to browser SpeechSynthesis
     }
 
-    // 2. Native Browser SpeechSynthesis with authentic Indian accent calibration
+    // 3. Tier 3: Native Browser SpeechSynthesis with authentic Indian accent calibration
     fallbackBrowserSpeech(caller, scriptText, langCode, isPreview);
   };
 
@@ -345,8 +413,21 @@ export default function FakeCallModal({ isOpen, onClose }) {
     }
 
     window.speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance(text);
     const matchedVoice = getBestIndianVoice(caller, langCode);
+    const isVoiceHindiCapable = matchedVoice && (
+      (matchedVoice.lang || '').toLowerCase().startsWith('hi') ||
+      matchedVoice.name.toLowerCase().includes('hindi') ||
+      matchedVoice.name.toLowerCase().includes('swara') ||
+      matchedVoice.name.toLowerCase().includes('madhur')
+    );
+
+    // If language is Hindi but the browser only has English voice, use Romanized Hindi phonetics
+    let spokenText = text;
+    if (langCode === 'hi-IN' && !isVoiceHindiCapable) {
+      spokenText = caller.phoneticFallback?.['hi-IN'] || text;
+    }
+
+    const utterance = new SpeechSynthesisUtterance(spokenText);
 
     if (matchedVoice) {
       utterance.voice = matchedVoice;
