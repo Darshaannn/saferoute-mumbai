@@ -11,6 +11,7 @@ import {
 import HeroJourneyPreview from '../components/home/HeroJourneyPreview';
 import FakeCallModal from '../components/FakeCallModal';
 import TransitAndRightsModal from '../components/TransitAndRightsModal';
+import DishaLogo from '../components/DishaLogo';
 
 export default function LandingPage() {
   const [showFakeCall, setShowFakeCall] = useState(false);
@@ -46,10 +47,9 @@ export default function LandingPage() {
 
               {/* Eyebrow */}
               <div className="flex items-center gap-2.5 sm:gap-3">
-                <div
-                  className="rounded-full"
-                  style={{ width: '7px', height: '7px', background: '#1E6761', flexShrink: 0 }}
-                />
+                <div className="w-5 h-5 flex items-center justify-center shrink-0">
+                  <DishaLogo size={20} className="w-5 h-5" />
+                </div>
                 <span
                   className="font-body text-[12px] sm:text-[13px] italic tracking-wide"
                   style={{
@@ -71,7 +71,7 @@ export default function LandingPage() {
               >
                 Know more<br />
                 <span style={{ color: '#123B3A' }}>before you </span>
-                <span style={{ color: '#1E6761' }}>move.</span>
+                <span className="bg-gradient-to-r from-rose-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent">move.</span>
               </h1>
 
               {/* Body copy — Instrument Serif */}
@@ -921,12 +921,15 @@ export default function LandingPage() {
       >
         <div className="max-w-[1440px] mx-auto flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
 
-          <div className="space-y-1">
-            <div className="font-display" style={{ fontSize: '20px', color: '#123B3A', lineHeight: 1 }}>
-              SafeRoute <span className="font-body" style={{ fontSize: '15px', color: '#6E7772', fontStyle: 'italic' }}>Mumbai</span>
-            </div>
-            <div className="font-body" style={{ fontSize: '13px', color: '#6E7772' }}>
-              Civic mobility &amp; emergency resource infrastructure
+          <div className="flex items-center gap-3">
+            <DishaLogo size={32} className="w-8 h-8" />
+            <div className="space-y-0.5">
+              <div className="font-display" style={{ fontSize: '22px', color: '#123B3A', lineHeight: 1 }}>
+                Disha <span className="font-body text-[14px] font-semibold text-rose-600">(Safe Route)</span>
+              </div>
+              <div className="font-body" style={{ fontSize: '13px', color: '#6E7772' }}>
+                Civic mobility &amp; emergency resource infrastructure
+              </div>
             </div>
           </div>
 

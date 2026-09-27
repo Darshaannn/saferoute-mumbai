@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Shield, Map, Activity, Navigation as NavIcon, Bot, PhoneCall, PhoneForwarded, Scale } from 'lucide-react';
+import { Map, Activity, Navigation as NavIcon, Bot, PhoneCall, PhoneForwarded, Scale } from 'lucide-react';
 import FakeCallModal from './FakeCallModal';
 import TransitAndRightsModal from './TransitAndRightsModal';
+import DishaLogo from './DishaLogo';
 
 export default function Navigation() {
   const location = useLocation();
@@ -36,36 +37,26 @@ export default function Navigation() {
           style={{ maxWidth: '1440px' }}
         >
 
-          {/* Brand */}
+          {/* Brand with Vectorized Disha Logo */}
           <Link
             to="/"
-            className="flex items-center gap-2.5 transition-opacity hover:opacity-75 group"
+            className="flex items-center gap-3 transition-transform hover:scale-[1.02] group"
             style={{ textDecoration: 'none' }}
           >
-            <div
-              className="flex items-center justify-center rounded-lg"
-              style={{
-                width: '30px',
-                height: '30px',
-                background: 'var(--color-primary)',
-                color: '#fff',
-                flexShrink: 0,
-              }}
-            >
-              <Shield className="w-4 h-4" />
+            <div className="flex items-center justify-center relative flex-shrink-0 drop-shadow-sm">
+              <DishaLogo size={36} className="w-9 h-9" />
             </div>
             <div className="flex items-baseline gap-1.5">
               <span
-                className="font-display tracking-wide"
-                style={{ fontSize: '20px', color: 'var(--color-primary)', lineHeight: 1 }}
+                className="font-display tracking-wider"
+                style={{ fontSize: '24px', color: 'var(--color-primary)', lineHeight: 1 }}
               >
-                SafeRoute
+                Disha
               </span>
               <span
-                className="font-body"
-                style={{ fontSize: '12px', color: 'var(--color-muted)', fontStyle: 'italic' }}
+                className="font-body text-[13px] font-semibold text-rose-600/90"
               >
-                Mumbai
+                (Safe Route)
               </span>
             </div>
           </Link>
@@ -103,7 +94,7 @@ export default function Navigation() {
           </nav>
 
           {/* Right: Quick tools */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2.5">
             <button
               onClick={() => setShowTransitGuide(true)}
               className="font-body transition-colors cursor-pointer"
@@ -178,7 +169,7 @@ export default function Navigation() {
           MOBILE TOP HEADER
           ───────────────────────────────────────── */}
       <header
-        className="md:hidden fixed top-0 left-0 right-0 z-40 flex items-center justify-between px-4"
+        className="md:hidden fixed top-0 left-0 right-0 z-40 flex items-center justify-between px-3"
         style={{
           height: '56px',
           background: 'rgba(244, 240, 232, 0.96)',
@@ -188,18 +179,15 @@ export default function Navigation() {
         }}
       >
         <Link to="/" className="flex items-center gap-2" style={{ textDecoration: 'none' }}>
-          <div
-            className="flex items-center justify-center rounded-md"
-            style={{ width: '26px', height: '26px', background: 'var(--color-primary)', color: '#fff' }}
-          >
-            <Shield className="w-3.5 h-3.5" />
-          </div>
-          <span className="font-display" style={{ fontSize: '18px', color: 'var(--color-primary)', lineHeight: 1 }}>
-            SafeRoute{' '}
-            <span className="font-body" style={{ fontSize: '11px', color: 'var(--color-muted)', fontStyle: 'italic' }}>
-              Mumbai
+          <DishaLogo size={28} className="w-7 h-7 flex-shrink-0" />
+          <div className="flex items-baseline gap-1">
+            <span className="font-display tracking-wide" style={{ fontSize: '19px', color: 'var(--color-primary)', lineHeight: 1 }}>
+              Disha
             </span>
-          </span>
+            <span className="font-body text-[10px] font-semibold text-rose-600">
+              (Safe Route)
+            </span>
+          </div>
         </Link>
 
         <div className="flex items-center gap-2">
@@ -216,6 +204,7 @@ export default function Navigation() {
           >
             <PhoneForwarded className="w-3.5 h-3.5" />
           </button>
+          
           <a
             href="tel:112"
             className="flex items-center gap-1 font-body font-semibold text-white"
@@ -223,7 +212,7 @@ export default function Navigation() {
               padding: '6px 10px',
               fontSize: '13px',
               background: 'var(--color-danger)',
-              borderRadius: '10px',
+              borderRadius: '8px',
               textDecoration: 'none',
             }}
           >
@@ -258,10 +247,10 @@ export default function Navigation() {
               color: location.pathname === '/' ? 'var(--color-primary)' : 'var(--color-muted)',
               background: location.pathname === '/' ? 'rgba(18,59,58,0.08)' : 'transparent',
               fontFamily: 'var(--font-body)',
-              minWidth: '52px',
+              minWidth: '50px',
             }}
           >
-            <Shield className="w-4 h-4" />
+            <DishaLogo size={16} className="w-4 h-4" />
             <span style={{ fontSize: '11px', marginTop: '2px', fontWeight: location.pathname === '/' ? '700' : '500' }}>
               Home
             </span>
@@ -280,7 +269,7 @@ export default function Navigation() {
                   color: isActive ? 'var(--color-primary)' : 'var(--color-muted)',
                   background: isActive ? 'rgba(18,59,58,0.08)' : 'transparent',
                   fontFamily: 'var(--font-body)',
-                  minWidth: '52px',
+                  minWidth: '50px',
                 }}
               >
                 <Icon className="w-4 h-4" />
