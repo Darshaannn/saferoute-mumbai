@@ -188,7 +188,7 @@ function JourneyMapClickHandler({ onMapClick }) {
 export default function SafeJourney() {
   const [journeyState, setJourneyState] = useState('planner'); // planner, active, emergency
   const [origin, setOrigin] = useState('Andheri Railway Station, Mumbai');
-  const [destination, setDestination] = useState('Colaba / Gateway of India, Mumbai');
+  const [destination, setDestination] = useState('Dadar, Mumbai');
   const [originLocation, setOriginLocation] = useState({
     name: 'Andheri Railway Station, Mumbai',
     lat: 19.1197,
@@ -196,9 +196,9 @@ export default function SafeJourney() {
     source: 'Default'
   });
   const [destinationLocation, setDestinationLocation] = useState({
-    name: 'Colaba / Gateway of India, Mumbai',
-    lat: 18.9220,
-    lng: 72.8347,
+    name: 'Dadar, Mumbai',
+    lat: 19.0182,
+    lng: 72.8434,
     source: 'Default'
   });
   const [mapStyle, setMapStyle] = useState('osm');
@@ -695,8 +695,8 @@ export default function SafeJourney() {
       // Construct resilient fallback so journey is always visible and interactive
       const sLat = originLocation?.lat || 19.1197;
       const sLng = originLocation?.lng || 72.8464;
-      const eLat = destinationLocation?.lat || 18.9220;
-      const eLng = destinationLocation?.lng || 72.8347;
+      const eLat = destinationLocation?.lat || 19.0182;
+      const eLng = destinationLocation?.lng || 72.8434;
       
       const numPts = 20;
       const coords = [];
