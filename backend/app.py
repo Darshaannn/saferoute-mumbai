@@ -240,10 +240,25 @@ def reverse_geocode():
         resp = requests.get(url, params=params, headers=headers, timeout=4)
         if resp.status_code == 200:
             data = resp.json()
+            address = data.get('address', {})
             display_name = data.get('display_name', '')
-            parts = [p.strip() for p in display_name.split(',') if p.strip()]
-            short_name = ", ".join(parts[:3]) if len(parts) >= 3 else display_name
-            return jsonify({"name": short_name or f"Point ({lat[:6]}, {lng[:6]})"})
+            
+            # Construct a clean short address from OSM address details
+            parts = []
+            for key in ['road', 'pedestrian', 'suburb', 'neighbourhood', 'residential', 'commercial', 'amenity', 'building', 'city_district', 'city', 'county']:
+                val = address.get(key)
+                if val and val not in parts:
+                    parts.append(val)
+            
+            clean_name = ", ".join(parts[:3]) if parts else ""
+            if not clean_name and display_name:
+                raw_parts = [p.strip() for p in display_name.split(',') if p.strip()]
+                clean_name = ", ".join(raw_parts[:3]) if len(raw_parts) >= 3 else display_name
+
+            return jsonify({
+                "name": clean_name or f"Point ({float(lat):.4f}, {float(lng):.4f})",
+                "display_name": display_name
+            })
     except Exception as e:
         print(f"Reverse geocode error: {e}")
         

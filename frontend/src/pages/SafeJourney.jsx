@@ -6,6 +6,7 @@ import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import { MUMBAI_SAFE_HAVENS } from '../data/safeHavens';
 import { computeTransitOptions } from '../data/mumbaiTransitLines';
+import { filterMumbaiLocations } from '../data/mumbaiLocations';
 import FakeCallModal from '../components/FakeCallModal';
 import TransitAndRightsModal from '../components/TransitAndRightsModal';
 import API_BASE_URL from '../config/api';
@@ -245,6 +246,10 @@ export default function SafeJourney() {
   const audioCtxRef = useRef(null);
   const oscRef = useRef(null);
   const watchIdRef = useRef(null);
+  const fromDebounceRef = useRef(null);
+  const toDebounceRef = useRef(null);
+  const fromAbortRef = useRef(null);
+  const toAbortRef = useRef(null);
 
   useEffect(() => {
     handleAnalyze();
@@ -457,7 +462,7 @@ export default function SafeJourney() {
     }
   };
 
-  // Debounced place search helper
+  // Instant local Mumbai locations filter + backend geocode helper
   const searchPlaces = (query, setFn, debounceRef, abortRef) => {
     if (debounceRef.current) {
       clearTimeout(debounceRef.current);
@@ -471,50 +476,142 @@ export default function SafeJourney() {
       return;
     }
 
+    const trimmed = query.trim();
+
+    // 1. Instantly filter from the comprehensive Mumbai database
+    const localMatches = filterMumbaiLocations(trimmed, 8);
+    setFn(localMatches);
+
+    // 2. Query backend geocoder to augment with precise addresses / OSM POIs
     debounceRef.current = setTimeout(async () => {
       const abortController = new AbortController();
       abortRef.current = abortController;
 
       try {
-        const data = await apiRequest(`/api/geocode?q=${encodeURIComponent(query.trim())}`, {
+        const data = await apiRequest(`/api/geocode?q=${encodeURIComponent(trimmed)}`, {
           signal: abortController.signal
         });
-        setFn(data.results || []);
+        if (data && Array.isArray(data.results) && data.results.length > 0) {
+          // Merge local and server results without duplicates
+          const seen = new Set(localMatches.map(m => m.name.toLowerCase()));
+          const newResults = [...localMatches];
+          data.results.forEach(r => {
+            const key = r.name.toLowerCase();
+            if (!seen.has(key)) {
+              seen.add(key);
+              newResults.push(r);
+            }
+          });
+          setFn(newResults.slice(0, 10));
+        }
       } catch (e) {
         if (!e.isAborted) {
           console.error("Geocoding search error", e);
         }
       }
-    }, 350);
+    }, 250);
   };
+
+  const [isLocatingGps, setIsLocatingGps] = useState(false);
 
   const handleUseMyLocation = () => {
     if (!navigator.geolocation) {
-      alert("Geolocation is not supported by your browser");
+      setErrorMsg("Geolocation is not supported by your browser.");
       return;
     }
+    setIsLocatingGps(true);
+    setErrorMsg('');
+
     navigator.geolocation.getCurrentPosition(
       async (pos) => {
         const lat = pos.coords.latitude;
         const lng = pos.coords.longitude;
         setLiveCoords({ lat, lng });
+
         let displayName = `${lat.toFixed(4)}, ${lng.toFixed(4)}`;
+        
+        // 1. Attempt backend reverse geocoding
         try {
           const data = await apiRequest(`/api/reverse-geocode?lat=${lat}&lng=${lng}`);
-          if (data.name) displayName = data.name;
-        } catch {
-          // fallback to coordinates string
+          if (data && data.name && !data.name.startsWith('Location (') && !data.name.startsWith('Point (')) {
+            displayName = data.name;
+          } else {
+            // 2. Fallback to direct client-side OpenStreetMap Nominatim
+            const nomResp = await fetch(
+              `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json`,
+              { headers: { 'Accept': 'application/json' } }
+            );
+            if (nomResp.ok) {
+              const nomData = await nomResp.json();
+              const addr = nomData.address || {};
+              const parts = [];
+              for (const k of ['road', 'pedestrian', 'suburb', 'neighbourhood', 'residential', 'commercial', 'amenity', 'building', 'city_district', 'city']) {
+                if (addr[k] && !parts.includes(addr[k])) {
+                  parts.push(addr[k]);
+                }
+              }
+              if (parts.length > 0) {
+                displayName = parts.slice(0, 3).join(', ');
+              } else if (nomData.display_name) {
+                const rawParts = nomData.display_name.split(',').map(s => s.trim()).filter(Boolean);
+                displayName = rawParts.slice(0, 3).join(', ');
+              }
+            }
+          }
+        } catch (err) {
+          console.warn("Reverse geocode OSM error:", err);
+          try {
+            const nomResp = await fetch(
+              `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json`,
+              { headers: { 'Accept': 'application/json' } }
+            );
+            if (nomResp.ok) {
+              const nomData = await nomResp.json();
+              const addr = nomData.address || {};
+              const parts = [];
+              for (const k of ['road', 'pedestrian', 'suburb', 'neighbourhood', 'residential', 'commercial', 'amenity', 'building', 'city_district', 'city']) {
+                if (addr[k] && !parts.includes(addr[k])) {
+                  parts.push(addr[k]);
+                }
+              }
+              if (parts.length > 0) {
+                displayName = parts.slice(0, 3).join(', ');
+              } else if (nomData.display_name) {
+                const rawParts = nomData.display_name.split(',').map(s => s.trim()).filter(Boolean);
+                displayName = rawParts.slice(0, 3).join(', ');
+              }
+            }
+          } catch {
+            displayName = `Current Location (${lat.toFixed(4)}, ${lng.toFixed(4)})`;
+          }
         }
+
         setOrigin(displayName);
         setOriginLocation({
           name: displayName,
           lat: lat,
           lng: lng,
-          source: 'GPS'
+          source: 'GPS (OSM Geocoded)'
         });
+        setIsLocatingGps(false);
       },
-      () => {
-        setErrorMsg("Unable to retrieve GPS location. Please type a Mumbai location.");
+      (err) => {
+        console.warn("GPS location error:", err);
+        setIsLocatingGps(false);
+        if (err.code === 1) {
+          setErrorMsg("Location access was denied. Please enable location permissions in browser settings.");
+        } else if (err.code === 2) {
+          setErrorMsg("GPS position unavailable. Please type your starting location.");
+        } else if (err.code === 3) {
+          setErrorMsg("GPS location request timed out. Please try again or type your location.");
+        } else {
+          setErrorMsg("Unable to retrieve GPS coordinates. Please type your location.");
+        }
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 10000,
+        maximumAge: 0
       }
     );
   };
@@ -781,9 +878,12 @@ export default function SafeJourney() {
                         <button 
                           type="button" 
                           onClick={handleUseMyLocation}
-                          className="text-[11px] text-blue-600 hover:text-blue-700 flex items-center gap-0.5 font-medium transition"
+                          disabled={isLocatingGps}
+                          className="text-[11px] text-blue-600 hover:text-blue-700 flex items-center gap-1 font-medium transition cursor-pointer disabled:opacity-50"
+                          title="Locate my GPS position & reverse geocode address via OSM"
                         >
-                          <Locate className="w-3 h-3" /> My GPS
+                          <Locate className={`w-3 h-3 ${isLocatingGps ? 'animate-spin text-blue-600' : ''}`} />
+                          {isLocatingGps ? 'Locating...' : 'My GPS'}
                         </button>
                         <button
                           type="button"
@@ -812,7 +912,7 @@ export default function SafeJourney() {
                     </div>
                     
                     {fromSuggestions.length > 0 && (
-                      <div className="absolute z-50 left-0 right-0 mt-1 bg-white border border-slate-200 rounded-xl shadow-xl max-h-48 overflow-y-auto divide-y divide-slate-100">
+                      <div className="absolute z-50 left-0 right-0 mt-1 bg-white border border-slate-200/90 rounded-2xl shadow-xl max-h-56 overflow-y-auto divide-y divide-slate-100 overflow-hidden">
                         {fromSuggestions.map((place, idx) => (
                           <div 
                             key={idx}
@@ -822,14 +922,24 @@ export default function SafeJourney() {
                                 name: place.name,
                                 lat: place.lat,
                                 lng: place.lng,
-                                source: place.source || 'Search'
+                                source: place.category || place.source || 'Search'
                               });
                               setFromSuggestions([]);
                             }}
-                            className="p-2.5 text-xs hover:bg-blue-50 cursor-pointer flex justify-between items-center transition"
+                            className="p-3 hover:bg-slate-50 cursor-pointer flex items-center justify-between gap-2 transition"
                           >
-                            <span className="font-medium text-slate-800 truncate">{place.name}</span>
-                            <span className="text-[10px] text-slate-400 shrink-0 ml-2">{place.source}</span>
+                            <div className="flex items-center gap-2.5 min-w-0">
+                              <div className="w-6 h-6 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0 border border-emerald-100">
+                                <MapPin className="w-3.5 h-3.5" />
+                              </div>
+                              <div className="min-w-0">
+                                <span className="font-semibold text-slate-800 text-xs block truncate">{place.name}</span>
+                                <span className="text-[10px] text-slate-500 block truncate">{place.zone || 'Mumbai'}</span>
+                              </div>
+                            </div>
+                            <span className="text-[10px] font-medium px-2 py-0.5 rounded-md bg-slate-100 text-slate-600 shrink-0 border border-slate-200/60">
+                              {place.category || place.source || 'Location'}
+                            </span>
                           </div>
                         ))}
                       </div>
@@ -897,7 +1007,7 @@ export default function SafeJourney() {
                     </div>
 
                     {toSuggestions.length > 0 && (
-                      <div className="absolute z-50 left-0 right-0 mt-1 bg-white border border-slate-200 rounded-xl shadow-xl max-h-48 overflow-y-auto divide-y divide-slate-100">
+                      <div className="absolute z-50 left-0 right-0 mt-1 bg-white border border-slate-200/90 rounded-2xl shadow-xl max-h-56 overflow-y-auto divide-y divide-slate-100 overflow-hidden">
                         {toSuggestions.map((place, idx) => (
                           <div 
                             key={idx}
@@ -907,14 +1017,24 @@ export default function SafeJourney() {
                                 name: place.name,
                                 lat: place.lat,
                                 lng: place.lng,
-                                source: place.source || 'Search'
+                                source: place.category || place.source || 'Search'
                               });
                               setToSuggestions([]);
                             }}
-                            className="p-2.5 text-xs hover:bg-blue-50 cursor-pointer flex justify-between items-center transition"
+                            className="p-3 hover:bg-slate-50 cursor-pointer flex items-center justify-between gap-2 transition"
                           >
-                            <span className="font-medium text-slate-800 truncate">{place.name}</span>
-                            <span className="text-[10px] text-slate-400 shrink-0 ml-2">{place.source}</span>
+                            <div className="flex items-center gap-2.5 min-w-0">
+                              <div className="w-6 h-6 rounded-lg bg-rose-50 text-rose-600 flex items-center justify-center shrink-0 border border-rose-100">
+                                <MapPin className="w-3.5 h-3.5" />
+                              </div>
+                              <div className="min-w-0">
+                                <span className="font-semibold text-slate-800 text-xs block truncate">{place.name}</span>
+                                <span className="text-[10px] text-slate-500 block truncate">{place.zone || 'Mumbai'}</span>
+                              </div>
+                            </div>
+                            <span className="text-[10px] font-medium px-2 py-0.5 rounded-md bg-slate-100 text-slate-600 shrink-0 border border-slate-200/60">
+                              {place.category || place.source || 'Location'}
+                            </span>
                           </div>
                         ))}
                       </div>
@@ -1328,11 +1448,11 @@ export default function SafeJourney() {
                           center={[liveCoords.lat, liveCoords.lng]}
                           radius={liveAccuracy}
                           pathOptions={{
-                            color: '#1E6761',
-                            fillColor: '#1E6761',
-                            fillOpacity: 0.08,
-                            weight: 1.2,
-                            dashArray: '3, 4'
+                            color: '#0284c7',
+                            fillColor: '#38bdf8',
+                            fillOpacity: 0.12,
+                            weight: 1.5,
+                            dashArray: '4, 4'
                           }}
                         />
                       )}

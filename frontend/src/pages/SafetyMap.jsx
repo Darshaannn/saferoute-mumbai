@@ -288,9 +288,15 @@ export default function SafetyMap() {
   const [locationStatus, setLocationStatus] = useState('idle'); // 'idle' | 'locating' | 'active' | 'denied' | 'unavailable' | 'timeout'
   const [locationError, setLocationError] = useState(null);
   const [isFollowingUser, setIsFollowingUser] = useState(false);
+  const isFollowingUserRef = useRef(false);
   const watchIdRef = useRef(null);
   const searchDebounceRef = useRef(null);
   const searchAbortRef = useRef(null);
+
+  const updateFollowingMode = (mode) => {
+    isFollowingUserRef.current = mode;
+    setIsFollowingUser(mode);
+  };
 
   useEffect(() => {
     Promise.all([
@@ -383,8 +389,8 @@ export default function SafetyMap() {
     setSearchQuery(place.name);
   };
 
-  // Continuous Live GPS Tracking Manager
-  const startLiveTracking = useCallback((shouldRecenter = true) => {
+  // Continuous Live GPS Tracking Manager with stable closure
+  const startLiveTracking = useCallback(() => {
     if (!navigator.geolocation) {
       setLocationStatus('unavailable');
       setLocationError("Geolocation is not supported by your browser.");
@@ -411,7 +417,8 @@ export default function SafetyMap() {
         setLocationStatus('active');
         setLocationError(null);
 
-        if (shouldRecenter || isFollowingUser) {
+        // Only recenter if user is actively in following mode
+        if (isFollowingUserRef.current) {
           setMapCenter([lat, lng]);
         }
       },
@@ -434,16 +441,18 @@ export default function SafetyMap() {
       {
         enableHighAccuracy: true,
         timeout: 10000,
-        maximumAge: 3000
+        maximumAge: 5000
       }
     );
     watchIdRef.current = id;
-  }, [isFollowingUser]);
+  }, []);
 
   // Automatically acquire GPS location immediately when opening the Maps page
   useEffect(() => {
     if (typeof navigator !== 'undefined' && navigator.geolocation) {
       setLocationStatus('locating');
+      updateFollowingMode(true);
+
       navigator.geolocation.getCurrentPosition(
         (pos) => {
           const lat = pos.coords.latitude;
@@ -454,10 +463,10 @@ export default function SafetyMap() {
           setLocationStatus('active');
           setLocationError(null);
           setMapCenter([lat, lng]);
-          setIsFollowingUser(true);
         },
         (err) => {
           console.warn("Auto-locate initial GPS acquisition:", err.message);
+          updateFollowingMode(false);
           if (err.code === 1) {
             setLocationStatus('denied');
             setLocationError("Location access denied. Exploring map with default Mumbai views.");
@@ -467,8 +476,8 @@ export default function SafetyMap() {
         },
         { enableHighAccuracy: true, timeout: 8000, maximumAge: 10000 }
       );
-      // Initiate live watcher
-      startLiveTracking(true);
+      
+      startLiveTracking();
     } else {
       setLocationStatus('unavailable');
     }
@@ -482,11 +491,28 @@ export default function SafetyMap() {
   }, [startLiveTracking]);
 
   const handleLocateMe = () => {
-    setIsFollowingUser(true);
+    updateFollowingMode(true);
     if (userLocation) {
       setMapCenter([...userLocation]);
     }
-    startLiveTracking(true);
+    if (navigator.geolocation) {
+      setLocationStatus('locating');
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          const lat = pos.coords.latitude;
+          const lng = pos.coords.longitude;
+          const acc = pos.coords.accuracy;
+          setUserLocation([lat, lng]);
+          setUserAccuracy(acc);
+          setLocationStatus('active');
+          setMapCenter([lat, lng]);
+        },
+        (err) => {
+          console.warn("Locate me current position error:", err);
+        },
+        { enableHighAccuracy: true, timeout: 8000, maximumAge: 0 }
+      );
+    }
   };
 
   const handleMapClick = async (latlng) => {
@@ -761,40 +787,44 @@ export default function SafetyMap() {
         }}
       >
         {/* Header */}
-        <div className="flex items-baseline justify-between gap-2 pb-1.5" style={{ borderBottom: '1px solid var(--color-border)' }}>
-          <span className="font-display" style={{ fontSize: '16px', color: 'var(--color-primary)', lineHeight: 1 }}>Area Safety Guide</span>
-          <span className="font-body" style={{ fontSize: '11px', color: 'var(--color-muted)', whiteSpace: 'nowrap', fontStyle: 'italic' }}>0 Safest · 100 Caution</span>
+        <div className="flex items-center justify-between gap-2 pb-2 border-b border-[#D8D3C9]">
+          <span className="font-display tracking-wide text-[17px] text-[#123B3A] leading-none">
+            Area Safety Guide
+          </span>
+          <span className="text-[11px] font-sans font-medium text-[#4A5568] bg-white/70 px-2 py-0.5 rounded-md border border-[#D8D3C9]/80">
+            0 Safest · 100 Caution
+          </span>
         </div>
 
         {/* Gradient Bar */}
-        <div className="space-y-1.5">
-          <div className="h-2 w-full rounded-full" style={{ background: 'linear-gradient(to right, #16a34a, #d97706, #dc2626)' }}></div>
-          <div className="grid grid-cols-5 text-center">
+        <div className="space-y-2">
+          <div className="h-2.5 w-full rounded-full shadow-inner" style={{ background: 'linear-gradient(to right, #16a34a, #ca8a04, #ea580c, #dc2626)' }}></div>
+          <div className="grid grid-cols-5 text-center gap-1">
             {[
-              { range: '0–20', label: 'Safe' },
-              { range: '21–40', label: 'Low' },
-              { range: '41–60', label: 'Mod' },
-              { range: '61–80', label: 'Vigilant' },
-              { range: '81–100', label: 'Caution' },
+              { range: '0–20', label: 'Safe', color: '#16a34a' },
+              { range: '21–40', label: 'Low', color: '#65a30d' },
+              { range: '41–60', label: 'Mod', color: '#b45309' },
+              { range: '61–80', label: 'Vigilant', color: '#c2410c' },
+              { range: '81–100', label: 'Caution', color: '#dc2626' },
             ].map(t => (
-              <div key={t.range}>
-                <span className="font-body font-semibold" style={{ fontSize: '9px', color: 'var(--color-ink)' }}>{t.range}</span>
-                <span className="font-body block" style={{ fontSize: '8px', color: 'var(--color-muted)' }}>{t.label}</span>
+              <div key={t.range} className="flex flex-col items-center">
+                <span className="font-sans font-bold text-[11px] leading-tight" style={{ color: t.color }}>{t.range}</span>
+                <span className="font-sans font-medium text-[10px] text-[#2D3748]">{t.label}</span>
               </div>
             ))}
           </div>
         </div>
 
         {/* Legend */}
-        <div className="flex items-center justify-between pt-1.5" style={{ borderTop: '1px solid var(--color-border)' }}>
-          <span className="font-body flex items-center gap-1.5" style={{ fontSize: '11px', color: 'var(--color-ink)' }}>
-            <span className="rounded-full" style={{ width: '8px', height: '8px', background: 'var(--color-primary)', display: 'inline-block', flexShrink: 0 }}></span> Police
+        <div className="flex items-center justify-between pt-2 border-t border-[#D8D3C9]">
+          <span className="font-sans font-semibold flex items-center gap-1.5 text-[12px] text-[#1A202C]">
+            <span className="rounded-full w-2.5 h-2.5 bg-[#123B3A] shadow-xs inline-block shrink-0"></span> Police
           </span>
-          <span className="font-body flex items-center gap-1.5" style={{ fontSize: '11px', color: 'var(--color-ink)' }}>
-            <span className="rounded-full" style={{ width: '8px', height: '8px', background: 'var(--color-accent)', display: 'inline-block', flexShrink: 0 }}></span> Medical
+          <span className="font-sans font-semibold flex items-center gap-1.5 text-[12px] text-[#1A202C]">
+            <span className="rounded-full w-2.5 h-2.5 bg-[#1E6761] shadow-xs inline-block shrink-0"></span> Medical
           </span>
-          <span className="font-body flex items-center gap-1.5" style={{ fontSize: '11px', color: 'var(--color-ink)' }}>
-            <span className="rounded-full" style={{ width: '8px', height: '8px', background: '#d97706', display: 'inline-block', flexShrink: 0 }}></span> Notes
+          <span className="font-sans font-semibold flex items-center gap-1.5 text-[12px] text-[#1A202C]">
+            <span className="rounded-full w-2.5 h-2.5 bg-[#d97706] shadow-xs inline-block shrink-0"></span> Notes
           </span>
         </div>
       </div>
@@ -815,7 +845,7 @@ export default function SafetyMap() {
         <MapController center={mapCenter} />
         <MapEventsHandler 
           onMapClick={handleMapClick} 
-          onUserPan={() => setIsFollowingUser(false)}
+          onUserPan={() => updateFollowingMode(false)}
         />
         
         <TileLayer
@@ -1035,11 +1065,11 @@ export default function SafetyMap() {
                 center={userLocation}
                 radius={userAccuracy}
                 pathOptions={{
-                  color: '#1E6761',
-                  fillColor: '#1E6761',
-                  fillOpacity: 0.08,
-                  weight: 1.2,
-                  dashArray: '3, 4'
+                  color: '#0284c7',
+                  fillColor: '#38bdf8',
+                  fillOpacity: 0.12,
+                  weight: 1.5,
+                  dashArray: '4, 4'
                 }}
               />
             )}
